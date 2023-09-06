@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyingpig.mapper.CourseAttendanceMapper" >
+
+
+    <select id="getStudentAttendanceNow" resultType="com.flyingpig.entity.CourseAttendance">
+        SELECT *
+        FROM course_attendance
+        WHERE NOW()>(SELECT begin_time FROM course_detail WHERE course_detail.id = course_attendance.course_id)
+        AND (SELECT end_time FROM course_detail WHERE course_detail.id = course_attendance.course_id) > NOW()
+        AND student_id=#{studentId}
+    </select>
+</mapper>

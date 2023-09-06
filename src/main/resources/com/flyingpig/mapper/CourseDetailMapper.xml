@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flyingpig.mapper.CourseDetailMapper" >
+    <select id="getByTime" resultType="com.flyingpig.entity.CourseDetail">
+        select id,course_name,begin_time,end_time,course_teacher,course_place from course_detail
+        where begin_time=#{beginTime} and end_time=#{endTime} and studentId=#{studentId}
+    </select>
+    <select id="getByTimeNow" resultType="com.flyingpig.dto.CourseTableInfo">
+        select * from course_detail
+        where studentId=#{studentId} and week=#{week}
+    </select>
+    <select id="getOneByTimeNow" resultType="com.flyingpig.dto.CourseTableInfo">
+        select id, course_name,week,section,begin_time,end_time,course_place,teacher_name from course_detail
+        where  DATE_ADD(begin_time,INTERVAL -5 MINUTE) <![CDATA[ < ]]> #{timeNow}
+        and end_time <![CDATA[ > ]]> #{timeNow}
+    </select>
+    <select id="getById" resultType="com.flyingpig.entity.CourseDetail">
+        select * from course_detail where id=#{courseId} ;
+    </select>
+    <select id="selectCourseIdByBeginTimeAndTeacherid" resultType="integer">
+        select id from course_detail where course_teacher =#{teacherId} and week=#{week} and weekday=#{weekday} and section=#{section}
+    </select>
+
+</mapper>
