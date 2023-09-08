@@ -17,10 +17,11 @@ public class CourseDetail {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String courseName;
-    private String semester;
-    private String week;
-    private String weekday;
-    private String section;
+    private Integer semester;
+    private Integer week;
+    private Integer weekday;
+    private Integer sectionStart;
+    private Integer sectionEnd;
     private LocalDateTime beginTime;
     private LocalDateTime endTime;
     private Integer courseTeacher;
