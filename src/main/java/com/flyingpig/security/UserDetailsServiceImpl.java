@@ -1,9 +1,9 @@
 package com.flyingpig.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.dto.LoginUser;
+import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.mapper.UserMapper;
-import com.flyingpig.entity.User;
+import com.flyingpig.dataobject.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

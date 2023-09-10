@@ -1,6 +1,6 @@
 package com.flyingpig.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flyingpig.entity.Teacher;
+import com.flyingpig.dataobject.entity.Teacher;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

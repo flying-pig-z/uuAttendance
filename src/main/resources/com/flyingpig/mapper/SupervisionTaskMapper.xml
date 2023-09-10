@@ -6,7 +6,7 @@
     <select id="count" resultType="long">
         select count(*) from supervision_task
     </select>
-    <select id="list" resultType="com.flyingpig.dto.SupervisionTaskWithCourseNameAndBeginTimeAndEndTime">
+    <select id="list" resultType="com.flyingpig.dataobject.dto.SupervisionTaskWithCourseNameAndBeginTimeAndEndTime">
         SELECT *
         FROM supervision_task
         WHERE (SELECT end_time FROM course_detail WHERE course_detail.id = supervision_task.course_id) > NOW()

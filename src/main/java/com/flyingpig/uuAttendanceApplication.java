@@ -7,7 +7,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 @ServletComponentScan
 @SpringBootApplication
 public class uuAttendanceApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(uuAttendanceApplication.class, args);
     }

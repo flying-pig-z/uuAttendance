@@ -1,13 +1,9 @@
 package com.flyingpig.controller;
 
-import com.flyingpig.dto.LeaveApplicationWithCourseName;
-import com.flyingpig.dto.StudentInfo;
-import com.flyingpig.entity.*;
-import com.flyingpig.dto.ResultLeaveDatail;
-import com.flyingpig.mapper.StudentMapper;
+import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
+import com.flyingpig.dataobject.entity.*;
+import com.flyingpig.dataobject.dto.ResultLeaveDatail;
 import com.flyingpig.pojo.Result;
-import com.flyingpig.service.CourseAttendanceService;
-import com.flyingpig.service.CourseDetailService;
 import com.flyingpig.service.LeaveService;
 import com.flyingpig.service.StudentService;
 import com.flyingpig.util.JwtUtil;

@@ -1,7 +1,7 @@
 package com.flyingpig.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flyingpig.entity.LeaveApplication;
+import com.flyingpig.dataobject.entity.LeaveApplication;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -1,11 +1,13 @@
 package com.flyingpig.controller;
 
-import com.flyingpig.dto.StudentInfo;
+import com.flyingpig.dataobject.entity.Student;
+import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.util.JwtUtil;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.StudentService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -24,10 +26,22 @@ public class StudentController {
         Map<String,Object> studentInfo=studentService.getStudentInfoByUserId(userId);
         return Result.success(studentInfo);
     }
-//    @GetMapping("/getStudentIdByStudentNo/{studentNo}")
-//    public Result getIdByNo(@PathVariable String studentNo){
-//        Student student=studentService.getByStudentNo(studentNo);
-//        Integer studentId=student.getId();
-//        return Result.success(studentId);
-//    }
+    //录入用户信息
+    @PostMapping("")
+    public Result addStudent(@RequestParam String no,@RequestParam String name, @RequestParam(defaultValue = "男") String gender,
+                             @RequestParam(defaultValue = "计算机与大数据学院") String colleage){
+        //初始化密码为学号
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String password=passwordEncoder.encode(no);
+        User user=new User(null,no,password,name,gender,colleage,1);
+        Student student=new Student();
+        student.setNo(no);
+        student.setName(name);
+        student.setGrade("20"+no.charAt(2)+no.charAt(3));
+        student.setClasS(""+no.charAt(6));
+        student.setMajor("计算机与大数据学院/软件学院");
+        studentService.addStudent(user,student);
+        return Result.success();
+    }
+
 }

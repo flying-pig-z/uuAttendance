@@ -1,4 +1,4 @@
-package com.flyingpig.security;
+package com.flyingpig.config;
 //import com.flyingpig.filter.JwtAuthenticationTokenFilter;
 import com.flyingpig.filter.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;

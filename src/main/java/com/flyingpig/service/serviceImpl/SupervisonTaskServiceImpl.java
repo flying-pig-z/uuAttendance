@@ -1,15 +1,11 @@
 package com.flyingpig.service.serviceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.dto.SupervisionTaskWithCourseNameAndBeginTimeAndEndTime;
-import com.flyingpig.entity.CourseDetail;
-import com.flyingpig.entity.SupervisionTask;
-import com.flyingpig.entity.Supervison;
+import com.flyingpig.dataobject.dto.SupervisionTaskWithCourseNameAndBeginTimeAndEndTime;
+import com.flyingpig.dataobject.entity.CourseDetail;
 import com.flyingpig.mapper.CourseDetailMapper;
 import com.flyingpig.mapper.SupervisionMapper;
 import com.flyingpig.mapper.SupervisionTaskMapper;
 import com.flyingpig.pojo.PageBean;
 import com.flyingpig.service.SupervisionTaskServie;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

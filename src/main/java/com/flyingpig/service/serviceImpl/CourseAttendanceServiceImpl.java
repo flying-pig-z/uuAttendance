@@ -2,14 +2,13 @@ package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.dto.StudentAttendanceNow;
-import com.flyingpig.entity.*;
+import com.flyingpig.dataobject.dto.StudentAttendanceNow;
+import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.mapper.CourseAttendanceMapper;
 import com.flyingpig.mapper.CourseDetailMapper;
 import com.flyingpig.mapper.StudentMapper;
-import com.flyingpig.dto.CourseTableInfo;
-import com.flyingpig.dto.ResultAttendance;
-import com.flyingpig.dto.ResultClassAttendance;
+import com.flyingpig.dataobject.dto.CourseTableInfo;
+import com.flyingpig.dataobject.dto.ResultAttendance;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.service.CourseAttendanceService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,21 +35,21 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
     @Autowired
     private UserMapper userMapper;
     @Override
-    public List<CourseTableInfo> getCourseTableInfoByWeekAndStudentId(Integer studentId, String week, String semester) {
+    public List<CourseTableInfo> getCourseTableInfoByWeekAndStudentId(Integer studentId, Integer week, Integer semester) {
         List<CourseTableInfo> result=new ArrayList<>();
         //先筛选出该学生所有考勤信息
         QueryWrapper<CourseAttendance> wrapper =new QueryWrapper<CourseAttendance>();
         wrapper.eq("student_id",studentId);
         List<CourseAttendance> courseAttendanceList=courseAttendanceMapper.selectList(wrapper);
         //再筛选出对应那一年,那一周的所有考勤信息
-        for(int i=0;i<courseAttendanceList.size();i++){
-            CourseDetail courseDetail=courseDetailMapper.selectById(courseAttendanceList.get(i).getCourseId());
+        for(CourseAttendance courseAttendance:courseAttendanceList){
+            CourseDetail courseDetail=courseDetailMapper.selectById(courseAttendance.getCourseId());
             //获取对应的年和周
-            String courseSemester=courseDetail.getSemester();
-            String courseWeek=courseDetail.getWeek();
+            Integer courseSemester=courseDetail.getSemester();
+            Integer courseWeek=courseDetail.getWeek();
             //比对筛选
             if(courseWeek.equals(week)&&courseSemester.equals(semester)){
-                Integer status=courseAttendanceList.get(i).getStatus();
+                Integer status=courseAttendance.getStatus();
                 QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
                 userQueryWrapper.eq("id",courseDetail.getCourseTeacher());
                 User user=userMapper.selectOne(userQueryWrapper);

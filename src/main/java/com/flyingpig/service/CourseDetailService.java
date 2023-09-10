@@ -1,11 +1,7 @@
 package com.flyingpig.service;
 
-import com.flyingpig.entity.CourseDetail;
-import com.flyingpig.dto.CourseTableInfo;
+import com.flyingpig.dataobject.entity.CourseDetail;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public interface CourseDetailService {

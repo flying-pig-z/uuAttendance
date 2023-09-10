@@ -1,6 +1,6 @@
 package com.flyingpig.filter;
 
-import com.flyingpig.dto.LoginUser;
+import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.util.JwtUtil;
 import com.flyingpig.util.RedisCache;
 import io.jsonwebtoken.Claims;

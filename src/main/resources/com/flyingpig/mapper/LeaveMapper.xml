@@ -7,13 +7,13 @@
         insert into leaveapplication (student_id, course_id, reason, leave_place, appeal_begin_time, appeal_end_time, status,leaveCourseName)
         values (#{studentId},#{courseId},#{reason},#{leavePlace},#{appealBeginTime},#{appealEndTime},#{status},#{leaveCourseName})
     </insert>
-    <select id="getByStudentId" resultType="com.flyingpig.entity.LeaveApplication">
+    <select id="getByStudentId" resultType="com.flyingpig.dataobject.entity.LeaveApplication">
         select * from leaveapplication where student_id=#{studentId}
     </select>
-    <select id="getByCourseId" resultType="com.flyingpig.entity.LeaveApplication">
+    <select id="getByCourseId" resultType="com.flyingpig.dataobject.entity.LeaveApplication">
         select * from leaveapplication where course_id=#{courseId}
     </select>
-    <select id="getById" resultType="com.flyingpig.entity.LeaveApplication">
+    <select id="getById" resultType="com.flyingpig.dataobject.entity.LeaveApplication">
         select * from leaveapplication where Id=#{leaveId}
     </select>
     <update id="updateLeaveStatus">

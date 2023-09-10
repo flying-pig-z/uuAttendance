@@ -11,13 +11,13 @@
     <update id="updateAttendanceAppealStatus">
         update attendanceappeal set status=#{status} where id=#{attendanceAppealId};
     </update>
-    <select id="getByStudentId" resultType="com.flyingpig.entity.AttendanceAppeal">
+    <select id="getByStudentId" resultType="com.flyingpig.dataobject.entity.AttendanceAppeal">
         select * from attendanceappeal where userId=#{studentId}
     </select>
-    <select id="getByCourseId" resultType="com.flyingpig.entity.AttendanceAppeal">
+    <select id="getByCourseId" resultType="com.flyingpig.dataobject.entity.AttendanceAppeal">
         select * from attendanceappeal where course_id=#{courseId}
     </select>
-    <select id="getById" resultType="com.flyingpig.entity.AttendanceAppeal">
+    <select id="getById" resultType="com.flyingpig.dataobject.entity.AttendanceAppeal">
         select * from attendanceappeal where id=#{attendanceAppealId}
     </select>
 </mapper>

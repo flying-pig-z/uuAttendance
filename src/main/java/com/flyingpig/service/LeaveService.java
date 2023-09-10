@@ -1,12 +1,11 @@
 package com.flyingpig.service;
 
-import com.flyingpig.dto.LeaveApplicationWithCourseName;
-import com.flyingpig.entity.LeaveApplication;
-import com.flyingpig.dto.ResultLeaveDatail;
+import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
+import com.flyingpig.dataobject.entity.LeaveApplication;
+import com.flyingpig.dataobject.dto.ResultLeaveDatail;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public interface LeaveService {

@@ -1,10 +1,9 @@
 package com.flyingpig.service;
 
-import com.flyingpig.dto.StudentAttendanceNow;
-import com.flyingpig.entity.CourseAttendance;
-import com.flyingpig.dto.CourseTableInfo;
-import com.flyingpig.dto.ResultAttendance;
-import com.flyingpig.dto.ResultClassAttendance;
+import com.flyingpig.dataobject.dto.StudentAttendanceNow;
+import com.flyingpig.dataobject.entity.CourseAttendance;
+import com.flyingpig.dataobject.dto.CourseTableInfo;
+import com.flyingpig.dataobject.dto.ResultAttendance;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.Map;
 
 @Service
 public interface CourseAttendanceService {
-    List<CourseTableInfo> getCourseTableInfoByWeekAndStudentId(Integer studentId, String week, String year);
+    List<CourseTableInfo> getCourseTableInfoByWeekAndStudentId(Integer studentId, Integer week, Integer year);
 //    public List<CourseDetailWithStatus> getCourseDetailWithStatusByWeek(Integer studentId, String week);
 
     void updateAttendanceStatus(CourseAttendance attendance);

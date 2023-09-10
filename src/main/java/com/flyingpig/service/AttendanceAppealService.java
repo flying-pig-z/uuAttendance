@@ -1,12 +1,11 @@
 package com.flyingpig.service;
 
-import com.flyingpig.dto.AttendanceAppealWithCourseName;
-import com.flyingpig.entity.AttendanceAppeal;
-import com.flyingpig.dto.ResultAttendanceAppealDetail;
+import com.flyingpig.dataobject.dto.AttendanceAppealWithCourseName;
+import com.flyingpig.dataobject.entity.AttendanceAppeal;
+import com.flyingpig.dataobject.dto.ResultAttendanceAppealDetail;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public interface AttendanceAppealService {

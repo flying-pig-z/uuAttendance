@@ -1,4 +1,4 @@
-package com.flyingpig.entity;
+package com.flyingpig.dataobject.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

@@ -1,8 +1,8 @@
 package com.flyingpig.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flyingpig.entity.CourseDetail;
-import com.flyingpig.dto.CourseTableInfo;
+import com.flyingpig.dataobject.entity.CourseDetail;
+import com.flyingpig.dataobject.dto.CourseTableInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDateTime;

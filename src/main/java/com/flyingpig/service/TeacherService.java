@@ -1,6 +1,6 @@
 package com.flyingpig.service;
 
-import com.flyingpig.entity.Teacher;
+import com.flyingpig.dataobject.entity.Teacher;
 import org.springframework.stereotype.Service;
 
 

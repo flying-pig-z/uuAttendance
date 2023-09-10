@@ -2,7 +2,7 @@ package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.mapper.TeacherMapper;
-import com.flyingpig.entity.Teacher;
+import com.flyingpig.dataobject.entity.Teacher;
 import com.flyingpig.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

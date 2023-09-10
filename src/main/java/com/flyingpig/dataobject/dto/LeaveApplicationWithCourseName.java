@@ -1,6 +1,6 @@
-package com.flyingpig.dto;
+package com.flyingpig.dataobject.dto;
 
-import com.flyingpig.entity.LeaveApplication;
+import com.flyingpig.dataobject.entity.LeaveApplication;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.flyingpig.controller;
 
-import com.flyingpig.entity.*;
-import com.flyingpig.dto.*;
+import com.flyingpig.dataobject.entity.*;
+import com.flyingpig.dataobject.dto.*;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.util.JwtUtil;
@@ -27,7 +27,7 @@ public class CourseAttendanceController {
         return Result.success();
     }
     @GetMapping("/courseTableInfo")
-    public Result getCourseDetailWithStatusByWeekAndStudentId(@RequestParam("week") String week,@RequestParam("semester") String semester,@RequestHeader String Authorization){
+    public Result getCourseDetailWithStatusByWeekAndStudentId(@RequestParam("week") Integer week,@RequestParam("semester") Integer semester,@RequestHeader String Authorization){
         CourseDetail select=new CourseDetail();
         //设置学生id
         Claims claims= JwtUtil.parseJwt(Authorization);

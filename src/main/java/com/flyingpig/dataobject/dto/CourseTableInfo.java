@@ -1,7 +1,6 @@
-package com.flyingpig.dto;
+package com.flyingpig.dataobject.dto;
 
-import com.flyingpig.entity.CourseDetail;
-import io.swagger.models.auth.In;
+import com.flyingpig.dataobject.entity.CourseDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

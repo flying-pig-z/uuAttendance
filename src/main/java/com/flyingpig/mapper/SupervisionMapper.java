@@ -1,7 +1,7 @@
 package com.flyingpig.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flyingpig.entity.Supervison;
+import com.flyingpig.dataobject.entity.Supervison;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -1,9 +1,8 @@
 package com.flyingpig.controller;
 
-import com.flyingpig.dto.AttendanceAppealWithCourseName;
-import com.flyingpig.dto.LeaveApplicationWithCourseName;
-import com.flyingpig.entity.*;
-import com.flyingpig.dto.ResultAttendanceAppealDetail;
+import com.flyingpig.dataobject.dto.AttendanceAppealWithCourseName;
+import com.flyingpig.dataobject.entity.*;
+import com.flyingpig.dataobject.dto.ResultAttendanceAppealDetail;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.AttendanceAppealService;
 import com.flyingpig.service.CourseAttendanceService;

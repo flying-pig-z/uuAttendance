@@ -1,5 +1,6 @@
 package com.flyingpig.controller;
 
+import com.flyingpig.pojo.Result;
 import com.flyingpig.service.CourseDetailService;
 import com.flyingpig.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,13 +8,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping("/courseDetails")
 public class CourseDetailController {
     @Autowired
     CourseDetailService courseDetailService;
     @Autowired
     TeacherService teacherService;
 
-
+//    @PostMapping("")
+//    public Result addCourseDetail(@RequestHeader String Authorization,@RequestParam String courseName,
+//    @RequestParam String semester,@RequestParam Integer weekBegin,@RequestParam Integer wekkEnd,
+//                                  @RequestParam Integer weekday,
+//                                  @RequestParam Integer sectionStart,@RequestParam Integer sectionEnd
+//    @RequestParam Integer)
 //    @GetMapping("teacherGetCourse/{week}/{weekday}/{section}")
 //    public Result teacherGetCourse(@RequestHeader String token,@PathVariable String week,@PathVariable String  weekday,@PathVariable String section){
 //        Claims claims= JwtUtil.parseJwt(token);

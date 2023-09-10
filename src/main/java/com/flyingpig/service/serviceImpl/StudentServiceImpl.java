@@ -1,16 +1,15 @@
 package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.dto.StudentInfo;
 import com.flyingpig.mapper.StudentMapper;
-import com.flyingpig.entity.Student;
+import com.flyingpig.dataobject.entity.Student;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.flyingpig.entity.User;
+import com.flyingpig.dataobject.entity.User;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +21,12 @@ public class StudentServiceImpl implements StudentService {
     private StudentMapper studentMapper;
     @Autowired
     private UserMapper userMapper;
-
-
+    @Override
+    public void addStudent(User user, Student student) {
+        Integer userId=userMapper.insert(user);
+        student.setUserid(userId);
+        studentMapper.insert(student);
+    }
     @Override
     public Map<String,Object> getStudentInfoByUserId(Integer userid) {
         Map<String,Object> target=new HashMap<>();
@@ -42,12 +45,6 @@ public class StudentServiceImpl implements StudentService {
         target.put("major",student.getMajor());
         target.put("college",user.getCollege());
         return target;
-    }
-
-    @Override
-    public Student getStudentByNo(String studentNo) {
-        Student student=studentMapper.getByNo(studentNo);
-        return student;
     }
 
 }

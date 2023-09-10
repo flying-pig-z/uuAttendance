@@ -1,2 +1,4 @@
-package com.flyingpig.dataobject.vo;public class AddCourseDetailVO {
+package com.flyingpig.dataobject.vo;
+
+public class CourseDetailAddVO {
 }

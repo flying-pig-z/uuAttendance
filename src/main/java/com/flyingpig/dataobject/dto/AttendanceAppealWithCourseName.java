@@ -1,6 +1,6 @@
-package com.flyingpig.dto;
+package com.flyingpig.dataobject.dto;
 
-import com.flyingpig.entity.AttendanceAppeal;
+import com.flyingpig.dataobject.entity.AttendanceAppeal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

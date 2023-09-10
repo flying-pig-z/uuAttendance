@@ -1,8 +1,8 @@
 package com.flyingpig.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flyingpig.entity.SupervisionTask;
-import com.flyingpig.dto.SupervisionTaskWithCourseNameAndBeginTimeAndEndTime;
+import com.flyingpig.dataobject.entity.SupervisionTask;
+import com.flyingpig.dataobject.dto.SupervisionTaskWithCourseNameAndBeginTimeAndEndTime;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

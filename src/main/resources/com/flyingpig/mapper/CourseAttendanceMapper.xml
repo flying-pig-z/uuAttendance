@@ -5,7 +5,7 @@
 <mapper namespace="com.flyingpig.mapper.CourseAttendanceMapper" >
 
 
-    <select id="getStudentAttendanceNow" resultType="com.flyingpig.entity.CourseAttendance">
+    <select id="getStudentAttendanceNow" resultType="com.flyingpig.dataobject.entity.CourseAttendance">
         SELECT *
         FROM course_attendance
         WHERE NOW()>(SELECT begin_time FROM course_detail WHERE course_detail.id = course_attendance.course_id)

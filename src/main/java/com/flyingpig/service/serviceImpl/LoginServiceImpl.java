@@ -1,11 +1,11 @@
 package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.dto.LoginUser;
+import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.LoginService;
-import com.flyingpig.entity.User;
+import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.util.JwtUtil;
 import com.flyingpig.util.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +68,13 @@ public class LoginServiceImpl implements LoginService {
         userQueryWrapper.eq("id",userId);
         User user=userMapper.selectOne(userQueryWrapper);
         return user.getUserType();
+    }
+
+    @Override
+    public void updateUserWithPassword(String userId,String newPassword) {
+        User user=new User();
+        user.setId(Integer.parseInt(userId));
+        user.setPassword(newPassword);
+        userMapper.updateById(user);
     }
 }

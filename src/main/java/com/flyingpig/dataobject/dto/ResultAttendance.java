@@ -1,4 +1,4 @@
-package com.flyingpig.dto;
+package com.flyingpig.dataobject.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

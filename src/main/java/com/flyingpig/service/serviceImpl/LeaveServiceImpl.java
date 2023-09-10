@@ -1,14 +1,13 @@
 package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.dto.LeaveApplicationWithCourseName;
-import com.flyingpig.dto.StudentInfo;
+import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
 import com.flyingpig.mapper.*;
-import com.flyingpig.entity.Counsellor;
-import com.flyingpig.entity.CourseDetail;
-import com.flyingpig.entity.LeaveApplication;
-import com.flyingpig.entity.Student;
-import com.flyingpig.dto.ResultLeaveDatail;
+import com.flyingpig.dataobject.entity.Counsellor;
+import com.flyingpig.dataobject.entity.CourseDetail;
+import com.flyingpig.dataobject.entity.LeaveApplication;
+import com.flyingpig.dataobject.entity.Student;
+import com.flyingpig.dataobject.dto.ResultLeaveDatail;
 import com.flyingpig.service.LeaveService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
