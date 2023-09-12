@@ -3,6 +3,7 @@ package com.flyingpig.dataobject.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.flyingpig.dataobject.vo.CourseDetailAddVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,5 +30,17 @@ public class CourseDetail {
     private LocalDateTime schoolOpenTime;
     private String longitude;
     private String latitude;
+    public CourseDetail(CourseDetailAddVO courseDetailAddVO){
+        this.setCourseName(courseDetailAddVO.getCourseName());
+        this.setSemester(courseDetailAddVO.getSemester());
+        this.setWeekday(courseDetailAddVO.getWeekday());
+        this.setSectionStart(courseDetailAddVO.getSectionStart());
+        this.setSectionEnd(courseDetailAddVO.getSectionEnd());
+        this.setSchoolOpenTime(courseDetailAddVO.getSchoolOpenTime());
+        this.setCoursePlace(courseDetailAddVO.getCoursePlace());
+        this.setLongitude(courseDetailAddVO.getLongitude());
+        this.setLatitude(courseDetailAddVO.getLatitude());
+    }
+
 
 }

@@ -1,8 +1,11 @@
 package com.flyingpig.controller;
 
+import com.flyingpig.dataobject.vo.CourseDetailAddVO;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.CourseDetailService;
 import com.flyingpig.service.TeacherService;
+import com.flyingpig.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +18,14 @@ public class CourseDetailController {
     @Autowired
     TeacherService teacherService;
 
-//    @PostMapping("")
-//    public Result addCourseDetail(@RequestHeader String Authorization,@RequestParam String courseName,
-//    @RequestParam String semester,@RequestParam Integer weekBegin,@RequestParam Integer wekkEnd,
-//                                  @RequestParam Integer weekday,
-//                                  @RequestParam Integer sectionStart,@RequestParam Integer sectionEnd
-//    @RequestParam Integer)
+    @PostMapping("")
+    public Result addCourseDetail(@RequestBody CourseDetailAddVO courseDetailAddVO,@RequestHeader String Authorization){
+        Claims claims= JwtUtil.parseJwt(Authorization);
+        String teacherId=claims.getSubject();
+        System.out.println(courseDetailAddVO);
+        courseDetailService.addCourseDetail(teacherId,courseDetailAddVO);
+        return Result.success();
+    }
 //    @GetMapping("teacherGetCourse/{week}/{weekday}/{section}")
 //    public Result teacherGetCourse(@RequestHeader String token,@PathVariable String week,@PathVariable String  weekday,@PathVariable String section){
 //        Claims claims= JwtUtil.parseJwt(token);
