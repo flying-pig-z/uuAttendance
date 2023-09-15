@@ -3,7 +3,6 @@ package com.flyingpig.controller;
 import com.flyingpig.dataobject.vo.CourseDetailAddVO;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.CourseDetailService;
-import com.flyingpig.service.TeacherService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class CourseDetailController {
     @Autowired
     CourseDetailService courseDetailService;
-    @Autowired
-    TeacherService teacherService;
 
     @PostMapping("")
     public Result addCourseDetail(@RequestBody CourseDetailAddVO courseDetailAddVO,@RequestHeader String Authorization){

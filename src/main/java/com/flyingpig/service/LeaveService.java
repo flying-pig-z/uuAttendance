@@ -17,7 +17,5 @@ public interface LeaveService {
 
 //    public void updateLeaveStatus(Integer leaveId,String status);
 
-    List<LeaveApplication> selectLeaveByCounsellorId(Integer counsellorId);
-
     List<LeaveApplicationWithCourseName> selectLeaveByUserId(Integer userId);
 }

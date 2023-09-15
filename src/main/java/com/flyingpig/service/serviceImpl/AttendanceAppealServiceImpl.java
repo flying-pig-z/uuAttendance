@@ -28,8 +28,6 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
     private CourseDetailMapper courseDetailMapper;
     @Autowired
     private CourseAttendanceMapper courseAttendanceMapper;
-    @Autowired
-    private CounsellorMapper counsellorMapper;
     @Override
     public void addAttendanceAppeal(AttendanceAppeal attendanceAppeal) {
         attendanceAppealMapper.insert(attendanceAppeal);
@@ -94,17 +92,7 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
 //        attendanceAppealMapper.updateAttendanceAppealStatus(attendanceAppealId,status);
 //    }
 
-    @Override
-    public List<AttendanceAppeal> selectAttendanceAppealByCounsellorId(Integer counsellorId) {
-        Counsellor counsellor=counsellorMapper.selectById(counsellorId);
-        List<Student> studentList=studentMapper.getByCollege(counsellor.getCollege());
-        List<AttendanceAppeal> attendanceAppealList=new ArrayList<>();
-        for(int i=0;i<studentList.size();i++){
-            List<AttendanceAppeal> temp=attendanceAppealMapper.getByStudentId(studentList.get(i).getId());
-            attendanceAppealList.addAll(temp);
-        }
-        return attendanceAppealList;
-    }
+
 
 
 }

@@ -19,7 +19,6 @@ public interface AttendanceAppealService {
 
 //    void updateAttendanceAppealStatus(Integer attendanceAppealId, String status);
 
-    List<AttendanceAppeal> selectAttendanceAppealByCounsellorId(Integer counsellorId);
 
 
 }

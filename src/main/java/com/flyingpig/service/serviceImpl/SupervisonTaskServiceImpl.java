@@ -20,8 +20,6 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskServie {
     SupervisionTaskMapper supervisionTaskMapper;
     @Autowired
     CourseDetailMapper courseMapper;
-    @Autowired
-    SupervisionMapper supervisionMapper;
     @Override
     public PageBean page(Integer pageNo, Integer pageSize, Integer userId) {
         //记录总记录数

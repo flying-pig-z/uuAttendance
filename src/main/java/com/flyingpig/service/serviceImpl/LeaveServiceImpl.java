@@ -30,8 +30,7 @@ public class LeaveServiceImpl implements LeaveService {
     private CourseDetailMapper courseMapper;
     @Autowired
     private CourseAttendanceMapper courseAttendanceMapper;
-    @Autowired
-    private CounsellorMapper counsellorMapper;
+
     @Override
     public List<LeaveApplicationWithCourseName> selectLeaveByUserId(Integer userId) {
         QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<>();
@@ -97,15 +96,5 @@ public class LeaveServiceImpl implements LeaveService {
 //        leaveMapper.updateLeaveStatus(leaveId,status);
 //    }
 
-    @Override
-    public List<LeaveApplication> selectLeaveByCounsellorId(Integer counsellorId) {
-        Counsellor counsellor=counsellorMapper.selectById(counsellorId);
-        List<Student> studentList=studentMapper.getByCollege(counsellor.getCollege());
-        List<LeaveApplication> leaveApplicationList=new ArrayList<>();
-        for(int i=0;i<studentList.size();i++){
-            List<LeaveApplication> temp=leaveMapper.getByStudentId(studentList.get(i).getId());
-            leaveApplicationList.addAll(temp);
-        }
-        return leaveApplicationList;
-    }
+
 }
