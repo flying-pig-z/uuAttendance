@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.dataobject.dto.StudentAttendanceNow;
 import com.flyingpig.dataobject.entity.*;
+import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
+import com.flyingpig.dataobject.vo.SignInVO;
 import com.flyingpig.mapper.CourseAttendanceMapper;
 import com.flyingpig.mapper.CourseDetailMapper;
 import com.flyingpig.mapper.StudentMapper;
@@ -13,6 +15,7 @@ import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.service.CourseAttendanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +41,7 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
     public List<CourseTableInfo> getCourseTableInfoByWeekAndStudentId(Integer studentId, Integer week, Integer semester) {
         List<CourseTableInfo> result=new ArrayList<>();
         //先筛选出该学生所有考勤信息
-        QueryWrapper<CourseAttendance> wrapper =new QueryWrapper<CourseAttendance>();
+        QueryWrapper<CourseAttendance> wrapper =new QueryWrapper<>();
         wrapper.eq("student_id",studentId);
         List<CourseAttendance> courseAttendanceList=courseAttendanceMapper.selectList(wrapper);
         //再筛选出对应那一年,那一周的所有考勤信息
@@ -173,5 +176,44 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         studentAttendanceNow.setLongitude(courseDetail.getLongitude());
         studentAttendanceNow.setLatitude(courseDetail.getLatitude());
         return studentAttendanceNow;
+    }
+
+    @Override
+    public void addCourseAttendances(CourseAttendanceAddVO courseAttendanceAddVO, String teacherId) {
+        CourseAttendance courseAttendance=new CourseAttendance();
+        courseAttendance.setTime(LocalDateTime.now());
+        courseAttendance.setStatus(0);
+        //设置学生id
+        QueryWrapper queryWrapper=new QueryWrapper<CourseAttendance>();
+        queryWrapper.eq("no",courseAttendanceAddVO.getNo());
+        Integer studentId=studentMapper.selectOne(queryWrapper).getId();
+        courseAttendance.setStudentId(studentId);
+        //设置课程id
+        queryWrapper=new QueryWrapper<CourseDetail>();
+        queryWrapper.eq("course_teacher",teacherId);
+        queryWrapper.eq("course_name",courseAttendanceAddVO.getCourseName());
+        queryWrapper.eq("semester",courseAttendanceAddVO.getSemester());
+        List<CourseDetail> courseDetailList=courseDetailMapper.selectList(queryWrapper);
+        for(CourseDetail courseDetail:courseDetailList){
+            courseAttendance.setCourseId(courseDetail.getId());
+            courseAttendanceMapper.insert(courseAttendance);
+        }
+    }
+
+    @Override
+    public boolean signIn(String userId, SignInVO signInVO) {
+        QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<>();
+        studentQueryWrapper.eq("userid",userId);
+        Student student=studentMapper.selectOne(studentQueryWrapper);
+        QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<>();
+        courseDetailQueryWrapper.eq("id",student.getId())
+                .eq("id", signInVO.getId());
+        CourseDetail courseDetail=courseDetailMapper.selectOne(courseDetailQueryWrapper);
+        //验证经纬度是否正确
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        // 验证密码
+        boolean isMatch = encoder.matches(courseDetail.getLatitude(), signInVO.getLatitude());
+        isMatch=encoder.matches(courseDetail.getLongitude(),signInVO.getLongitude());
+        return isMatch;
     }
 }

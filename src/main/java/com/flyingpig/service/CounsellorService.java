@@ -1,6 +1,5 @@
 package com.flyingpig.service;
 
-import com.flyingpig.dataobject.entity.Counsellor;
 import org.springframework.stereotype.Service;
 
 @Service

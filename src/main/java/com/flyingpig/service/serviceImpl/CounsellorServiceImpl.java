@@ -1,8 +1,6 @@
 package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.mapper.CounsellorMapper;
-import com.flyingpig.dataobject.entity.Counsellor;
 import com.flyingpig.service.CounsellorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

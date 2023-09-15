@@ -66,13 +66,4 @@ public class LeaveController {
 //        leaveService.updateLeaveStatus(leaveId,status);
 //        return Result.success();
 //    }
-//    @GetMapping("/counsellorLeave")
-//    public Result counsellorLeave(@RequestHeader String token){
-//        //设置督导id
-//        Claims claims= JwtUtil.parseJwt(token);
-//        String id=claims.get("id").toString();
-//        Integer counsellorId=Integer.parseInt(id);
-//        List<LeaveApplication> leaveApplicationList=leaveService.selectLeaveByCounsellorId(counsellorId);
-//        return Result.success(leaveApplicationList);
-//    }
 }

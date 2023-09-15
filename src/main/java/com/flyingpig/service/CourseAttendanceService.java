@@ -4,6 +4,8 @@ import com.flyingpig.dataobject.dto.StudentAttendanceNow;
 import com.flyingpig.dataobject.entity.CourseAttendance;
 import com.flyingpig.dataobject.dto.CourseTableInfo;
 import com.flyingpig.dataobject.dto.ResultAttendance;
+import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
+import com.flyingpig.dataobject.vo.SignInVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,4 +29,8 @@ public interface CourseAttendanceService {
     CourseTableInfo getAttendanceNowByStuUserId(Integer userId);
 
     StudentAttendanceNow getStudentAttendanceNow(String studentId);
+
+    void addCourseAttendances(CourseAttendanceAddVO courseAttendanceAddVO, String teacherId);
+
+    boolean signIn(String userId, SignInVO signInVO);
 }

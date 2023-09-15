@@ -2,7 +2,6 @@ package com.flyingpig.service.serviceImpl;
 import com.flyingpig.dataobject.dto.SupervisionTaskWithCourseNameAndBeginTimeAndEndTime;
 import com.flyingpig.dataobject.entity.CourseDetail;
 import com.flyingpig.mapper.CourseDetailMapper;
-import com.flyingpig.mapper.SupervisionMapper;
 import com.flyingpig.mapper.SupervisionTaskMapper;
 import com.flyingpig.pojo.PageBean;
 import com.flyingpig.service.SupervisionTaskServie;

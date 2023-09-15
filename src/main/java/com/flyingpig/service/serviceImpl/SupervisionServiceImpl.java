@@ -1,7 +1,5 @@
 package com.flyingpig.service.serviceImpl;
 
-import com.flyingpig.mapper.StudentMapper;
-import com.flyingpig.mapper.SupervisionMapper;
 import com.flyingpig.service.SupervisionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

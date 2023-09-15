@@ -2,6 +2,8 @@ package com.flyingpig.controller;
 
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.dto.*;
+import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
+import com.flyingpig.dataobject.vo.SignInVO;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.util.JwtUtil;
@@ -24,6 +26,24 @@ public class CourseAttendanceController {
     public Result updateAttendanceStatusByStudentIdAndCourseId(@RequestBody CourseAttendance attendance) {
         //调用service层的添加功能
         courseAttendanceService.updateAttendanceStatus(attendance);
+        return Result.success();
+    }
+    @PutMapping("/signin")
+    public Result signIn(@RequestHeader String Authorization,@RequestBody SignInVO signInVO){
+        Claims claims= JwtUtil.parseJwt(Authorization);
+        String userId=claims.getSubject();
+        if(courseAttendanceService.signIn(userId,signInVO)){
+            return Result.success("签到成功");
+        }
+        else {
+            return Result.error("签到失败");
+        }
+    }
+    @PostMapping("")
+    public Result addCourseAttendances(@RequestBody CourseAttendanceAddVO courseAttendanceAddVO, @RequestHeader String Authorization){
+        Claims claims=JwtUtil.parseJwt(Authorization);
+        String userId=claims.getSubject();
+        courseAttendanceService.addCourseAttendances(courseAttendanceAddVO,userId);
         return Result.success();
     }
     @GetMapping("/courseTableInfo")

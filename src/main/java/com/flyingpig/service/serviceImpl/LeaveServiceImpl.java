@@ -3,7 +3,6 @@ package com.flyingpig.service.serviceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
 import com.flyingpig.mapper.*;
-import com.flyingpig.dataobject.entity.Counsellor;
 import com.flyingpig.dataobject.entity.CourseDetail;
 import com.flyingpig.dataobject.entity.LeaveApplication;
 import com.flyingpig.dataobject.entity.Student;
