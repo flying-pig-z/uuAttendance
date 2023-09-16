@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Service
 public interface CourseAttendanceService {
-    List<CourseTableInfo> getCourseTableInfoByWeekAndStudentId(Integer studentId, Integer week, Integer year);
+    List<CourseTableInfo> getCourseTableInfoByWeekAndUserId(Integer studentId, Integer week, Integer year);
 //    public List<CourseDetailWithStatus> getCourseDetailWithStatusByWeek(Integer studentId, String week);
 
     void updateAttendanceStatus(CourseAttendance attendance);

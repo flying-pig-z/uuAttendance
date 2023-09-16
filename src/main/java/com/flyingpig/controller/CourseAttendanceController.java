@@ -52,11 +52,11 @@ public class CourseAttendanceController {
         //设置学生id
         Claims claims= JwtUtil.parseJwt(Authorization);
         String id=claims.getSubject();
-        Integer StudentId=Integer.parseInt(id);
-        List<CourseTableInfo> courseDetailWithStatusList = courseAttendanceService.getCourseTableInfoByWeekAndStudentId(StudentId,week,semester);
+        Integer userId=Integer.parseInt(id);
+        List<CourseTableInfo> courseDetailWithStatusList = courseAttendanceService.getCourseTableInfoByWeekAndUserId(userId,week,semester);
         return Result.success(courseDetailWithStatusList);
     }
-    //
+
     @GetMapping("/attendanceNow")
     public Result getAttendanceNowByStuUserId(@RequestHeader String Authorization){
         CourseTableInfo courseDetailWithStatus =new CourseTableInfo();

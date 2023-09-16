@@ -38,18 +38,23 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
     @Autowired
     private UserMapper userMapper;
     @Override
-    public List<CourseTableInfo> getCourseTableInfoByWeekAndStudentId(Integer studentId, Integer week, Integer semester) {
+    public List<CourseTableInfo> getCourseTableInfoByWeekAndUserId(Integer userId, Integer week, Integer semester) {
+        QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<>();
+        studentQueryWrapper.eq("userid",userId);
+        Integer studentId=studentMapper.selectOne(studentQueryWrapper).getId();
         List<CourseTableInfo> result=new ArrayList<>();
         //先筛选出该学生所有考勤信息
         QueryWrapper<CourseAttendance> wrapper =new QueryWrapper<>();
         wrapper.eq("student_id",studentId);
         List<CourseAttendance> courseAttendanceList=courseAttendanceMapper.selectList(wrapper);
+        System.out.println(courseAttendanceList);
         //再筛选出对应那一年,那一周的所有考勤信息
         for(CourseAttendance courseAttendance:courseAttendanceList){
             CourseDetail courseDetail=courseDetailMapper.selectById(courseAttendance.getCourseId());
             //获取对应的年和周
             Integer courseSemester=courseDetail.getSemester();
             Integer courseWeek=courseDetail.getWeek();
+
             //比对筛选
             if(courseWeek.equals(week)&&courseSemester.equals(semester)){
                 Integer status=courseAttendance.getStatus();

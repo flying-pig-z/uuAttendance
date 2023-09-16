@@ -14,4 +14,7 @@ public class SupervisionTaskWithCourseNameAndBeginTimeAndEndTime {
     private String courseName;
     private LocalDateTime beginTime;
     private LocalDateTime endTime;
+    private Integer semester;
+    private Integer weekday;
+
 }

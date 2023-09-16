@@ -32,6 +32,8 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskServie {
             item.setCourseName(target.getCourseName());
             item.setBeginTime(target.getBeginTime());
             item.setEndTime(target.getEndTime());
+            item.setSemester(target.getSemester());
+            item.setWeekday(target.getWeekday());
         }
         //封装PageBean对象
         PageBean pageBean=new PageBean(count,resultTaskList);

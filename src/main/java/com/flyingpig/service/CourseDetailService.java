@@ -1,5 +1,6 @@
 package com.flyingpig.service;
 
+import com.flyingpig.dataobject.dto.CourseColumn;
 import com.flyingpig.dataobject.entity.CourseDetail;
 import com.flyingpig.dataobject.vo.CourseDetailAddVO;
 import org.springframework.stereotype.Service;
@@ -13,4 +14,6 @@ public interface CourseDetailService {
     CourseDetail getById(Integer courseId);
 
     void addCourseDetail(String teacherId, CourseDetailAddVO courseDetailAddVO);
+
+    CourseColumn getDataColumn();
 }

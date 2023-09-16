@@ -1,9 +1,12 @@
 package com.flyingpig.service.serviceImpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.flyingpig.dataobject.dto.CourseColumn;
 import com.flyingpig.dataobject.vo.CourseDetailAddVO;
 import com.flyingpig.mapper.CourseAttendanceMapper;
 import com.flyingpig.mapper.CourseDetailMapper;
 import com.flyingpig.dataobject.entity.CourseDetail;
+import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.service.CourseDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.Callable;
 
 @Service
 @Slf4j
@@ -55,6 +57,24 @@ public class CourseDetailServiceImpl implements CourseDetailService {
             courseDetail.setEndTime(endTime);
             courseDetailMapper.insert(courseDetail);
         }
+    }
+
+    @Override
+    public CourseColumn getDataColumn() {
+        CourseColumn result=new CourseColumn();
+        LocalDateTime nowTime=LocalDateTime.now();
+        Integer year=nowTime.getYear();
+        String semester=new String();
+        if(nowTime.getMonth().getValue()>=8||nowTime.getMonth().getValue()<=1){
+            semester=year.toString()+"01";
+        }else {
+            semester=year.toString()+"02";
+        }
+        result.setSemester(semester);
+        QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<>();
+        courseDetailQueryWrapper.eq("semester",semester);
+        result.setSchoolOpenTime(courseDetailMapper.selectList(courseDetailQueryWrapper).get(0).getSchoolOpenTime());
+        return result;
     }
 
 

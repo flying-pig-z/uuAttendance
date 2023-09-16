@@ -1,7 +1,9 @@
 package com.flyingpig.controller;
 
+import com.flyingpig.dataobject.dto.CourseColumn;
 import com.flyingpig.dataobject.vo.CourseDetailAddVO;
 import com.flyingpig.pojo.Result;
+import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.service.CourseDetailService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -22,6 +24,11 @@ public class CourseDetailController {
         System.out.println(courseDetailAddVO);
         courseDetailService.addCourseDetail(teacherId,courseDetailAddVO);
         return Result.success();
+    }
+    @GetMapping("/dataColumn")
+    public Result getDataColumn(){
+        CourseColumn courseColumn=courseDetailService.getDataColumn();
+        return Result.success(courseColumn);
     }
 //    @GetMapping("teacherGetCourse/{week}/{weekday}/{section}")
 //    public Result teacherGetCourse(@RequestHeader String token,@PathVariable String week,@PathVariable String  weekday,@PathVariable String section){
