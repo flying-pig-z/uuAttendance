@@ -8,11 +8,4 @@ import java.util.List;
 
 @Mapper
 public interface StudentMapper extends BaseMapper<Student> {
-    Student getByUsernameAndPassword(Student student);
-    StudentInfo getStudentInfoById(Integer id);
-    //通过专业班级年级获取学生id
-    List<Student> getByGradeAndMajorAndClass(String grade, String major, String Class);
-    List<Student> getByCollege(String major);
-
-    Student getByNo(String studentNo);
 }

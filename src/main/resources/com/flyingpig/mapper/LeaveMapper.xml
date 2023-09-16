@@ -3,20 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.flyingpig.mapper.LeaveMapper" >
-    <insert id="addLeave">
-        insert into leaveapplication (student_id, course_id, reason, leave_place, appeal_begin_time, appeal_end_time, status,leaveCourseName)
-        values (#{studentId},#{courseId},#{reason},#{leavePlace},#{appealBeginTime},#{appealEndTime},#{status},#{leaveCourseName})
-    </insert>
-    <select id="getByStudentId" resultType="com.flyingpig.dataobject.entity.LeaveApplication">
-        select * from leaveapplication where student_id=#{studentId}
-    </select>
     <select id="getByCourseId" resultType="com.flyingpig.dataobject.entity.LeaveApplication">
         select * from leaveapplication where course_id=#{courseId}
     </select>
-    <select id="getById" resultType="com.flyingpig.dataobject.entity.LeaveApplication">
-        select * from leaveapplication where Id=#{leaveId}
-    </select>
-    <update id="updateLeaveStatus">
-        update leaveapplication set status=#{status} where id=#{leaveId};
-    </update>
 </mapper>

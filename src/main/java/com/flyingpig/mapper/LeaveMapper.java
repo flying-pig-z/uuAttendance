@@ -8,7 +8,5 @@ import java.util.List;
 
 @Mapper
 public interface LeaveMapper extends BaseMapper<LeaveApplication> {
-    List<LeaveApplication> getByStudentId(Integer studentId);
     List<LeaveApplication> getByCourseId(Integer courseId);
-    void updateLeaveStatus(Integer leaveId,String status);
 }

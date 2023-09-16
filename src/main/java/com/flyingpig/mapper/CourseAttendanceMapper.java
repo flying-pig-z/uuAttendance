@@ -6,6 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface CourseAttendanceMapper extends BaseMapper<CourseAttendance> {
-
     CourseAttendance getStudentAttendanceNow(String studentId);
 }
