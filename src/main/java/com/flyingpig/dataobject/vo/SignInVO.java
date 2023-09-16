@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SignInVO {
     //课程id
-    public Integer id;
+    public Integer courseId;
     public String latitude;
     public String longitude;
 }

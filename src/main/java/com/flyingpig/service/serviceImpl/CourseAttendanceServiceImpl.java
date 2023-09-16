@@ -206,14 +206,17 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         studentQueryWrapper.eq("userid",userId);
         Student student=studentMapper.selectOne(studentQueryWrapper);
         QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<>();
-        courseDetailQueryWrapper.eq("id",student.getId())
-                .eq("id", signInVO.getId());
+        courseDetailQueryWrapper.eq("id", signInVO.getCourseId());
         CourseDetail courseDetail=courseDetailMapper.selectOne(courseDetailQueryWrapper);
-        //验证经纬度是否正确
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        // 验证密码
-        boolean isMatch = encoder.matches(courseDetail.getLatitude(), signInVO.getLatitude());
-        isMatch=encoder.matches(courseDetail.getLongitude(),signInVO.getLongitude());
-        return isMatch;
+        if(signInVO.getLatitude().equals(courseDetail.getLatitude())&&signInVO.getLongitude().equals(courseDetail.getLongitude())){
+            CourseAttendance courseAttendance=new CourseAttendance();
+            courseAttendance.setStatus(1);
+            QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper=new QueryWrapper<>();
+            courseAttendanceQueryWrapper.eq("course_id",signInVO.getCourseId());
+            courseAttendanceMapper.update(courseAttendance,courseAttendanceQueryWrapper);
+            return true;
+        }else{
+            return false;
+        }
     }
 }
