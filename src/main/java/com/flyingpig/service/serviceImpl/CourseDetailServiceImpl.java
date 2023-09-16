@@ -78,11 +78,7 @@ public class CourseDetailServiceImpl implements CourseDetailService {
     }
 
 
-    @Override
-    public CourseDetail getByTime(CourseDetail courseDetail) {
-        CourseDetail resultCourseDetail =courseDetailMapper.getByTime(courseDetail);
-        return resultCourseDetail;
-    }
+
 
 
 

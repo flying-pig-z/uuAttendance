@@ -10,8 +10,5 @@ import java.util.List;
 
 @Mapper
 public interface CourseDetailMapper extends BaseMapper<CourseDetail> {
-    CourseDetail getByTime(CourseDetail courseDetail);
-    List<CourseTableInfo> getByTimeNow(Integer studentId, String week);
-    CourseTableInfo getOneByTimeNow(Integer studentId, LocalDateTime timeNow);
     Integer selectCourseIdByBeginTimeAndTeacherid(String week,String weekday,String section,Integer teacherId);
 }
