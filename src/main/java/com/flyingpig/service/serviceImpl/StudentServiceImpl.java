@@ -8,6 +8,7 @@ import com.flyingpig.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.flyingpig.dataobject.entity.User;
 import java.util.HashMap;
@@ -23,7 +24,10 @@ public class StudentServiceImpl implements StudentService {
     private UserMapper userMapper;
     @Override
     public void addStudent(User user, Student student) {
-        Integer userId=userMapper.insert(user);
+        userMapper.insert(user);
+        QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
+        userQueryWrapper.eq("no",student.getNo());
+        Integer userId=userMapper.selectOne(userQueryWrapper).getId();
         student.setUserid(userId);
         studentMapper.insert(student);
     }

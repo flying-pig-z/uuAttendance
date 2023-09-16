@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @TableName("student")
 public class Student {
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.AUTO)
     private Integer id;
     private String no;
     private String name;

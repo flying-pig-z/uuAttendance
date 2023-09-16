@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @TableName("attendanceappeal")
 public class AttendanceAppeal extends Model<AttendanceAppeal> {
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.AUTO)
     private Integer id;
     private Integer studentId;
     private Integer courseId;

@@ -19,6 +19,4 @@ public interface AttendanceAppealService {
 
 //    void updateAttendanceAppealStatus(Integer attendanceAppealId, String status);
 
-
-
 }

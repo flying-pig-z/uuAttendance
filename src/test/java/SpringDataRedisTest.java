@@ -13,7 +13,7 @@ public class SpringDataRedisTest {
 
     public static void main(String[] args){
         BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
-        String encodeString=bCryptPasswordEncoder.encode("16");
+        String encodeString=bCryptPasswordEncoder.encode("T0");
         System.out.println(encodeString);
     }
 }
