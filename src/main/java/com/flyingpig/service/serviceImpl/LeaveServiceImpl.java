@@ -2,6 +2,7 @@ package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
+import com.flyingpig.dataobject.entity.AttendanceAppeal;
 import com.flyingpig.mapper.*;
 import com.flyingpig.dataobject.entity.CourseDetail;
 import com.flyingpig.dataobject.entity.LeaveApplication;
@@ -59,7 +60,9 @@ public class LeaveServiceImpl implements LeaveService {
         List<LeaveApplication> leaveApplicationList = new ArrayList<>();;
         List<Integer> courseList=supervisionTaskMapper.getUnattendancedCourselistByUserId(SupervisionId);
         for(int i=0;i<courseList.size();i++){
-            leaveApplicationList.addAll(leaveMapper.getByCourseId(courseList.get(i)));
+            QueryWrapper<LeaveApplication> leaveApplicationQueryWrapper=new QueryWrapper<>();
+            leaveApplicationQueryWrapper.eq("course_id",courseList.get(i));
+            leaveApplicationList.addAll(leaveMapper.selectList(leaveApplicationQueryWrapper));
         }
         return leaveApplicationList;
     }

@@ -8,5 +8,4 @@ import java.util.List;
 
 @Mapper
 public interface LeaveMapper extends BaseMapper<LeaveApplication> {
-    List<LeaveApplication> getByCourseId(Integer courseId);
 }
