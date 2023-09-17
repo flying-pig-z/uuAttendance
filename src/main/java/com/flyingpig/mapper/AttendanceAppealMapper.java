@@ -8,6 +8,4 @@ import java.util.List;
 
 @Mapper
 public interface AttendanceAppealMapper extends BaseMapper<AttendanceAppeal> {
-    //根据课程id进行获取
-    List<AttendanceAppeal> getByCourseId(Integer courseId);
 }

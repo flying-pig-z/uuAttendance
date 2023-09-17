@@ -56,9 +56,10 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
         List<AttendanceAppeal> attendanceAppealList = new ArrayList<>();;
         List<Integer> courseList=supervisionTaskMapper.getUnattendancedCourselistByUserId(SupervisionId);
         for(int i=0;i<courseList.size();i++){
-            attendanceAppealList.addAll(attendanceAppealMapper.getByCourseId(courseList.get(i)));
+            QueryWrapper<AttendanceAppeal> attendanceAppealQueryWrapper=new QueryWrapper<>();
+            attendanceAppealQueryWrapper.eq("course_id",courseList.get(i));
+            attendanceAppealList.addAll(attendanceAppealMapper.selectList(attendanceAppealQueryWrapper));
         }
-
         return attendanceAppealList;
     }
     //查询申诉的详情

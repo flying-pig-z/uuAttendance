@@ -31,7 +31,7 @@ public class AttendanceAppealController {
     @Autowired
     StudentService studentService;
     @PostMapping("")
-    public Result AddAttendanceAppeal(@RequestBody AttendanceAppeal attendanceAppeal, @RequestHeader String Authorization) {
+    public Result addAttendanceAppeal(@RequestBody AttendanceAppeal attendanceAppeal, @RequestHeader String Authorization) {
         //设置userid
         Claims claims= JwtUtil.parseJwt(Authorization);
         Integer userid=Integer.parseInt(claims.getSubject());
@@ -50,18 +50,9 @@ public class AttendanceAppealController {
         List<AttendanceAppealWithCourseName> result=attendanceAppealService.selectAttendanceAppealByStuUserId(userId);
         return Result.success(result);
     }
-//    @GetMapping("/supervisionAttendanceAppeal")
-//    public Result supervisionLeave(@RequestHeader String Authorization){
-//        //设置督导id
-//        Claims claims= JwtUtil.parseJwt(token);
-//        String id=claims.get("id").toString();
-//        Integer supervisionId=Integer.parseInt(id);
-//        List<AttendanceAppeal> attendanceAppealList=attendanceAppealService.selectLeaveBySupervisionId(supervisionId);
-//        return Result.success(attendanceAppealList);
-//    }
     //查询对应申诉的详细信息
     @GetMapping("/{attendanceAppealId}/attendanceAppealDetail")
-    public Result AttendanceAppealDetail(@RequestHeader String Authorization, @PathVariable Integer attendanceAppealId){
+    public Result getAttendanceAppealDetail(@RequestHeader String Authorization, @PathVariable Integer attendanceAppealId){
         ResultAttendanceAppealDetail resultAttendanceAppealDetail=attendanceAppealService.getAttendanceAppealDetail(attendanceAppealId);
         return Result.success(resultAttendanceAppealDetail);
     }

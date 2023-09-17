@@ -12,7 +12,6 @@
         WHERE (SELECT end_time FROM course_detail WHERE course_detail.id = supervision_task.course_id) > NOW()
         AND userid=#{userId}
         LIMIT #{start}, #{pageSize}
-
     </select>
     <select id="getUnattendancedCourselistByUserId" resultType="integer">
         select course_id

@@ -6,5 +6,4 @@
     <select id="selectCourseIdByBeginTimeAndTeacherid" resultType="integer">
         select id from course_detail where course_teacher =#{teacherId} and week=#{week} and weekday=#{weekday} and section=#{section}
     </select>
-
 </mapper>
