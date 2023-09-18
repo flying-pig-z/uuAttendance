@@ -54,7 +54,6 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
             //获取对应的年和周
             Integer courseSemester=courseDetail.getSemester();
             Integer courseWeek=courseDetail.getWeek();
-
             //比对筛选
             if(courseWeek.equals(week)&&courseSemester.equals(semester)){
                 Integer status=courseAttendance.getStatus();

@@ -1,8 +1,12 @@
-package com.flyingpig.controller;
+package com.flyingpig.controller.usercontrollers;
 
+import com.flyingpig.dataobject.entity.User;
+import com.flyingpig.dataobject.vo.EmailRegisterVO;
 import com.flyingpig.pojo.Result;
+import com.flyingpig.service.LoginService;
 import com.flyingpig.util.EmailUtil;
 import com.flyingpig.util.JwtUtil;
+import com.flyingpig.util.RedisCache;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,36 +18,37 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/mails")
+@RequestMapping("/user/email")
 public class MailController {
     @Autowired
-    private JavaMailSenderImpl mailSender;
+    private LoginService loginService;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private JavaMailSenderImpl mailSender;
+    //这里要使用工具类，不然各个方法之间的redis数据无法共用
+    @Autowired
+    private RedisCache redisCache;
     @Value("${spring.mail.username}")
     private String emailUserName;
-    @GetMapping("")
-    public Result sendEmailVerificationCode(@RequestHeader String Authorization ,@RequestParam  String email) {
+    @GetMapping("/verificationCode")
+    public Result sendEmailVerificationCode(@RequestParam  String email) {
         //检查email是否符合格式
-
-        //获取用户身份
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        String userId=claims.getSubject();
         //检查redis中有无验证码，如果有，则返回已存在
-        ValueOperations<String, String> operation = redisTemplate.opsForValue();
-        String verificationCode=operation.get(userId);
+
+        String verificationCode=redisCache.getCacheObject(email);
         if(verificationCode!=null){
             return Result.error("验证码已存在，请误重复发送");
-        }else{
+        }else {
             //如果没有，生成验证码存入缓存并发送
-            verificationCode= EmailUtil.createVerificationCode();
+            verificationCode = EmailUtil.createVerificationCode();
             //存入缓存
-            redisTemplate.opsForValue().set(userId, verificationCode, 120, TimeUnit.SECONDS);
+            redisCache.setCacheObject(email, verificationCode, 120, TimeUnit.SECONDS);
             //发送
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(emailUserName);//设置发件qq邮箱
@@ -53,5 +58,23 @@ public class MailController {
             mailSender.send(message);
             return Result.success("验证码已发送");
         }
+    }
+    @PostMapping("/register")
+    public Result emailRegister(@RequestBody EmailRegisterVO emailRegisterVO) {
+        System.out.println(emailRegisterVO.getEmail());
+        String verificationCode=redisCache.getCacheObject(emailRegisterVO.getEmail());
+        System.out.println(verificationCode);
+        if(verificationCode!=null&&verificationCode.equals(emailRegisterVO.getVerificationCode())){
+            //添加用户
+            User user=new User();
+            user.setNo(emailRegisterVO.getNo());
+            user.setPassword(emailRegisterVO.getPassword());
+            user.setUserType(3);
+            loginService.addUser(user);
+            return Result.success("添加成功");
+        }else {
+            return Result.error("验证码验证错误");
+        }
+
     }
 }

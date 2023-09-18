@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +18,8 @@ public class CourseTableInfo {
     private Integer day;
     private Integer sectionStart;
     private Integer sectionEnd;
+    private LocalDateTime beginTime;
+    private LocalDateTime endTime;
     private String place;
     private Integer status;
     private String teacherName;
@@ -28,6 +32,8 @@ public class CourseTableInfo {
         sectionStart=courseDetail.getSectionStart();
         sectionEnd=courseDetail.getSectionEnd();
         place=courseDetail.getCoursePlace();
+        beginTime=courseDetail.getBeginTime();
+        endTime=courseDetail.getEndTime();
         this.status=status;
         this.teacherName=teacherName;
     }

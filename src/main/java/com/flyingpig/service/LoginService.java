@@ -10,4 +10,6 @@ public interface LoginService {
     Integer getAuthenticateByUserId(String userId);
 
     void updateUserWithPassword(String userId,String newPassword);
+
+    void addUser(User user);
 }

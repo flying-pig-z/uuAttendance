@@ -77,4 +77,9 @@ public class LoginServiceImpl implements LoginService {
         user.setPassword(newPassword);
         userMapper.updateById(user);
     }
+
+    @Override
+    public void addUser(User user) {
+        userMapper.insert(user);
+    }
 }

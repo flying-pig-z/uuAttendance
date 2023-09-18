@@ -1,8 +1,9 @@
-package com.flyingpig.controller;
+package com.flyingpig.controller.usercontrollers;
+
 import com.flyingpig.dataobject.dto.LoginUser;
-import com.flyingpig.service.*;
-import com.flyingpig.dataobject.entity.*;
+import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.pojo.Result;
+import com.flyingpig.service.LoginService;
 import com.flyingpig.util.JwtUtil;
 import com.flyingpig.util.RedisCache;
 import io.jsonwebtoken.Claims;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/user")
-public class LoginController {
+public class UserController {
     @Autowired
     private LoginService loginService;
     @Autowired
@@ -52,7 +53,6 @@ public class LoginController {
             return Result.error("密码更新失败");
         }
     }
-
     @GetMapping("/authenticate")
     public Result getAuthenticateByUserId(@RequestHeader String Authorization){
         Claims claims= JwtUtil.parseJwt(Authorization);
