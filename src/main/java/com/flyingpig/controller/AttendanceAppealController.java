@@ -56,19 +56,10 @@ public class AttendanceAppealController {
         ResultAttendanceAppealDetail resultAttendanceAppealDetail=attendanceAppealService.getAttendanceAppealDetail(attendanceAppealId);
         return Result.success(resultAttendanceAppealDetail);
     }
-//    @PutMapping("/judgeAttendanceAppeal/{attendanceAppealId}/{status}")
-//    public Result JudgeLeave(@RequestHeader String token,@PathVariable Integer attendanceAppealId, @PathVariable String status){
-//        attendanceAppealService.updateAttendanceAppealStatus(attendanceAppealId,status);
-//        return Result.success();
-//    }
-//    @GetMapping("/counsellorAttendanceAppeal")
-//    public Result counsellorAttendanceAppeal(@RequestHeader String token){
-//        //设置督导id
-//        Claims claims= JwtUtil.parseJwt(token);
-//        String id=claims.get("id").toString();
-//        Integer counsellorId=Integer.parseInt(id);
-//        List<AttendanceAppeal> attendanceAppealList=attendanceAppealService.selectAttendanceAppealByCounsellorId(counsellorId);
-//        return Result.success(attendanceAppealList);
-//    }
-//
+    @PutMapping("/{attendanceAppealId}")
+    public Result judgeLeave(@PathVariable Integer attendanceAppealId, @RequestParam String status){
+        attendanceAppealService.updateByAttendanceAppealIdAndStatus(attendanceAppealId,status);
+        return Result.success();
+    }
+
 }

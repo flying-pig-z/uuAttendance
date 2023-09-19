@@ -51,17 +51,6 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
         }
         return AttendanceAppealWithCourseNameList;
     }
-    @Override
-    public List<AttendanceAppeal> selectLeaveBySupervisionId(Integer SupervisionId) {
-        List<AttendanceAppeal> attendanceAppealList = new ArrayList<>();;
-        List<Integer> courseList=supervisionTaskMapper.getUnattendancedCourselistByUserId(SupervisionId);
-        for(int i=0;i<courseList.size();i++){
-            QueryWrapper<AttendanceAppeal> attendanceAppealQueryWrapper=new QueryWrapper<>();
-            attendanceAppealQueryWrapper.eq("course_id",courseList.get(i));
-            attendanceAppealList.addAll(attendanceAppealMapper.selectList(attendanceAppealQueryWrapper));
-        }
-        return attendanceAppealList;
-    }
     //查询申诉的详情
     @Override
     public ResultAttendanceAppealDetail getAttendanceAppealDetail(Integer attendanceAppealId) {
@@ -82,18 +71,26 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
         }
         return resultAttendanceAppealDetail;
     }
-    //更新申诉状态
-//    @Override
-//    public void updateAttendanceAppealStatus(Integer attendanceAppealId, String status) {
-//        AttendanceAppeal attendanceAppeal=attendanceAppealMapper.selectById(attendanceAppealId);
-//        Integer studentId=attendanceAppeal.getStudentId();
-//        Integer courseId=attendanceAppeal.getCourseId();
-//        if(status.equals("通过"))
-//            courseAttendanceMapper.updateStatus(studentId,courseId,"已签到");
-//        attendanceAppealMapper.updateAttendanceAppealStatus(attendanceAppealId,status);
-//    }
 
-
-
+    @Override
+    public void updateByAttendanceAppealIdAndStatus(Integer attendanceAppealId, String status) {
+        //先将考勤申诉表中的考勤申诉状态改为通过
+        AttendanceAppeal attendanceAppeal=new AttendanceAppeal();
+        attendanceAppeal.setId(attendanceAppealId);
+        attendanceAppeal.setStatus(status);
+        attendanceAppealMapper.updateById(attendanceAppeal);
+        //如果通过再将签到表中的签到状态改为请假
+        if(status.equals("1")){
+            AttendanceAppeal attendanceAppeal1=attendanceAppealMapper.selectById(attendanceAppealId);
+            Integer courseId=attendanceAppeal1.getCourseId();
+            Integer studentId=attendanceAppeal1.getStudentId();
+            CourseAttendance courseAttendance=new CourseAttendance();
+            QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper=new QueryWrapper<>();
+            courseAttendanceQueryWrapper.eq("course_id",courseId);
+            courseAttendanceQueryWrapper.eq("student_id",studentId);
+            courseAttendance.setStatus(1);
+            courseAttendanceMapper.update(courseAttendance,courseAttendanceQueryWrapper);
+        }
+    }
 
 }

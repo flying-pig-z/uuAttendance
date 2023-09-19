@@ -12,11 +12,10 @@ public interface AttendanceAppealService {
     void addAttendanceAppeal(AttendanceAppeal attendanceAppeal);
     List<AttendanceAppealWithCourseName> selectAttendanceAppealByStuUserId(Integer id);
 
-    List<AttendanceAppeal> selectLeaveBySupervisionId(Integer SupervisionId);
 
     ResultAttendanceAppealDetail getAttendanceAppealDetail(Integer attendanceAppealId);
 
 
-//    void updateAttendanceAppealStatus(Integer attendanceAppealId, String status);
+    void updateByAttendanceAppealIdAndStatus(Integer attendanceAppealId, String status);
 
 }
