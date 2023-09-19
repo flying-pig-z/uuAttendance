@@ -26,7 +26,7 @@ public class LeaveController {
     @Autowired
     private StudentService studentService;
     @PostMapping("")
-    public Result AddLeave(@RequestBody LeaveApplication leaveApplication,@RequestHeader String Authorization) {
+    public Result addLeave(@RequestBody LeaveApplication leaveApplication,@RequestHeader String Authorization) {
         //封装完毕后调用service层的add方法
 
         Claims claims= JwtUtil.parseJwt(Authorization);
@@ -41,29 +41,28 @@ public class LeaveController {
     @GetMapping("/student")
     public Result selectLeaveByStudentId(@RequestHeader String Authorization) {
         //设置学生id
-        String token=Authorization;
-        Claims claims= JwtUtil.parseJwt(token);
+        Claims claims= JwtUtil.parseJwt(Authorization);
         Integer userId=Integer.parseInt(claims.getSubject());
         List<LeaveApplicationWithCourseName> result=leaveService.selectLeaveByUserId(userId);
         return Result.success(result);
     }
-    @GetMapping("/supervision")
-    public Result selectLeaveBySupervison(@RequestHeader String Authorization){
+    @GetMapping("/teacher")
+    public Result selectLeaveByTeacherId(@RequestHeader String Authorization){
         //设置督导id
         Claims claims= JwtUtil.parseJwt(Authorization);
         Integer userid=Integer.parseInt(claims.getSubject());
-        List<LeaveApplication> leaveApplicationList=leaveService.selectLeaveBySupUserId(userid);
+        List<LeaveApplication> leaveApplicationList=leaveService.selectLeaveByTeaUserId(userid);
         return Result.success(leaveApplicationList);
     }
     @GetMapping("/{leaveId}/leaveDetail")
-    public Result LeaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId){
+    public Result leaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId){
         ResultLeaveDatail resultLeaveDatail=leaveService.getLeaveDetail(leaveId);
         return Result.success(resultLeaveDatail);
     }
-//    @PutMapping("/judgeLeave/{leaveId}/{status}")
-//    public Result JudgeLeave(@PathVariable Integer leaveId, @PathVariable String status){
-//
-//        leaveService.updateLeaveStatus(leaveId,status);
-//        return Result.success();
-//    }
+    //用于老师通过请假和不通过
+    @PutMapping("/{leaveId}")
+    public Result judgeLeave(@PathVariable Integer leaveId, @RequestParam String status){
+        leaveService.updateLeaveByLeaveIdAndStatus(leaveId,status);
+        return Result.success();
+    }
 }

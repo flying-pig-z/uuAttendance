@@ -9,13 +9,13 @@ import java.util.List;
 
 @Service
 public interface LeaveService {
-    public void addLeave(LeaveApplication leaveApplication);
-    public List<LeaveApplication> selectLeaveBySupUserId(Integer UserId);
+    void addLeave(LeaveApplication leaveApplication);
+    List<LeaveApplication> selectLeaveByTeaUserId(Integer UserId);
 
-    public ResultLeaveDatail getLeaveDetail(Integer leaveId);
+    ResultLeaveDatail getLeaveDetail(Integer leaveId);
 
 
-//    public void updateLeaveStatus(Integer leaveId,String status);
+    void updateLeaveByLeaveIdAndStatus(Integer leaveId,String status);
 
     List<LeaveApplicationWithCourseName> selectLeaveByUserId(Integer userId);
 }

@@ -1,4 +1,4 @@
-package com.flyingpig.controller.usercontrollers;
+package com.flyingpig.controller;
 
 import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.dataobject.entity.User;

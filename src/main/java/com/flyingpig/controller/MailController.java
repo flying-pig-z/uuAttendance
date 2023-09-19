@@ -1,4 +1,4 @@
-package com.flyingpig.controller.usercontrollers;
+package com.flyingpig.controller;
 
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.EmailRegisterVO;
