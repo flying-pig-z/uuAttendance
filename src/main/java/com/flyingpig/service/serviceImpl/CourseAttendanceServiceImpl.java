@@ -89,25 +89,21 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         }
     }
     @Override
-    public Map<String,Object> getWhoNoCheck(Integer courseId) {
+    public ResultAttendance getWhoNoCheck(Integer courseId) {
         //更新的条件
         QueryWrapper<CourseAttendance> wrapper=new QueryWrapper<>();
         wrapper.eq("course_id",courseId);
         List<CourseAttendance> courseAttendanceList= courseAttendanceMapper.selectList(wrapper);
-        Student student=studentMapper.selectById(courseAttendanceList.get(0).getStudentId());
-        LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        userLambdaQueryWrapper.eq(User::getId,student.getUserid());
-        User user=userMapper.selectOne(userLambdaQueryWrapper);
-        Map<String,Object> studentInfo=new HashMap<>();
-        studentInfo.put("id",student.getId());
-        studentInfo.put("no",user.getNo());
-        studentInfo.put("name",user.getName());
-        studentInfo.put("gender",user.getGender());
-        studentInfo.put("grade",student.getGrade());
-        studentInfo.put("class",student.getClasS());
-        studentInfo.put("major",student.getMajor());
-        studentInfo.put("college",user.getCollege());
-        return studentInfo;
+        CourseAttendance personCourseAttendance=courseAttendanceList.get(0);
+        Student student=studentMapper.selectById(personCourseAttendance.getStudentId());
+        ResultAttendance resultAttendance=new ResultAttendance();
+        resultAttendance.setId(personCourseAttendance.getId());
+        resultAttendance.setStudentId(student.getId());
+        resultAttendance.setStudentNo(student.getNo());
+        resultAttendance.setStudentName(student.getName());
+        resultAttendance.setCourseId(courseId);
+        resultAttendance.setStatus(personCourseAttendance.getStatus());
+        return resultAttendance;
     }
 
     @Override

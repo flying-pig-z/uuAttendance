@@ -10,8 +10,7 @@ import java.util.List;
 @Mapper
 public interface SupervisionTaskMapper extends BaseMapper<SupervisionTask> {
     //获取总记录数,表里总的有几行数据
-    public Long count() ;
+    Long count() ;
     //获取当前页的结果列表
     List<SupervisionTaskWithCourseNameAndBeginTimeAndEndTime> list(Integer start, Integer pageSize,Integer userId);
-    public List<Integer> getUnattendancedCourselistByUserId(Integer studentId);
 }

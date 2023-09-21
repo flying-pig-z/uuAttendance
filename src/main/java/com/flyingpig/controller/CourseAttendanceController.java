@@ -71,8 +71,8 @@ public class CourseAttendanceController {
     @GetMapping("/whoNoCheck")
     public Result getWhoNoCheck(@RequestParam("courseId") Integer courseId) {
         //调用service层的添加功能
-        Map<String,Object> studentInfo=courseAttendanceService.getWhoNoCheck(courseId);
-        return Result.success(studentInfo);
+        ResultAttendance resultAttendance=courseAttendanceService.getWhoNoCheck(courseId);
+        return Result.success(resultAttendance);
     }
     //获取这个课程的学生名单及其这节课的考勤情况
     @GetMapping("")

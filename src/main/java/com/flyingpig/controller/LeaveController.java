@@ -2,7 +2,8 @@ package com.flyingpig.controller;
 
 import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
 import com.flyingpig.dataobject.entity.*;
-import com.flyingpig.dataobject.dto.ResultLeaveDatail;
+import com.flyingpig.dataobject.dto.LeaveDatail;
+import com.flyingpig.pojo.PageBean;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.LeaveService;
 import com.flyingpig.service.StudentService;
@@ -47,16 +48,16 @@ public class LeaveController {
         return Result.success(result);
     }
     @GetMapping("/teacher")
-    public Result selectLeaveByTeacherId(@RequestHeader String Authorization){
-        //设置督导id
+    public Result selectLeaveByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
+        //设置教师id
         Claims claims= JwtUtil.parseJwt(Authorization);
         Integer userid=Integer.parseInt(claims.getSubject());
-        List<LeaveApplication> leaveApplicationList=leaveService.selectLeaveByTeaUserId(userid);
-        return Result.success(leaveApplicationList);
+        PageBean result=leaveService.selectLeaveByTeaUserId(pageNo,pageSize,userid);
+        return Result.success(result);
     }
     @GetMapping("/{leaveId}/leaveDetail")
     public Result leaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId){
-        ResultLeaveDatail resultLeaveDatail=leaveService.getLeaveDetail(leaveId);
+        LeaveDatail resultLeaveDatail=leaveService.getLeaveDetail(leaveId);
         return Result.success(resultLeaveDatail);
     }
     //用于老师通过请假和不通过

@@ -18,7 +18,7 @@ public interface CourseAttendanceService {
 
     void updateAttendanceStatus(CourseAttendance attendance);
 
-    Map<String,Object> getWhoNoCheck(Integer courseId);
+    ResultAttendance getWhoNoCheck(Integer courseId);
 
     List<ResultAttendance> getresultAttendanceListByCourseId(Integer courseId);
     //获取某个班级的考勤情况
