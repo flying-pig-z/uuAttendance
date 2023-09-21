@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/leaves")
 @Slf4j
 public class LeaveController {
@@ -47,7 +46,7 @@ public class LeaveController {
         List<LeaveApplicationWithCourseName> result=leaveService.selectLeaveByUserId(userId);
         return Result.success(result);
     }
-    @GetMapping("/teacher")
+    @GetMapping("/teaLeaveSummary")
     public Result selectLeaveByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
         //设置教师id
         Claims claims= JwtUtil.parseJwt(Authorization);

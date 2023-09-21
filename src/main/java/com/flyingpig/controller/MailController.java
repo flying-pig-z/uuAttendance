@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/user/email")
 public class MailController {
     @Autowired

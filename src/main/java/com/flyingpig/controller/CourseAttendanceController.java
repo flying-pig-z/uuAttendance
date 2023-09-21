@@ -18,7 +18,6 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/courseAttendances")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CourseAttendanceController {
     @Autowired
     private CourseAttendanceService courseAttendanceService;

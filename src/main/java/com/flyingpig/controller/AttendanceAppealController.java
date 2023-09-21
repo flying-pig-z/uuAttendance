@@ -2,7 +2,8 @@ package com.flyingpig.controller;
 
 import com.flyingpig.dataobject.dto.AttendanceAppealWithCourseName;
 import com.flyingpig.dataobject.entity.*;
-import com.flyingpig.dataobject.dto.ResultAttendanceAppealDetail;
+import com.flyingpig.dataobject.dto.AttendanceAppealDetail;
+import com.flyingpig.pojo.PageBean;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.AttendanceAppealService;
 import com.flyingpig.service.CourseAttendanceService;
@@ -19,7 +20,6 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/attendanceAppeals")
 public class AttendanceAppealController {
     @Autowired
@@ -50,10 +50,18 @@ public class AttendanceAppealController {
         List<AttendanceAppealWithCourseName> result=attendanceAppealService.selectAttendanceAppealByStuUserId(userId);
         return Result.success(result);
     }
+    @GetMapping("/teaAttendanceAppealSummary")
+    public Result selectAttendanceAppealByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
+        //设置教师id
+        Claims claims= JwtUtil.parseJwt(Authorization);
+        Integer userid=Integer.parseInt(claims.getSubject());
+        PageBean result=attendanceAppealService.selectAttendanceAppealSummaryByTeaUserId(pageNo,pageSize,userid);
+        return Result.success(result);
+    }
     //查询对应申诉的详细信息
     @GetMapping("/{attendanceAppealId}/attendanceAppealDetail")
     public Result getAttendanceAppealDetail(@RequestHeader String Authorization, @PathVariable Integer attendanceAppealId){
-        ResultAttendanceAppealDetail resultAttendanceAppealDetail=attendanceAppealService.getAttendanceAppealDetail(attendanceAppealId);
+        AttendanceAppealDetail resultAttendanceAppealDetail=attendanceAppealService.getAttendanceAppealDetail(attendanceAppealId);
         return Result.success(resultAttendanceAppealDetail);
     }
     @PutMapping("/{attendanceAppealId}")

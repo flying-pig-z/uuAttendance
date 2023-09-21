@@ -23,9 +23,11 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskServie {
     @Override
     public PageBean page(Integer pageNo, Integer pageSize, Integer userId) {
         //记录总记录数
-        Long count= supervisionTaskMapper.count();
+        Long count= supervisionTaskMapper.selectCountBySupervisonIdAndTimeNow();
         //获取分页查询结果列表
         Integer start=(pageNo-1)*pageSize;//计算起始索引，公式：(页码-1）*页大小
+        System.out.println(start);
+        System.out.println(pageSize);
         List<SupervisionTaskWithCourseNameAndBeginTimeAndEndTime> resultTaskList=supervisionTaskMapper.list(start,pageSize,userId);
         for(SupervisionTaskWithCourseNameAndBeginTimeAndEndTime item:resultTaskList){
             CourseDetail target=courseMapper.selectById(item.getCourseId());

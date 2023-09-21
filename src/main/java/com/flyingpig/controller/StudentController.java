@@ -14,7 +14,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/students")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class StudentController {
     @Autowired
     private StudentService studentService;

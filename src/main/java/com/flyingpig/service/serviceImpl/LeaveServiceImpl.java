@@ -93,7 +93,7 @@ public class LeaveServiceImpl implements LeaveService {
         LeaveDatail resultLeaveDatail=new LeaveDatail();
 
         if(leaveApplication!=null&&student!=null&& courseDetail !=null){
-            resultLeaveDatail.setLeaveId(leaveId);
+            resultLeaveDatail.setLeavePlace(leaveApplication.getLeavePlace());
             resultLeaveDatail.setBeginTime(leaveApplication.getAppealBeginTime());
             resultLeaveDatail.setEndTime(leaveApplication.getAppealEndTime());
             resultLeaveDatail.setReason(leaveApplication.getReason());

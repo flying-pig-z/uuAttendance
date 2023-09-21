@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultAttendanceAppealDetail {
+public class AttendanceAppealDetail {
     private String studentNo;
     private String studentName;
     private String courseName;

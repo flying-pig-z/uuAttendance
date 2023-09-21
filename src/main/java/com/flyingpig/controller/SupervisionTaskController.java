@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Slf4j
 public class SupervisionTaskController {
     @Autowired
