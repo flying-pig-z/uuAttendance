@@ -1,4 +1,4 @@
-package com.flyingpig.ws;
+package com.flyingpig.websocket;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.config.WebSocketConfig;
