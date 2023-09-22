@@ -9,7 +9,9 @@ public interface LoginService {
 
     Integer getAuthenticateByUserId(String userId);
 
-    void updateUserWithPassword(String userId,String newPassword);
+    void updateUserWithPassword(String no,String newPassword);
 
     void addUser(User user);
+
+    String getPasswordByNo(String no);
 }

@@ -3,7 +3,7 @@ import java.util.Random;
 public class EmailUtil {
     //判断邮箱格式
     public static boolean judgeEmailFormat(String email){
-        String regex = "@fzu\\.edu\\.cn$";
+        String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         if (email.matches(regex)) {
             return true;
         } else {

@@ -2,6 +2,7 @@ package com.flyingpig.controller;
 
 import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.dataobject.entity.User;
+import com.flyingpig.dataobject.vo.ChangePasswordVO;
 import com.flyingpig.pojo.Result;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.JwtUtil;
@@ -32,20 +33,17 @@ public class UserController {
         return loginService.logout();
     }
     @PutMapping("/password")
-    public Result changePassword(@RequestHeader String Authorization,@RequestParam String oldPassword,@RequestParam String newPassword){
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        String userId=claims.getSubject();
-        // 从缓存中获取当前用户的密码
-        LoginUser loginUser=redisCache.getCacheObject("login:"+userId);
-        String passwordInDatabase = loginUser.getPassword();
+    public Result changePassword(@RequestBody ChangePasswordVO changePasswordVO){
+        // 从数据库中的密码
+        String passwordInDatabase=loginService.getPasswordByNo(changePasswordVO.getNo());
         // 创建BCryptPasswordEncoder对象
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         // 判断传回来的旧密码是否与数据库中存储的密码一致
-        if (passwordEncoder.matches(oldPassword, passwordInDatabase)) {
+        if (passwordEncoder.matches(changePasswordVO.getOldPassword(), passwordInDatabase)) {
             // 对新密码进行加密
-            String newEncodedPassword = passwordEncoder.encode(newPassword);
+            String newEncodedPassword = passwordEncoder.encode(changePasswordVO.getNewPassword());
             // 更新数据库中的密码
-            loginService.updateUserWithPassword(userId,newEncodedPassword);
+            loginService.updateUserWithPassword(changePasswordVO.getNo(), newEncodedPassword);
             return Result.success("密码更新成功");
         } else {
             // 旧密码不匹配，返回错误提示

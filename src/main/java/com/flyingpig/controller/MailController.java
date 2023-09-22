@@ -1,5 +1,6 @@
 package com.flyingpig.controller;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.EmailRegisterVO;
 import com.flyingpig.pojo.Result;
@@ -38,8 +39,10 @@ public class MailController {
     @GetMapping("/verificationCode")
     public Result sendEmailVerificationCode(@RequestParam  String email) {
         //检查email是否符合格式
+        if(EmailUtil.judgeEmailFormat(email)){
+            return Result.error("邮箱不符合格式");
+        }
         //检查redis中有无验证码，如果有，则返回已存在
-
         String verificationCode=redisCache.getCacheObject(email);
         if(verificationCode!=null){
             return Result.error("验证码已存在，请误重复发送");

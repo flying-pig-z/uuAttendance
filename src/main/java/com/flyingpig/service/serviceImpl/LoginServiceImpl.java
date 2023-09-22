@@ -71,15 +71,25 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void updateUserWithPassword(String userId,String newPassword) {
+    public void updateUserWithPassword(String no,String newPassword) {
         User user=new User();
-        user.setId(Integer.parseInt(userId));
+        user.setNo(no);
         user.setPassword(newPassword);
-        userMapper.updateById(user);
+        QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
+        userQueryWrapper.eq("no",no);
+        userMapper.update(user,userQueryWrapper);
     }
 
     @Override
     public void addUser(User user) {
         userMapper.insert(user);
+    }
+
+    @Override
+    public String getPasswordByNo(String no) {
+        QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
+        userQueryWrapper.eq("no",no);
+        String password=userMapper.selectOne(userQueryWrapper).getPassword();
+        return password;
     }
 }
