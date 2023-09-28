@@ -1,6 +1,5 @@
 package com.flyingpig.controller;
 
-import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.ChangePasswordVO;
 import com.flyingpig.pojo.Result;

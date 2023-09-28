@@ -43,11 +43,6 @@ public class CourseAttendanceEndPoint {
     public void setCourseAttendanceService (CourseAttendanceService courseAttendanceService){
         CourseAttendanceEndPoint.courseAttendanceService = courseAttendanceService;
     }
-    private static RedisCache redisCache;
-    @Autowired
-    private void setRedisCache (RedisCache redisCache){
-        CourseAttendanceEndPoint.redisCache = redisCache;
-    }
     /**
      * 与某个客户端的连接对话，需要通过它来给客户端发送消息
      */
@@ -177,7 +172,4 @@ public class CourseAttendanceEndPoint {
         log.info("发生错误");
         error.printStackTrace();
     }
-
-
-
 }

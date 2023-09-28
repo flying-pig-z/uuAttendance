@@ -7,6 +7,7 @@ import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.mapper.*;
 import com.flyingpig.dataobject.dto.LeaveDatail;
 import com.flyingpig.pojo.PageBean;
+import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.service.LeaveService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,12 @@ public class LeaveServiceImpl implements LeaveService {
     @Override
     public void addLeave(LeaveApplication leaveApplication) {
         leaveMapper.insert(leaveApplication);
+        QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper=new QueryWrapper<>();
+        courseAttendanceQueryWrapper.eq("course_id",leaveApplication.getCourseId());
+        courseAttendanceQueryWrapper.eq("student_id",leaveApplication.getStudentId());
+        CourseAttendance courseAttendance=new CourseAttendance();
+        courseAttendance.setStatus(3);
+        courseAttendanceMapper.update(courseAttendance,courseAttendanceQueryWrapper);
     }
     //根据督导id获取督导对应的请假
     @Override

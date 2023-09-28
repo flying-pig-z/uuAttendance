@@ -37,8 +37,8 @@ public class CourseDetailServiceImpl implements CourseDetailService {
         for(int i=courseDetailAddVO.getWeekBegin();i<= courseDetailAddVO.getWeekEnd();i=i+ courseDetailAddVO.getWeekInterval()){
             courseDetail.setWeek(i);
             //计算课程具体时间
-            LocalDateTime beginTime=courseDetailAddVO.getSchoolOpenTime().plusWeeks(i).plusDays(courseDetailAddVO.getWeekday()-1);
-            LocalDateTime endTime=courseDetailAddVO.getSchoolOpenTime().plusWeeks(i).plusDays(courseDetailAddVO.getWeekday()-1);
+            LocalDateTime beginTime=courseDetailAddVO.getSchoolOpenTime().plusWeeks(i-1).plusDays(courseDetailAddVO.getWeekday()-1);
+            LocalDateTime endTime=courseDetailAddVO.getSchoolOpenTime().plusWeeks(i-1).plusDays(courseDetailAddVO.getWeekday()-1);
             beginTime = switch (courseDetail.getSectionStart()) {
                 case 1 -> beginTime.withHour(8).withMinute(20);
                 case 3 -> beginTime.withHour(10).withMinute(20);

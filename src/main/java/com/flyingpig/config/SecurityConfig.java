@@ -33,8 +33,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                // 对于登录接口 允许匿名访问
+                // 对于登录,修改密码和注册接口 允许匿名访问
                 .antMatchers("/user/login").anonymous()
+                .antMatchers("/user/password").anonymous()
+                .antMatchers("/user/email/verificationCode").anonymous()
+                .antMatchers("/user/email/register").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //把token校验过滤器添加到过滤器链中
