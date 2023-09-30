@@ -71,9 +71,9 @@ public class MailController {
             User user=new User();
             user.setNo(emailRegisterVO.getNo());
             user.setPassword(emailRegisterVO.getPassword());
-            user.setUserType(3);
+            user.setUserType(0);
             loginService.addUser(user);
-            return Result.success("添加成功");
+            return Result.success("添加成功,请联系管理员审核");
         }else {
             return Result.error("验证码验证错误");
         }

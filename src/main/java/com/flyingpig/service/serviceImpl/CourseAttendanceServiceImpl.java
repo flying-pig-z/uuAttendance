@@ -2,10 +2,12 @@ package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.flyingpig.dataobject.dto.CourseStudent;
 import com.flyingpig.dataobject.dto.StudentAttendanceNow;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
 import com.flyingpig.dataobject.vo.SignInVO;
+import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
 import com.flyingpig.mapper.CourseAttendanceMapper;
 import com.flyingpig.mapper.CourseDetailMapper;
 import com.flyingpig.mapper.StudentMapper;
@@ -67,11 +69,6 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         return result;
     }
 
-    //    @Override
-//    public List<CourseDetailWithStatus> getCourseDetailWithStatusByWeek(Integer studentId, String week) {
-//        List<CourseDetailWithStatus> resultList=Att
-//        return resultList;
-//    }
     @Override
     public void updateAttendanceStatus(CourseAttendance attendance){
         attendance.setTime(LocalDateTime.now());
@@ -139,30 +136,6 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         }
         return realResult;
     }
-    //获取这个班级的考勤情况
-
-//    @Override
-//    public List<ResultClassAttendance> getClassAttendance(String grade, String major, String Class) {
-//        List<Student> studentList=studentMapper.getByGradeAndMajorAndClass(grade,major,Class);
-//        List<ResultClassAttendance> resultClassAttendanceList=new ArrayList<>();
-//        for(int i=0;i<studentList.size();i++){
-//            Integer signedCount= courseAttendanceMapper.countStudentAttendance(studentList.get(i).getId(),"已签到");
-//            Integer unsignedCount= courseAttendanceMapper.countStudentAttendance(studentList.get(i).getId(),"未签到");
-//            Integer leaveCount= courseAttendanceMapper.countStudentAttendance(studentList.get(i).getId(),"请假");
-//            ResultClassAttendance temp=new ResultClassAttendance(studentList.get(i).getNo(),studentList.get(i).getName(),signedCount,unsignedCount,leaveCount);
-//            resultClassAttendanceList.add(temp);
-//        }
-//        return resultClassAttendanceList;
-//    }
-//    @Override
-//    public CourseAttendance getByStudentIdAndBeginTimeAndEndTime(CourseAttendance target) {
-//        target= courseAttendanceMapper.getByStudentIdAndBeginTimeAndEndTime(target);
-//        return target;
-//    }
-    @Override
-    public CourseTableInfo getAttendanceNowByStuUserId(Integer userId) {
-        return null;
-    }
     @Override
     public StudentAttendanceNow getStudentAttendanceNow(String studentId) {
         //获取当前时间
@@ -218,5 +191,28 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         }else{
             return false;
         }
+    }
+    @Override
+    public List<CourseStudent> getStudentByTeauserIdAndsemesterAndCourseName(String teaUserid, Integer semester, String courseName) {
+        QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<CourseDetail>();
+        courseDetailQueryWrapper.eq("course_teacher",teaUserid);
+        courseDetailQueryWrapper.eq("course_name",courseName);
+        courseDetailQueryWrapper.eq("semester",semester);
+        List<CourseDetail> courseDetailList=courseDetailMapper.selectList(courseDetailQueryWrapper);
+        Integer courseOneId=courseDetailList.get(0).getId();
+        QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper=new QueryWrapper<>();
+        courseAttendanceQueryWrapper.eq("course_id",courseOneId).select("student_id");
+        List<CourseAttendance> courseAttendanceList=courseAttendanceMapper.selectList(courseAttendanceQueryWrapper);
+        List<CourseStudent> courseStudentList=new ArrayList<>();
+        for(CourseAttendance courseAttendance:courseAttendanceList){
+            Integer studentId=courseAttendance.getStudentId();
+            Student student=studentMapper.selectById(studentId);
+            CourseStudent courseStudent=new CourseStudent();
+            courseStudent.setStuUserId(student.getUserid());
+            courseStudent.setStudentNo(student.getNo());
+            courseStudent.setStudentName(student.getName());
+            courseStudentList.add(courseStudent);
+        }
+        return courseStudentList;
     }
 }
