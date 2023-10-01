@@ -13,6 +13,7 @@ import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,9 @@ public class AttendanceAppealController {
     CourseAttendanceService courseAttendanceService;
     @Autowired
     StudentService studentService;
+
     @PostMapping("")
+    @PreAuthorize("hasAuthority('sys:student:operation')")
     public Result addAttendanceAppeal(@RequestBody AttendanceAppeal attendanceAppeal, @RequestHeader String Authorization) {
         //设置userid
         Claims claims= JwtUtil.parseJwt(Authorization);
@@ -42,7 +45,9 @@ public class AttendanceAppealController {
         attendanceAppealService.addAttendanceAppeal(attendanceAppeal);
         return Result.success();
     }
+
     @GetMapping("/student")
+    @PreAuthorize("hasAuthority('sys:student:operation')")
     public Result selectAttendanceAppealByStuUserId(@RequestHeader String Authorization) {
         //设置学生id
         Claims claims= JwtUtil.parseJwt(Authorization);
@@ -50,6 +55,8 @@ public class AttendanceAppealController {
         List<AttendanceAppealWithCourseName> result=attendanceAppealService.selectAttendanceAppealByStuUserId(userId);
         return Result.success(result);
     }
+
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/teaAttendanceAppealSummary")
     public Result selectAttendanceAppealByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
         //设置教师id
@@ -58,12 +65,15 @@ public class AttendanceAppealController {
         PageBean result=attendanceAppealService.selectAttendanceAppealSummaryByTeaUserId(pageNo,pageSize,userid);
         return Result.success(result);
     }
+
     //查询对应申诉的详细信息
     @GetMapping("/{attendanceAppealId}/attendanceAppealDetail")
     public Result getAttendanceAppealDetail(@RequestHeader String Authorization, @PathVariable Integer attendanceAppealId){
         AttendanceAppealDetail resultAttendanceAppealDetail=attendanceAppealService.getAttendanceAppealDetail(attendanceAppealId);
         return Result.success(resultAttendanceAppealDetail);
     }
+
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PutMapping("/{attendanceAppealId}")
     public Result judgeLeave(@PathVariable Integer attendanceAppealId, @RequestParam String status){
         attendanceAppealService.updateByAttendanceAppealIdAndStatus(attendanceAppealId,status);

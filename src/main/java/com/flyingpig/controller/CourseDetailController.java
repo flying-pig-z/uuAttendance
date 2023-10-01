@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class CourseDetailController {
     @Autowired
     CourseDetailService courseDetailService;
+
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PostMapping("")
     public Result addCourseDetail(@RequestBody CourseDetailAddVO courseDetailAddVO,@RequestHeader String Authorization){
@@ -25,6 +26,8 @@ public class CourseDetailController {
         courseDetailService.addCourseDetail(teacherId,courseDetailAddVO);
         return Result.success();
     }
+
+    @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/dataColumn")
     public Result getDataColumn(){
         CourseColumn courseColumn=courseDetailService.getDataColumn();

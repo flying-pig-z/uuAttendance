@@ -8,6 +8,7 @@ import com.flyingpig.util.JwtUtil;
 import com.flyingpig.util.RedisCache;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +51,7 @@ public class UserController {
             return Result.error("密码更新失败");
         }
     }
+    @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/authenticate")
     public Result getAuthenticateByUserId(@RequestHeader String Authorization){
         Claims claims= JwtUtil.parseJwt(Authorization);

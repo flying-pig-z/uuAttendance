@@ -26,6 +26,7 @@ public class LeaveController {
     private LeaveService leaveService;
     @Autowired
     private StudentService studentService;
+
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @PostMapping("")
     public Result addLeave(@RequestBody LeaveApplication leaveApplication,@RequestHeader String Authorization) {
@@ -40,6 +41,7 @@ public class LeaveController {
         leaveService.addLeave(leaveApplication);
         return Result.success();
     }
+
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/student")
     public Result selectLeaveByStudentId(@RequestHeader String Authorization) {
@@ -49,6 +51,7 @@ public class LeaveController {
         List<LeaveApplicationWithCourseName> result=leaveService.selectLeaveByUserId(userId);
         return Result.success(result);
     }
+
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/teaLeaveSummary")
     public Result selectLeaveByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
@@ -58,11 +61,13 @@ public class LeaveController {
         PageBean result=leaveService.selectLeaveByTeaUserId(pageNo,pageSize,userid);
         return Result.success(result);
     }
+
     @GetMapping("/{leaveId}/leaveDetail")
     public Result leaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId){
         LeaveDatail resultLeaveDatail=leaveService.getLeaveDetail(leaveId);
         return Result.success(resultLeaveDatail);
     }
+
     //用于老师通过请假和不通过
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PutMapping("/{leaveId}")
@@ -70,4 +75,5 @@ public class LeaveController {
         leaveService.updateLeaveByLeaveIdAndStatus(leaveId,status);
         return Result.success();
     }
+
 }

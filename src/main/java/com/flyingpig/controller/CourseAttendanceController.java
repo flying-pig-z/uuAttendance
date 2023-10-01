@@ -10,6 +10,7 @@ import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import java.util.List;
 public class CourseAttendanceController {
     @Autowired
     private CourseAttendanceService courseAttendanceService;
+
+    @PreAuthorize("hasAuthority('sys:supervision:operation')")
     @PutMapping ("/status")
     public Result updateAttendanceStatusByStudentIdAndCourseId(@RequestBody CourseAttendance attendance) {
         //调用service层的添加功能
@@ -26,6 +29,7 @@ public class CourseAttendanceController {
         return Result.success();
     }
 
+    @PreAuthorize("hasAuthority('sys:student:operation')")
     @PutMapping("/signin")
     public Result signIn(@RequestHeader String Authorization,@RequestBody SignInVO signInVO){
         Claims claims= JwtUtil.parseJwt(Authorization);
@@ -37,6 +41,8 @@ public class CourseAttendanceController {
             return Result.error("签到失败");
         }
     }
+
+    @PreAuthorize("hasAuthority('sys:supervision:operation')")
     @PostMapping("")
     public Result addCourseAttendances(@RequestBody CourseAttendanceAddVO courseAttendanceAddVO, @RequestHeader String Authorization){
         Claims claims=JwtUtil.parseJwt(Authorization);
@@ -44,6 +50,8 @@ public class CourseAttendanceController {
         courseAttendanceService.addCourseAttendances(courseAttendanceAddVO,userId);
         return Result.success();
     }
+
+    @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/courseTableInfo")
     public Result getCourseDetailWithStatusByWeekAndStudentId(@RequestParam("week") Integer week,@RequestParam("semester") Integer semester,@RequestHeader String Authorization){
         CourseDetail select=new CourseDetail();
@@ -54,12 +62,15 @@ public class CourseAttendanceController {
         List<CourseTableInfo> courseDetailWithStatusList = courseAttendanceService.getCourseTableInfoByWeekAndUserId(userId,week,semester);
         return Result.success(courseDetailWithStatusList);
     }
+
+    @PreAuthorize("hasAuthority('sys:supervision:operation')")
     @GetMapping("/whoNoCheck")
     public Result getWhoNoCheck(@RequestParam("courseId") Integer courseId) {
         //调用service层的添加功能
         ResultAttendance resultAttendance=courseAttendanceService.getWhoNoCheck(courseId);
         return Result.success(resultAttendance);
     }
+
     //获取这个课程的学生名单及其这节课的考勤情况
     @GetMapping("")
     public Result getCourseAttendanceBycourseId(@RequestParam("courseId") Integer courseId) {
@@ -67,6 +78,7 @@ public class CourseAttendanceController {
         List<ResultAttendance> resultAttendanceList= courseAttendanceService.getresultAttendanceListByCourseId(courseId);
         return Result.success(resultAttendanceList);
     }
+
     //通过老师的id和学期还有课程名字获取到这个课程的学生
     @GetMapping("/student")
     public Result getStudentByTeauserIdAndsemesterAndCourseName(@RequestHeader String Authorization,@RequestParam Integer semester,@RequestParam String courseName){
