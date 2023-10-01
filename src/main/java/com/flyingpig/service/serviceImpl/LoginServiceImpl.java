@@ -3,7 +3,7 @@ package com.flyingpig.service.serviceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.mapper.UserMapper;
-import com.flyingpig.pojo.Result;
+import com.flyingpig.common.Result;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.util.JwtUtil;

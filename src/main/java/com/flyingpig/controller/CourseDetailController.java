@@ -2,7 +2,7 @@ package com.flyingpig.controller;
 
 import com.flyingpig.dataobject.dto.CourseColumn;
 import com.flyingpig.dataobject.vo.CourseDetailAddVO;
-import com.flyingpig.pojo.Result;
+import com.flyingpig.common.Result;
 import com.flyingpig.service.CourseDetailService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;

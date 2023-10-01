@@ -1,7 +1,7 @@
 package com.flyingpig.service;
 
 import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
-import com.flyingpig.pojo.PageBean;
+import com.flyingpig.common.PageBean;
 import org.springframework.stereotype.Service;
 
 @Service

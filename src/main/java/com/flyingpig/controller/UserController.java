@@ -2,7 +2,7 @@ package com.flyingpig.controller;
 
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.ChangePasswordVO;
-import com.flyingpig.pojo.Result;
+import com.flyingpig.common.Result;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.JwtUtil;
 import com.flyingpig.util.RedisCache;

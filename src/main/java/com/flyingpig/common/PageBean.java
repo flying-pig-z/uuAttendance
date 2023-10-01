@@ -1,4 +1,4 @@
-package com.flyingpig.pojo;
+package com.flyingpig.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

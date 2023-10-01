@@ -1,4 +1,4 @@
-package com.flyingpig.security;
+package com.flyingpig.service.serviceImpl.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.dataobject.dto.LoginUser;

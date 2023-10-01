@@ -1,8 +1,8 @@
 package com.flyingpig.controller;
 
 import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
-import com.flyingpig.pojo.PageBean;
-import com.flyingpig.pojo.Result;
+import com.flyingpig.common.PageBean;
+import com.flyingpig.common.Result;
 import com.flyingpig.service.SupervisionTaskService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -20,7 +20,7 @@ public class SupervisionTaskController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('sys:supervision:operation')")
-    private Result getSupervisonTaskPageBySupervisonId(@RequestParam(defaultValue = "1")Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize,@RequestHeader String Authorization){
+    public Result getSupervisonTaskPageBySupervisonId(@RequestParam(defaultValue = "1")Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize,@RequestHeader String Authorization){
         //记录日志
         log.info("分页查询，参数：{}，{}",pageNo,pageSize);
         //调用业务层分页查询功能

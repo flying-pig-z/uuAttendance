@@ -3,7 +3,7 @@ package com.flyingpig.service;
 import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
 import com.flyingpig.dataobject.entity.LeaveApplication;
 import com.flyingpig.dataobject.dto.LeaveDatail;
-import com.flyingpig.pojo.PageBean;
+import com.flyingpig.common.PageBean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

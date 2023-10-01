@@ -3,7 +3,7 @@ package com.flyingpig.controller;
 import com.flyingpig.dataobject.entity.Student;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.util.JwtUtil;
-import com.flyingpig.pojo.Result;
+import com.flyingpig.common.Result;
 import com.flyingpig.service.StudentService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;

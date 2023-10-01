@@ -1,28 +1,18 @@
 package com.flyingpig.controller;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.EmailRegisterVO;
-import com.flyingpig.pojo.Result;
+import com.flyingpig.common.Result;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.EmailUtil;
-import com.flyingpig.util.JwtUtil;
 import com.flyingpig.util.RedisCache;
-import io.jsonwebtoken.Claims;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/user/email")

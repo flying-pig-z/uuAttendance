@@ -1,7 +1,7 @@
 package com.flyingpig.exception;
 
 import com.alibaba.fastjson.JSON;
-import com.flyingpig.pojo.Result;
+import com.flyingpig.common.Result;
 import com.flyingpig.util.WebUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

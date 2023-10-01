@@ -1,6 +1,6 @@
 package com.flyingpig.service;
 
-import com.flyingpig.pojo.Result;
+import com.flyingpig.common.Result;
 import com.flyingpig.dataobject.entity.User;
 
 public interface LoginService {
