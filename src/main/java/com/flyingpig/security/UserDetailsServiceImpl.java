@@ -2,6 +2,7 @@ package com.flyingpig.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.dataobject.dto.LoginUser;
+import com.flyingpig.mapper.MenuMapper;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.dataobject.entity.User;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -18,6 +22,8 @@ import java.util.Objects;
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private MenuMapper menuMapper;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //查询用户信息
@@ -30,6 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         //TODO 根据用户查询权限信息，添加到LoginUser中
         //把数据封装成UserDetails返回
-        return new LoginUser(user);
+        List<String> permissionKeyList =  menuMapper.selectPermsByUserId((long)user.getId());
+        return new LoginUser(user,permissionKeyList);
     }
 }

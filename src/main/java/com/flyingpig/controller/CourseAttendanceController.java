@@ -26,6 +26,7 @@ public class CourseAttendanceController {
         courseAttendanceService.updateAttendanceStatus(attendance);
         return Result.success();
     }
+
     @PutMapping("/signin")
     public Result signIn(@RequestHeader String Authorization,@RequestBody SignInVO signInVO){
         Claims claims= JwtUtil.parseJwt(Authorization);

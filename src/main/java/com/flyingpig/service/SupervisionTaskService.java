@@ -5,7 +5,7 @@ import com.flyingpig.pojo.PageBean;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface SupervisionTaskServie {
+public interface SupervisionTaskService {
     PageBean page(Integer pageNo, Integer pageSize, Integer userId);
 
     void addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(String teaUserid, SupervisionTaskAddVO supervisionTaskAddVO);

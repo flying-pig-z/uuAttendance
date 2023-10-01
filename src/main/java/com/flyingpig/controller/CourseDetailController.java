@@ -8,6 +8,7 @@ import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class CourseDetailController {
     @Autowired
     CourseDetailService courseDetailService;
-
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PostMapping("")
     public Result addCourseDetail(@RequestBody CourseDetailAddVO courseDetailAddVO,@RequestHeader String Authorization){
         Claims claims= JwtUtil.parseJwt(Authorization);

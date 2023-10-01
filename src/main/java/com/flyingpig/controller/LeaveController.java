@@ -11,6 +11,7 @@ import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class LeaveController {
     private LeaveService leaveService;
     @Autowired
     private StudentService studentService;
+    @PreAuthorize("hasAuthority('sys:student:operation')")
     @PostMapping("")
     public Result addLeave(@RequestBody LeaveApplication leaveApplication,@RequestHeader String Authorization) {
         //封装完毕后调用service层的add方法
@@ -38,6 +40,7 @@ public class LeaveController {
         leaveService.addLeave(leaveApplication);
         return Result.success();
     }
+    @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/student")
     public Result selectLeaveByStudentId(@RequestHeader String Authorization) {
         //设置学生id
@@ -46,6 +49,7 @@ public class LeaveController {
         List<LeaveApplicationWithCourseName> result=leaveService.selectLeaveByUserId(userId);
         return Result.success(result);
     }
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/teaLeaveSummary")
     public Result selectLeaveByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
         //设置教师id
@@ -60,6 +64,7 @@ public class LeaveController {
         return Result.success(resultLeaveDatail);
     }
     //用于老师通过请假和不通过
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PutMapping("/{leaveId}")
     public Result judgeLeave(@PathVariable Integer leaveId, @RequestParam String status){
         leaveService.updateLeaveByLeaveIdAndStatus(leaveId,status);

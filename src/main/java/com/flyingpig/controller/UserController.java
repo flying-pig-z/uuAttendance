@@ -25,6 +25,7 @@ public class UserController {
             return loginService.login(user);
         }catch (Exception e) {
             return Result.error("账号或密码错误，请重新登录");
+
         }
     }
     @PostMapping ("/logout")

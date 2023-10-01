@@ -7,6 +7,7 @@ import com.flyingpig.pojo.Result;
 import com.flyingpig.service.StudentService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.Map;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+    @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/studentInfo")
     public Result getStudentInfoById(@RequestHeader String Authorization){
         //设置学生id
@@ -25,7 +27,9 @@ public class StudentController {
         Map<String,Object> studentInfo=studentService.getStudentInfoByUserId(userId);
         return Result.success(studentInfo);
     }
+
     //录入用户信息
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PostMapping("")
     public Result addStudent(@RequestParam String no,@RequestParam String name, @RequestParam(defaultValue = "男") String gender,
                              @RequestParam(defaultValue = "计算机与大数据学院") String colleage){

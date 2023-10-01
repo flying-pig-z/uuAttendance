@@ -1,14 +1,14 @@
 package com.flyingpig.controller;
 
-import com.flyingpig.dataobject.entity.SupervisionTask;
 import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
 import com.flyingpig.pojo.PageBean;
 import com.flyingpig.pojo.Result;
-import com.flyingpig.service.SupervisionTaskServie;
+import com.flyingpig.service.SupervisionTaskService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/supervisiontasks")
 public class SupervisionTaskController {
     @Autowired
-    private SupervisionTaskServie supervisionTaskServie;
+    private SupervisionTaskService supervisionTaskService;
+
     @GetMapping("")
+    @PreAuthorize("hasAuthority('sys:supervision:operation')")
     private Result getSupervisonTaskPageBySupervisonId(@RequestParam(defaultValue = "1")Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize,@RequestHeader String Authorization){
         //记录日志
         log.info("分页查询，参数：{}，{}",pageNo,pageSize);
@@ -25,22 +27,24 @@ public class SupervisionTaskController {
         Claims claims= JwtUtil.parseJwt(Authorization);
         String id=claims.getSubject();
         Integer userId=Integer.parseInt(id);
-        PageBean pageBean= supervisionTaskServie.page(pageNo,pageSize,userId);
+        PageBean pageBean= supervisionTaskService.page(pageNo,pageSize,userId);
         //响应
         return Result.success(pageBean);
     }
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PostMapping("")
     public Result addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization,@RequestBody SupervisionTaskAddVO supervisionTaskAddVO){
         Claims claims= JwtUtil.parseJwt(Authorization);
         String teaUserid=claims.getSubject();
-        supervisionTaskServie.addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid,supervisionTaskAddVO);
+        supervisionTaskService.addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid,supervisionTaskAddVO);
         return Result.success();
     }
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @DeleteMapping("")
     public Result deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization,@RequestBody SupervisionTaskAddVO supervisionTaskAddVO){
         Claims claims= JwtUtil.parseJwt(Authorization);
         String teaUserid=claims.getSubject();
-        supervisionTaskServie.deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid,supervisionTaskAddVO);
+        supervisionTaskService.deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid,supervisionTaskAddVO);
         return Result.success();
     }
 }

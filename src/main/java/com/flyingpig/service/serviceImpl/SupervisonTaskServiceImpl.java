@@ -10,7 +10,7 @@ import com.flyingpig.mapper.CourseDetailMapper;
 import com.flyingpig.mapper.SupervisionTaskMapper;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.pojo.PageBean;
-import com.flyingpig.service.SupervisionTaskServie;
+import com.flyingpig.service.SupervisionTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @Slf4j
 @Transactional(rollbackFor = {Exception.class})
-public class SupervisonTaskServiceImpl implements SupervisionTaskServie {
+public class SupervisonTaskServiceImpl implements SupervisionTaskService {
     @Autowired
     SupervisionTaskMapper supervisionTaskMapper;
     @Autowired
