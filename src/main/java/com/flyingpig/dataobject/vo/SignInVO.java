@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class SignInVO {
     //课程id
     public Integer courseId;
-    public String latitude;
-    public String longitude;
+    public Double latitude;
+    public Double longitude;
 }

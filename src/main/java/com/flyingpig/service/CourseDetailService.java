@@ -5,14 +5,14 @@ import com.flyingpig.dataobject.entity.CourseDetail;
 import com.flyingpig.dataobject.vo.CourseDetailAddVO;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service
 public interface CourseDetailService {
-
-    Integer getCourseIdByBeginTimeAndTeacherId(String week,String weekday,String section,Integer teacherId);
-
-    CourseDetail getById(Integer courseId);
 
     void addCourseDetail(String teacherId, CourseDetailAddVO courseDetailAddVO);
 
     CourseColumn getDataColumn();
+
+    HashSet<String> listCourseDetailByTeaUserIdAndSemester(String teacherId, String semester);
 }

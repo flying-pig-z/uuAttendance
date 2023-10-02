@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+
 @Slf4j
 @RestController
 @RequestMapping("/courseDetails")
@@ -33,21 +36,13 @@ public class CourseDetailController {
         CourseColumn courseColumn=courseDetailService.getDataColumn();
         return Result.success(courseColumn);
     }
-//    @GetMapping("teacherGetCourse/{week}/{weekday}/{section}")
-//    public Result teacherGetCourse(@RequestHeader String token,@PathVariable String week,@PathVariable String  weekday,@PathVariable String section){
-//        Claims claims= JwtUtil.parseJwt(token);
-//        String id=claims.get("id").toString();
-//        Integer teacherId=Integer.parseInt(id);
-//
-//        Integer courseId= courseDetailService.getCourseIdByBeginTimeAndTeacherId(week,weekday,section,teacherId);
-//        return Result.success(courseId);
-//    }
-//    @GetMapping("teacherGetCourse/{teacherName}/{week}/{weekday}/{section}")
-//    public Result GetCourseByTeacherNameAndWeekAndWeekdayAndSection(@PathVariable String teacherName,@PathVariable String week,@PathVariable String  weekday,@PathVariable String section){
-//
-//        Integer teacherId=teacherService.getIdByTeacherName(teacherName);
-//
-//        Integer courseId= courseDetailService.getCourseIdByBeginTimeAndTeacherId(week,weekday,section,teacherId);
-//        return Result.success(courseId);
-//    }
+
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
+    @GetMapping("/coursedetailList")
+    public Result listCourseDetailByTeaUserIdAndSemester(@RequestHeader String Authorization,@RequestParam String semester){
+        Claims claims= JwtUtil.parseJwt(Authorization);
+        String teacherId=claims.getSubject();
+        HashSet<String> courseNameSet = courseDetailService.listCourseDetailByTeaUserIdAndSemester(teacherId,semester);
+        return Result.success(courseNameSet);
+    }
 }

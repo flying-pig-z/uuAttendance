@@ -2,10 +2,12 @@ package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.flyingpig.common.PageBean;
 import com.flyingpig.dataobject.dto.CourseStudent;
 import com.flyingpig.dataobject.dto.StudentAttendanceNow;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
+import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
 import com.flyingpig.dataobject.vo.SignInVO;
 import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
 import com.flyingpig.mapper.CourseAttendanceMapper;
@@ -15,7 +17,9 @@ import com.flyingpig.dataobject.dto.CourseTableInfo;
 import com.flyingpig.dataobject.dto.ResultAttendance;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.service.CourseAttendanceService;
+import com.flyingpig.util.DistanceCalculator;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.startup.ContextRuleSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -181,7 +185,9 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<>();
         courseDetailQueryWrapper.eq("id", signInVO.getCourseId());
         CourseDetail courseDetail=courseDetailMapper.selectOne(courseDetailQueryWrapper);
-        if(signInVO.getLatitude().equals(courseDetail.getLatitude())&&signInVO.getLongitude().equals(courseDetail.getLongitude())){
+        Double courseLatitude=Double.parseDouble(courseDetail.getLatitude());
+        Double courseLongitude=Double.parseDouble(courseDetail.getLongitude());
+        if(DistanceCalculator.distanceBetweenCoordinates(signInVO.getLatitude(),signInVO.getLongitude(),courseLatitude,courseLongitude)<=30){
             CourseAttendance courseAttendance=new CourseAttendance();
             courseAttendance.setStatus(1);
             QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper=new QueryWrapper<>();
@@ -214,5 +220,34 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
             courseStudentList.add(courseStudent);
         }
         return courseStudentList;
+    }
+
+    @Override
+    public PageBean pageCourseAttendance(CourseAttendanceQueryVO courseAttendanceQueryVO) {
+        PageBean pageBean=new PageBean();
+        QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<>();
+        courseDetailQueryWrapper.eq("course_teacher",courseAttendanceQueryVO.getTeaUserId())
+                .eq("course_name",courseAttendanceQueryVO.getCourseName())
+                .eq("semester",courseAttendanceQueryVO.getSemester());
+        if(courseAttendanceQueryVO.getWeek()!=null){
+            courseDetailQueryWrapper.eq("week",courseAttendanceQueryVO.getWeek());
+        }
+        if(courseAttendanceQueryVO.getWeekday()!=null){
+            courseDetailQueryWrapper.eq("weekday",courseAttendanceQueryVO.getWeekday());
+        }
+        if(courseAttendanceQueryVO.getBeginSection()!=null){
+            courseDetailQueryWrapper.eq("section_start",courseAttendanceQueryVO.getBeginSection());
+        }
+        if(courseAttendanceQueryVO.getEndSection()!=null){
+            courseDetailQueryWrapper.eq("section_end",courseAttendanceQueryVO.getEndSection());
+        }
+        List<CourseDetail> courseDetailList=courseDetailMapper.selectList(courseDetailQueryWrapper);
+
+        QueryWrapper<CourseAttendance> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("course_id", courseDetailList).groupBy("student_id").select("student_id");
+//        pageBean.setTotal();
+//        pageBean.setRows();
+
+        return pageBean;
     }
 }

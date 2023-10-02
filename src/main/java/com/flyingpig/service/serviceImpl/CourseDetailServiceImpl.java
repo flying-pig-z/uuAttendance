@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -24,12 +26,6 @@ public class CourseDetailServiceImpl implements CourseDetailService {
     @Autowired
     private CourseAttendanceMapper courseAttendanceMapper;
 
-
-    @Override
-    public CourseDetail getById(Integer courseId) {
-        CourseDetail courseDetail =courseDetailMapper.selectById(courseId);
-        return courseDetail;
-    }
     @Override
     public void addCourseDetail(String teacherId, CourseDetailAddVO courseDetailAddVO) {
         CourseDetail courseDetail=new CourseDetail(courseDetailAddVO);
@@ -77,14 +73,19 @@ public class CourseDetailServiceImpl implements CourseDetailService {
         return result;
     }
 
-
-
-
-
-
     @Override
-    public Integer getCourseIdByBeginTimeAndTeacherId(String week,String weekday,String section, Integer teacherId) {
-        Integer resultcourseId=courseDetailMapper.selectCourseIdByBeginTimeAndTeacherid(week,weekday,section,teacherId);
-        return resultcourseId;
+    public HashSet<String> listCourseDetailByTeaUserIdAndSemester(String teacherId, String semester) {
+        QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<>();
+        courseDetailQueryWrapper.eq("course_teacher",teacherId)
+                .eq("semester",semester)
+                .select("course_name");
+        List<CourseDetail> courseDetailList=courseDetailMapper.selectList(courseDetailQueryWrapper);
+        HashSet<String> courseNameSet=new HashSet<>();
+        for(CourseDetail courseDetail:courseDetailList){
+            courseNameSet.add(courseDetail.getCourseName());
+        }
+        return courseNameSet;
     }
+
+
 }

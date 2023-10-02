@@ -11,8 +11,8 @@
     <groupId>com.itheima</groupId>
     <artifactId>uuAttendance</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo2</name>
-    <description>demo2</description>
+    <name>uuAttendance</name>
+    <description>An attendance software that supports roll calling and location check-in.</description>
     <properties>
         <java.version>17</java.version>
     </properties>

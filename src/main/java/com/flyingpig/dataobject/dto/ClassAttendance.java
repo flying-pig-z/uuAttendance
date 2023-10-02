@@ -7,10 +7,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultClassAttendance {
+public class ClassAttendance {
     String studentNo;
     String studentName;
+    //签到次数
     Integer signedCount;
-    Integer unsignedCount;
+    //未签到次数
+    Integer nocheckCount;
+    //缺勤次数
+    Integer absentCount;
+    //请假次数
     Integer leaveCount;
 }

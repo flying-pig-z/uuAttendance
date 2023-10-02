@@ -1,13 +1,17 @@
 package com.flyingpig.controller;
 
+import com.baomidou.mybatisplus.extension.api.R;
+import com.flyingpig.common.PageBean;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.dto.*;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
+import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
 import com.flyingpig.dataobject.vo.SignInVO;
 import com.flyingpig.common.Result;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +38,8 @@ public class CourseAttendanceController {
     public Result signIn(@RequestHeader String Authorization,@RequestBody SignInVO signInVO){
         Claims claims= JwtUtil.parseJwt(Authorization);
         String userId=claims.getSubject();
+        System.out.println(signInVO.getLatitude());
+        System.out.println(signInVO.getLatitude());
         if(courseAttendanceService.signIn(userId,signInVO)){
             return Result.success("签到成功");
         }
@@ -86,5 +92,18 @@ public class CourseAttendanceController {
         String teaUserid=claims.getSubject();
         List<CourseStudent> courseStudentList=courseAttendanceService.getStudentByTeauserIdAndsemesterAndCourseName(teaUserid,semester,courseName);
         return Result.success(courseStudentList);
+    }
+
+    @GetMapping("/courseAttendanceList")
+    public Result pageCourseAttendance(@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
+                                       @RequestParam(defaultValue = "null") Integer week,@RequestParam(defaultValue = "null") Integer weekday,
+                                       @RequestParam(defaultValue = "null") Integer beginSection,@RequestParam(defaultValue = "null") Integer endSection,
+                                       @RequestParam(defaultValue = "1") Integer pageNo,@RequestParam(defaultValue = "10") Integer pageSize){
+        Claims claims= JwtUtil.parseJwt(Authorization);
+        Integer teaUserid=Integer.parseInt(claims.getSubject());
+        CourseAttendanceQueryVO courseAttendanceQueryVO=new CourseAttendanceQueryVO(teaUserid,courseName,semester,week,weekday,beginSection,endSection,
+                pageNo,pageSize);
+        PageBean resultPage=courseAttendanceService.pageCourseAttendance(courseAttendanceQueryVO);
+        return Result.success(resultPage);
     }
 }

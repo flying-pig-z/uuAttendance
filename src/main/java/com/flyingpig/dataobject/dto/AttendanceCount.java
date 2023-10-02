@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultAttendanceCount {
+public class AttendanceCount {
     Integer attendanceCount;
     Integer absentCount;
     Integer leaveApplicationCount;
