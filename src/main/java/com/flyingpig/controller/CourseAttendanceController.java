@@ -81,6 +81,7 @@ public class CourseAttendanceController {
     }
 
     //获取这个课程的学生名单及其这节课的考勤情况
+    @PreAuthorize("hasAuthority('sys:supervision:operation')")
     @GetMapping("")
     public Result listCourseAttendanceBycourseId(@RequestParam("courseId") Integer courseId) {
         //调用service层的添加功能id
@@ -89,6 +90,7 @@ public class CourseAttendanceController {
     }
 
     //通过老师的id和学期还有课程名字获取到这个课程的学生
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/student")
     public Result listStudentByTeauserIdAndsemesterAndCourseName(@RequestHeader String Authorization,@RequestParam Integer semester,@RequestParam String courseName){
         Claims claims= JwtUtil.parseJwt(Authorization);
@@ -97,6 +99,7 @@ public class CourseAttendanceController {
         return Result.success(courseStudentList);
     }
 
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/courseAttendanceList")
     public Result pageCourseAttendance(@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
                                        @RequestParam(required = false) Integer week,@RequestParam(required = false) Integer weekday,
@@ -110,6 +113,7 @@ public class CourseAttendanceController {
         return Result.success(resultPage);
     }
 
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/studentAttendanceList")
     public Result pageStudentAttendanceByStudentInfo(@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
                                                     @RequestParam String studentNo,
@@ -121,7 +125,7 @@ public class CourseAttendanceController {
         return Result.success(resultPage);
     }
 
-
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/export/studentAttendanceList")
     public void exportstudentAttendanceList(HttpServletResponse response,@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
                        @RequestParam String studentNo){
@@ -131,6 +135,7 @@ public class CourseAttendanceController {
                 ,semester,studentNo);
     }
 
+    @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/export/courseAttendanceList")
     public void exportcourseAttendance(HttpServletResponse response,@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
                                        @RequestParam(required = false) Integer week,@RequestParam(required = false) Integer weekday,
