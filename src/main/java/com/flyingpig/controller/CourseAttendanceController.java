@@ -106,6 +106,7 @@ public class CourseAttendanceController {
         PageBean resultPage=courseAttendanceService.pageCourseAttendance(courseAttendanceQueryVO);
         return Result.success(resultPage);
     }
+
     @GetMapping("/studentAttendanceList")
     public Result pageStudentAttendanceByStudentInfo(@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
                                                     @RequestParam String studentNo,

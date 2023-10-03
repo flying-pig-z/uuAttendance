@@ -18,6 +18,7 @@ import java.util.Map;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/studentInfo")
     public Result getStudentInfoById(@RequestHeader String Authorization){

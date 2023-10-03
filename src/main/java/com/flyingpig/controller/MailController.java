@@ -26,6 +26,7 @@ public class MailController {
     private RedisCache redisCache;
     @Value("${spring.mail.username}")
     private String emailUserName;
+
     @GetMapping("/verificationCode")
     public Result sendEmailVerificationCode(@RequestParam  String email) {
         //检查email是否符合格式
@@ -51,6 +52,7 @@ public class MailController {
             return Result.success("验证码已发送");
         }
     }
+
     @PostMapping("/register")
     public Result emailRegister(@RequestBody EmailRegisterVO emailRegisterVO) {
         System.out.println(emailRegisterVO.getEmail());

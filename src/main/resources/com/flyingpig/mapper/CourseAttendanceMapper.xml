@@ -32,16 +32,19 @@
     <!--    连接三张表查询-->
     <select id="getStudentAttendanceByCourseIdAndStudentNo"
             resultType="com.flyingpig.dataobject.dto.StudentAttendance">
-            select student.no As studentNo,
-                   student.name As studentName,
-                   course_detail.week As week,
-                   course_detail.weekday As weekday,
-                   course_attendance.status As status
-            From course_attendance
-                     JOIN student ON course_attendance.student_id = student.id
-                     JOIN course_detail  on course_detail.id = course_attendance.course_id
-            WHERE course_detail.course_name=#{courseName} And student.no=#{studentNo}
-              And course_detail.semester=#{semester} And course_detail.course_teacher=#{teaUserid}
+        SELECT student.no AS studentNo,
+               student.name AS studentName,
+               course_detail.week AS week,
+               course_detail.weekday AS weekday,
+               course_attendance.status AS status
+        FROM course_attendance
+                 JOIN student ON course_attendance.student_id = student.id
+                 JOIN course_detail ON course_detail.id = course_attendance.course_id
+        WHERE course_detail.course_name = #{courseName}
+          AND student.no = #{studentNo}
+          AND course_detail.semester = #{semester}
+          AND course_detail.course_teacher = #{teaUserid}
+        ORDER BY course_detail.begin_time;
     </select>
 
 </mapper>

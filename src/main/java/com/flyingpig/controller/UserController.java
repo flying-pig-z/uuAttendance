@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private LoginService loginService;
-    @Autowired
-    private RedisCache redisCache;
+
     @PostMapping("/login")
     public Result login(@RequestBody User user) {
         try{
@@ -33,6 +32,7 @@ public class UserController {
     public Result logout(){
         return loginService.logout();
     }
+
     @PutMapping("/password")
     public Result changePassword(@RequestBody ChangePasswordVO changePasswordVO){
         // 从数据库中的密码
@@ -51,6 +51,7 @@ public class UserController {
             return Result.error("密码更新失败");
         }
     }
+
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/authenticate")
     public Result getAuthenticateByUserId(@RequestHeader String Authorization){

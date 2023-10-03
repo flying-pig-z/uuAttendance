@@ -35,6 +35,7 @@ public class SupervisionTaskController {
         //响应
         return Result.success(pageBean);
     }
+
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PostMapping("")
     public Result addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization,@RequestBody SupervisionTaskAddVO supervisionTaskAddVO){
@@ -43,6 +44,7 @@ public class SupervisionTaskController {
         supervisionTaskService.addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid,supervisionTaskAddVO);
         return Result.success();
     }
+
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @DeleteMapping("")
     public Result deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization,@RequestBody SupervisionTaskAddVO supervisionTaskAddVO){
@@ -51,6 +53,7 @@ public class SupervisionTaskController {
         supervisionTaskService.deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid,supervisionTaskAddVO);
         return Result.success();
     }
+
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/supervisionList")
     public Result listSupervisonByteaUserIdAndCourseNameAndsemester(@RequestHeader String Authorization,@RequestParam String semester,@RequestParam String courseName){

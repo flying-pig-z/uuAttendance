@@ -250,7 +250,7 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         pageBean.setTotal((long) result.size());
         //手动分页
         List<StudentAttendance> pageResult=new ArrayList<>();
-        for(int i=(pageNo-1)*pageSize;i<pageNo*pageSize;i++){
+        for(int i=(pageNo-1)*pageSize;i<pageNo*pageSize&&i<result.size();i++){
             pageResult.add(result.get(i));
         }
         pageBean.setRows(pageResult);
