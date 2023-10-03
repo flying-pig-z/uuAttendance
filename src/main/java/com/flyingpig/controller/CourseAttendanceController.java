@@ -1,6 +1,5 @@
 package com.flyingpig.controller;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.flyingpig.common.PageBean;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.dto.*;
@@ -9,13 +8,15 @@ import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
 import com.flyingpig.dataobject.vo.SignInVO;
 import com.flyingpig.common.Result;
 import com.flyingpig.service.CourseAttendanceService;
+import com.flyingpig.service.ExportService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Slf4j
@@ -24,6 +25,8 @@ import java.util.List;
 public class CourseAttendanceController {
     @Autowired
     private CourseAttendanceService courseAttendanceService;
+    @Autowired
+    private ExportService exportService;
 
     @PreAuthorize("hasAuthority('sys:supervision:operation')")
     @PutMapping ("/status")
@@ -116,5 +119,24 @@ public class CourseAttendanceController {
         PageBean resultPage=courseAttendanceService.pageStudentAttendanceByteaUserIdAndCourseInfoAndStudentNo(teaUserid,courseName
                 ,semester,studentNo,pageNo,pageSize);
         return Result.success(resultPage);
+    }
+
+
+    @GetMapping("/export/studentAttendanceList")
+    public void exportstudentAttendanceList(HttpServletResponse response,@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
+                       @RequestParam String studentNo){
+        Claims claims= JwtUtil.parseJwt(Authorization);
+        Integer teaUserid=Integer.parseInt(claims.getSubject());
+        exportService.exportStudentAttendance(response,teaUserid,courseName
+                ,semester,studentNo);
+    }
+
+    @GetMapping("/export/courseAttendanceList")
+    public void exportcourseAttendance(HttpServletResponse response,@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
+                                       @RequestParam(required = false) Integer week,@RequestParam(required = false) Integer weekday,
+                                       @RequestParam(required = false) Integer beginSection,@RequestParam(required = false) Integer endSection){
+        Claims claims= JwtUtil.parseJwt(Authorization);
+        Integer teaUserid=Integer.parseInt(claims.getSubject());
+        exportService.exportCourseAttendance(response,teaUserid,courseName, semester,week,weekday,beginSection,endSection);
     }
 }

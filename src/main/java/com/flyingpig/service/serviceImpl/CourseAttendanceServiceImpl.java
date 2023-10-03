@@ -256,4 +256,5 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         pageBean.setRows(pageResult);
         return pageBean;
     }
+
 }
