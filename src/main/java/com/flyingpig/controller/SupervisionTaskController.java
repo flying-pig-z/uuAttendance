@@ -24,14 +24,14 @@ public class SupervisionTaskController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('sys:supervision:operation')")
-    public Result getSupervisonTaskPageBySupervisonId(@RequestParam(defaultValue = "1")Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize,@RequestHeader String Authorization){
+    public Result pageSupervisonTaskBySupervisonId(@RequestParam(defaultValue = "1")Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize,@RequestHeader String Authorization){
         //记录日志
         log.info("分页查询，参数：{}，{}",pageNo,pageSize);
         //调用业务层分页查询功能
         Claims claims= JwtUtil.parseJwt(Authorization);
         String id=claims.getSubject();
         Integer userId=Integer.parseInt(id);
-        PageBean pageBean= supervisionTaskService.page(pageNo,pageSize,userId);
+        PageBean pageBean= supervisionTaskService.pageSupervisonTaskBySupervisonId(pageNo,pageSize,userId);
         //响应
         return Result.success(pageBean);
     }

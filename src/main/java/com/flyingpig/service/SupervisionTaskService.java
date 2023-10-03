@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface SupervisionTaskService {
-    PageBean page(Integer pageNo, Integer pageSize, Integer userId);
+    PageBean pageSupervisonTaskBySupervisonId(Integer pageNo, Integer pageSize, Integer userId);
 
     void addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(String teaUserid, SupervisionTaskAddVO supervisionTaskAddVO);
 

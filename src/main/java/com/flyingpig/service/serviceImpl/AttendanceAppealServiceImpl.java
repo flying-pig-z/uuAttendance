@@ -36,7 +36,7 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
     }
 
     @Override
-    public List<AttendanceAppealWithCourseName> selectAttendanceAppealByStuUserId(Integer userId) {
+    public List<AttendanceAppealWithCourseName> listAttendanceAppealByStuUserId(Integer userId) {
         QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<>();
         studentQueryWrapper.eq("userid",userId);
         Student student=studentMapper.selectOne(studentQueryWrapper);
@@ -95,7 +95,7 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
         }
     }
     @Override
-    public PageBean selectAttendanceAppealSummaryByTeaUserId(Integer pageNo, Integer pageSize, Integer teacherId) {
+    public PageBean pageAttendanceAppealSummaryByTeaUserId(Integer pageNo, Integer pageSize, Integer teacherId) {
         List<AttendanceAppeal> result = new ArrayList<>();
         //先去课程表查询教师所有的教授课程的id，并将课程通过时间由晚到近进行排序,确保最后请假对应的课程由早到晚
         QueryWrapper<CourseDetail> courseDetailQueryWrapper = new QueryWrapper<>();

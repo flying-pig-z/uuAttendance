@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public interface AttendanceAppealService {
     void addAttendanceAppeal(AttendanceAppeal attendanceAppeal);
-    List<AttendanceAppealWithCourseName> selectAttendanceAppealByStuUserId(Integer id);
+    List<AttendanceAppealWithCourseName> listAttendanceAppealByStuUserId(Integer id);
 
 
     AttendanceAppealDetail getAttendanceAppealDetail(Integer attendanceAppealId);
@@ -19,5 +19,5 @@ public interface AttendanceAppealService {
 
     void updateByAttendanceAppealIdAndStatus(Integer attendanceAppealId, String status);
 
-    PageBean selectAttendanceAppealSummaryByTeaUserId(Integer pageNo, Integer pageSize, Integer userid);
+    PageBean pageAttendanceAppealSummaryByTeaUserId(Integer pageNo, Integer pageSize, Integer userid);
 }

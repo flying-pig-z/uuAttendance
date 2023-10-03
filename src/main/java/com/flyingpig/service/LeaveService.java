@@ -11,12 +11,12 @@ import java.util.List;
 @Service
 public interface LeaveService {
     void addLeave(LeaveApplication leaveApplication);
-    PageBean selectLeaveByTeaUserId(Integer pageNo, Integer pageSize, Integer teacherId);
+    PageBean pageLeaveByTeaUserId(Integer pageNo, Integer pageSize, Integer teacherId);
 
     LeaveDatail getLeaveDetail(Integer leaveId);
 
 
     void updateLeaveByLeaveIdAndStatus(Integer leaveId,String status);
 
-    List<LeaveApplicationWithCourseName> selectLeaveByUserId(Integer userId);
+    List<LeaveApplicationWithCourseName> listLeaveByUserId(Integer userId);
 }

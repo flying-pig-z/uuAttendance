@@ -48,21 +48,21 @@ public class AttendanceAppealController {
 
     @GetMapping("/student")
     @PreAuthorize("hasAuthority('sys:student:operation')")
-    public Result selectAttendanceAppealByStuUserId(@RequestHeader String Authorization) {
+    public Result listAttendanceAppealByStuUserId(@RequestHeader String Authorization) {
         //设置学生id
         Claims claims= JwtUtil.parseJwt(Authorization);
         Integer userId=Integer.parseInt(claims.getSubject());
-        List<AttendanceAppealWithCourseName> result=attendanceAppealService.selectAttendanceAppealByStuUserId(userId);
+        List<AttendanceAppealWithCourseName> result=attendanceAppealService.listAttendanceAppealByStuUserId(userId);
         return Result.success(result);
     }
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/teaAttendanceAppealSummary")
-    public Result selectAttendanceAppealByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
+    public Result pageAttendanceAppealByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
         //设置教师id
         Claims claims= JwtUtil.parseJwt(Authorization);
         Integer userid=Integer.parseInt(claims.getSubject());
-        PageBean result=attendanceAppealService.selectAttendanceAppealSummaryByTeaUserId(pageNo,pageSize,userid);
+        PageBean result=attendanceAppealService.pageAttendanceAppealSummaryByTeaUserId(pageNo,pageSize,userid);
         return Result.success(result);
     }
 

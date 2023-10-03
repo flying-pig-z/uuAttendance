@@ -44,26 +44,26 @@ public class LeaveController {
 
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/student")
-    public Result selectLeaveByStudentId(@RequestHeader String Authorization) {
+    public Result listLeaveByStudentId(@RequestHeader String Authorization) {
         //设置学生id
         Claims claims= JwtUtil.parseJwt(Authorization);
         Integer userId=Integer.parseInt(claims.getSubject());
-        List<LeaveApplicationWithCourseName> result=leaveService.selectLeaveByUserId(userId);
+        List<LeaveApplicationWithCourseName> result=leaveService.listLeaveByUserId(userId);
         return Result.success(result);
     }
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/teaLeaveSummary")
-    public Result selectLeaveByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
+    public Result pageLeaveByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
         //设置教师id
         Claims claims= JwtUtil.parseJwt(Authorization);
         Integer userid=Integer.parseInt(claims.getSubject());
-        PageBean result=leaveService.selectLeaveByTeaUserId(pageNo,pageSize,userid);
+        PageBean result=leaveService.pageLeaveByTeaUserId(pageNo,pageSize,userid);
         return Result.success(result);
     }
 
     @GetMapping("/{leaveId}/leaveDetail")
-    public Result leaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId){
+    public Result getleaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId){
         LeaveDatail resultLeaveDatail=leaveService.getLeaveDetail(leaveId);
         return Result.success(resultLeaveDatail);
     }

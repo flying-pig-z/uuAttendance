@@ -59,7 +59,7 @@ public class CourseAttendanceController {
 
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/courseTableInfo")
-    public Result getCourseDetailWithStatusByWeekAndStudentId(@RequestParam("week") Integer week,@RequestParam("semester") Integer semester,@RequestHeader String Authorization){
+    public Result listCourseDetailWithStatusByWeekAndStudentId(@RequestParam("week") Integer week,@RequestParam("semester") Integer semester,@RequestHeader String Authorization){
         CourseDetail select=new CourseDetail();
         //设置学生id
         Claims claims= JwtUtil.parseJwt(Authorization);
@@ -79,7 +79,7 @@ public class CourseAttendanceController {
 
     //获取这个课程的学生名单及其这节课的考勤情况
     @GetMapping("")
-    public Result getCourseAttendanceBycourseId(@RequestParam("courseId") Integer courseId) {
+    public Result listCourseAttendanceBycourseId(@RequestParam("courseId") Integer courseId) {
         //调用service层的添加功能id
         List<ResultAttendance> resultAttendanceList= courseAttendanceService.getresultAttendanceListByCourseId(courseId);
         return Result.success(resultAttendanceList);
@@ -87,7 +87,7 @@ public class CourseAttendanceController {
 
     //通过老师的id和学期还有课程名字获取到这个课程的学生
     @GetMapping("/student")
-    public Result getStudentByTeauserIdAndsemesterAndCourseName(@RequestHeader String Authorization,@RequestParam Integer semester,@RequestParam String courseName){
+    public Result listStudentByTeauserIdAndsemesterAndCourseName(@RequestHeader String Authorization,@RequestParam Integer semester,@RequestParam String courseName){
         Claims claims= JwtUtil.parseJwt(Authorization);
         String teaUserid=claims.getSubject();
         List<CourseStudent> courseStudentList=courseAttendanceService.getStudentByTeauserIdAndsemesterAndCourseName(teaUserid,semester,courseName);

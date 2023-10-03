@@ -32,7 +32,7 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskService {
     @Autowired
     UserMapper userMapper;
     @Override
-    public PageBean page(Integer pageNo, Integer pageSize, Integer userId) {
+    public PageBean pageSupervisonTaskBySupervisonId(Integer pageNo, Integer pageSize, Integer userId) {
         //记录总记录数
         Long count= supervisionTaskMapper.selectCountBySupervisonIdAndTimeNow();
         //获取分页查询结果列表
