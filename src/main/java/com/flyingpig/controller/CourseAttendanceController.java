@@ -96,14 +96,24 @@ public class CourseAttendanceController {
 
     @GetMapping("/courseAttendanceList")
     public Result pageCourseAttendance(@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
-                                       @RequestParam(defaultValue = "null") Integer week,@RequestParam(defaultValue = "null") Integer weekday,
-                                       @RequestParam(defaultValue = "null") Integer beginSection,@RequestParam(defaultValue = "null") Integer endSection,
+                                       @RequestParam(required = false) Integer week,@RequestParam(required = false) Integer weekday,
+                                       @RequestParam(required = false) Integer beginSection,@RequestParam(required = false) Integer endSection,
                                        @RequestParam(defaultValue = "1") Integer pageNo,@RequestParam(defaultValue = "10") Integer pageSize){
         Claims claims= JwtUtil.parseJwt(Authorization);
         Integer teaUserid=Integer.parseInt(claims.getSubject());
         CourseAttendanceQueryVO courseAttendanceQueryVO=new CourseAttendanceQueryVO(teaUserid,courseName,semester,week,weekday,beginSection,endSection,
                 pageNo,pageSize);
         PageBean resultPage=courseAttendanceService.pageCourseAttendance(courseAttendanceQueryVO);
+        return Result.success(resultPage);
+    }
+    @GetMapping("/studentAttendanceList")
+    public Result pageStudentAttendanceByStudentInfo(@RequestHeader String Authorization,@RequestParam String courseName, @RequestParam Integer semester,
+                                                    @RequestParam String studentNo,
+                                                     @RequestParam(defaultValue = "1") Integer pageNo,@RequestParam(defaultValue = "10") Integer pageSize){
+        Claims claims= JwtUtil.parseJwt(Authorization);
+        Integer teaUserid=Integer.parseInt(claims.getSubject());
+        PageBean resultPage=courseAttendanceService.pageStudentAttendanceByteaUserIdAndCourseInfoAndStudentNo(teaUserid,courseName
+                ,semester,studentNo,pageNo,pageSize);
         return Result.success(resultPage);
     }
 }

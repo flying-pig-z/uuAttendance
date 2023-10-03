@@ -10,5 +10,4 @@ import java.util.List;
 
 @Mapper
 public interface CourseDetailMapper extends BaseMapper<CourseDetail> {
-    Integer selectCourseIdByBeginTimeAndTeacherid(String week,String weekday,String section,Integer teacherId);
 }

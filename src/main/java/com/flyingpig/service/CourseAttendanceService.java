@@ -9,11 +9,9 @@ import com.flyingpig.dataobject.dto.ResultAttendance;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
 import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
 import com.flyingpig.dataobject.vo.SignInVO;
-import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public interface CourseAttendanceService {
@@ -34,4 +32,6 @@ public interface CourseAttendanceService {
     List<CourseStudent> getStudentByTeauserIdAndsemesterAndCourseName(String teaUserid, Integer semester, String courseName);
 
     PageBean pageCourseAttendance(CourseAttendanceQueryVO courseAttendanceQueryVO);
+
+    PageBean pageStudentAttendanceByteaUserIdAndCourseInfoAndStudentNo(Integer teaUserid, String courseName, Integer semester, String studentNo, Integer pageNo, Integer pageSize);
 }

@@ -26,7 +26,10 @@ public class StudentAttendanceNow {
             return false;
         }
         StudentAttendanceNow other = (StudentAttendanceNow) obj;
-        return Objects.deepEquals(new Object[]{courseId, status, courseName, longitude, latitude},
-                new Object[]{other.courseId, other.status, other.courseName, other.longitude, other.latitude});
+        return Objects.equals(courseId, other.courseId) &&
+                Objects.equals(status, other.status) &&
+                Objects.equals(courseName, other.courseName) &&
+                Objects.equals(longitude, other.longitude) &&
+                Objects.equals(latitude, other.latitude);
     }
 }

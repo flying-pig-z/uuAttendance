@@ -1,35 +1,26 @@
 package com.flyingpig.service.serviceImpl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.common.PageBean;
-import com.flyingpig.dataobject.dto.CourseStudent;
-import com.flyingpig.dataobject.dto.StudentAttendanceNow;
+import com.flyingpig.dataobject.dto.*;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
 import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
 import com.flyingpig.dataobject.vo.SignInVO;
-import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
 import com.flyingpig.mapper.CourseAttendanceMapper;
 import com.flyingpig.mapper.CourseDetailMapper;
 import com.flyingpig.mapper.StudentMapper;
-import com.flyingpig.dataobject.dto.CourseTableInfo;
-import com.flyingpig.dataobject.dto.ResultAttendance;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.util.DistanceCalculator;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.startup.ContextRuleSet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -242,12 +233,27 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
             courseDetailQueryWrapper.eq("section_end",courseAttendanceQueryVO.getEndSection());
         }
         List<CourseDetail> courseDetailList=courseDetailMapper.selectList(courseDetailQueryWrapper);
+        List<ClassAttendance> classAttendanceList=courseAttendanceMapper.listStudentAttendanceByCourseIdList(courseDetailList);
+        pageBean.setTotal((long)classAttendanceList.size());
+        List<ClassAttendance> result=new ArrayList<>();
+        for(int i=(courseAttendanceQueryVO.getPageNo()-1)*courseAttendanceQueryVO.getPageSize();i<courseAttendanceQueryVO.getPageNo()*courseAttendanceQueryVO.getPageSize()&&i<classAttendanceList.size();i++){
+            result.add(classAttendanceList.get(i));
+        }
+        pageBean.setRows(result);
+        return pageBean;
+    }
 
-        QueryWrapper<CourseAttendance> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("course_id", courseDetailList).groupBy("student_id").select("student_id");
-//        pageBean.setTotal();
-//        pageBean.setRows();
-
+    @Override
+    public PageBean pageStudentAttendanceByteaUserIdAndCourseInfoAndStudentNo(Integer teaUserid, String courseName, Integer semester, String studentNo, Integer pageNo, Integer pageSize) {
+        PageBean pageBean=new PageBean();
+        List<StudentAttendance> result=courseAttendanceMapper.getStudentAttendanceByCourseIdAndStudentNo(teaUserid, courseName, semester, studentNo);
+        pageBean.setTotal((long) result.size());
+        //手动分页
+        List<StudentAttendance> pageResult=new ArrayList<>();
+        for(int i=(pageNo-1)*pageSize;i<pageNo*pageSize;i++){
+            pageResult.add(result.get(i));
+        }
+        pageBean.setRows(pageResult);
         return pageBean;
     }
 }

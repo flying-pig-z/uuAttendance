@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //简单说加上anonymous在没有token的情况下可以访问，携带token反而不能访问，一般用于登录注册接口之类的
                 //与之相对应的是加上permiAll()，加上后这个接口有无token(有无身份)都可以访问，一般用于静态资源的放行
                 .antMatchers("/user/login").anonymous()
-                .antMatchers("/user/password").anonymous()
+                .antMatchers("/user/password").permitAll()
                 .antMatchers("/user/email/verificationCode").anonymous()
                 .antMatchers("/user/email/register").anonymous()
                 //2.除上面外的所有请求任意的用户认证之后可以访问

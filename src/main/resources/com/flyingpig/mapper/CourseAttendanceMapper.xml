@@ -11,4 +11,37 @@
         AND (SELECT end_time FROM course_detail WHERE course_detail.id = course_attendance.course_id) > NOW()
         AND student_id=#{studentId}
     </select>
+    <select id="listStudentAttendanceByCourseIdList" resultType="com.flyingpig.dataobject.dto.ClassAttendance">
+        SELECT student.name AS studentNo,
+        student.no AS studentName,
+        SUM(CASE WHEN course_attendance.status = 0 THEN 1 ELSE 0 END) AS nocheckCount,
+        SUM(CASE WHEN course_attendance.status = 1 THEN 1 ELSE 0 END) AS signedCount,
+        SUM(CASE WHEN course_attendance.status = 2 THEN 1 ELSE 0 END) AS absentCount,
+        SUM(CASE WHEN course_attendance.status = 3 THEN 1 ELSE 0 END) AS leaveCount
+        FROM student
+        JOIN course_attendance ON student.id = course_attendance.student_id
+        WHERE course_attendance.course_id IN (
+        <!-- 使用动态SQL遍历courseDetailList -->
+        <foreach collection="courseDetailList" item="courseDetailItem" separator=",">
+            #{courseDetailItem.id}
+        </foreach>
+        )
+#         使得学生不重复
+        GROUP BY student_id;
+    </select>
+    <!--    连接三张表查询-->
+    <select id="getStudentAttendanceByCourseIdAndStudentNo"
+            resultType="com.flyingpig.dataobject.dto.StudentAttendance">
+            select student.no As studentNo,
+                   student.name As studentName,
+                   course_detail.week As week,
+                   course_detail.weekday As weekday,
+                   course_attendance.status As status
+            From course_attendance
+                     JOIN student ON course_attendance.student_id = student.id
+                     JOIN course_detail  on course_detail.id = course_attendance.course_id
+            WHERE course_detail.course_name=#{courseName} And student.no=#{studentNo}
+              And course_detail.semester=#{semester} And course_detail.course_teacher=#{teaUserid}
+    </select>
+
 </mapper>
