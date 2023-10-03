@@ -28,7 +28,7 @@ public class LeaveServiceImpl implements LeaveService {
     private CourseAttendanceMapper courseAttendanceMapper;
 
     @Override
-    public List<LeaveApplicationWithCourseName> selectLeaveByUserId(Integer userId) {
+    public List<LeaveApplicationWithCourseName> listLeaveByUserId(Integer userId) {
         QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<>();
         studentQueryWrapper.eq("userid",userId);
         Student student=studentMapper.selectOne(studentQueryWrapper);
@@ -57,7 +57,7 @@ public class LeaveServiceImpl implements LeaveService {
     }
     //根据督导id获取督导对应的请假
     @Override
-    public PageBean selectLeaveByTeaUserId(Integer pageNo, Integer pageSize,Integer teacherId) {
+    public PageBean pageLeaveByTeaUserId(Integer pageNo, Integer pageSize,Integer teacherId) {
         List<LeaveApplication> result = new ArrayList<>();
         //先去课程表查询教师所有的教授课程的id，并将课程通过时间由晚到近进行排序,确保最后请假对应的课程由早到晚
         QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<>();
