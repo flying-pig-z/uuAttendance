@@ -50,7 +50,7 @@ uu考勤的流程图：
 * 安全方面使用spring-securiy+jwt对框架对访问接口的用户进行认证，对密码进行哈希加密存储，并对用户的身份进行精细化鉴权，确保接口使用的安全性
 * 使用spring-boot-starter-mail实现了邮箱验证码的发送以及账号的注册
 * 集成swagger便于文档的生成和接口的调试
-* 使用Apache POI将考勤数据导出为EXCEL和PDF
+* 使用Apache POI将考勤数据导出为EXCEL
 * 使用websocket长连接使得学生考勤签到界面的信息实时更新，解决轮询消耗大量带宽的问题
 
 ## 3.项目亮点
