@@ -17,6 +17,6 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         String json = JSON.toJSONString(Result.error("身份权限不符合"));
-        WebUtils.renderString(response,json);
+        WebUtils.renderString(response, json);
     }
 }

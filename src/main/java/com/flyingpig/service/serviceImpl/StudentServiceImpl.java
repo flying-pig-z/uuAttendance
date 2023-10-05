@@ -1,9 +1,11 @@
 package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.flyingpig.dataobject.entity.UserRoleRelation;
 import com.flyingpig.mapper.StudentMapper;
 import com.flyingpig.dataobject.entity.Student;
 import com.flyingpig.mapper.UserMapper;
+import com.flyingpig.mapper.UserRoleRelationMapper;
 import com.flyingpig.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class StudentServiceImpl implements StudentService {
     private StudentMapper studentMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserRoleRelationMapper userRoleRelationMapper;
+
     @Override
     public void addStudent(User user, Student student) {
         userMapper.insert(user);
@@ -30,6 +35,9 @@ public class StudentServiceImpl implements StudentService {
         Integer userId=userMapper.selectOne(userQueryWrapper).getId();
         student.setUserid(userId);
         studentMapper.insert(student);
+        //插入关系表中，赋予学生身份和权限
+        UserRoleRelation userRoleRelation=new UserRoleRelation(userId,1);
+        userRoleRelationMapper.insert(userRoleRelation);
     }
     @Override
     public Map<String,Object> getStudentInfoByUserId(Integer userid) {

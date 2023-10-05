@@ -6,11 +6,13 @@ import com.flyingpig.dataobject.dto.SupervisionTaskWithCourseNameAndBeginTimeAnd
 import com.flyingpig.dataobject.entity.CourseDetail;
 import com.flyingpig.dataobject.entity.SupervisionTask;
 import com.flyingpig.dataobject.entity.User;
+import com.flyingpig.dataobject.entity.UserRoleRelation;
 import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
 import com.flyingpig.mapper.CourseDetailMapper;
 import com.flyingpig.mapper.SupervisionTaskMapper;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.common.PageBean;
+import com.flyingpig.mapper.UserRoleRelationMapper;
 import com.flyingpig.service.SupervisionTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskService {
     CourseDetailMapper courseDetailMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    UserRoleRelationMapper userRoleRelationMapper;
+
     @Override
     public PageBean pageSupervisonTaskBySupervisonId(Integer pageNo, Integer pageSize, Integer userId) {
         //记录总记录数
@@ -69,11 +74,14 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskService {
             supervisionTask.setUserid(supervisionTaskAddVO.getUserId());
             supervisionTask.setCourseId(courseDetail.getId());
             supervisionTaskMapper.insert(supervisionTask);
-            //更新用户的身份
+            //更新user表用户的身份
             User user=new User();
             user.setId(supervisionTaskAddVO.getUserId());
             user.setUserType(2);
             userMapper.updateById(user);
+            //修改关系表中用户督导身份和权限
+            UserRoleRelation userRoleRelation=new UserRoleRelation(supervisionTaskAddVO.getUserId(),2);
+            userRoleRelationMapper.updateById(userRoleRelation);
         }
     }
 
@@ -102,6 +110,11 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskService {
                 user.setId(supervisionTaskAddVO.getUserId());
                 user.setUserType(1);
                 userMapper.updateById(user);
+                //修改关系表中用户督导身份和权限
+                UserRoleRelation userRoleRelation=new UserRoleRelation(supervisionTaskAddVO.getUserId(),1);
+                QueryWrapper<UserRoleRelation> userRoleRelationQueryWrapper=new QueryWrapper<>();
+                userRoleRelationQueryWrapper.eq("user_id",supervisionTaskAddVO.getUserId());
+                userRoleRelationMapper.update(userRoleRelation,userRoleRelationQueryWrapper);
             }
         }
     }

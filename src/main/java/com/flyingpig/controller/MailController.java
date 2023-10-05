@@ -1,8 +1,8 @@
 package com.flyingpig.controller;
 
+import com.flyingpig.common.Result;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.EmailRegisterVO;
-import com.flyingpig.common.Result;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.EmailUtil;
 import com.flyingpig.util.RedisCache;
@@ -30,7 +30,7 @@ public class MailController {
     @GetMapping("/verificationCode")
     public Result sendEmailVerificationCode(@RequestParam  String email) {
         //检查email是否符合格式
-        if(EmailUtil.judgeEmailFormat(email)){
+        if(!EmailUtil.judgeEmailFormat(email)){
             return Result.error("邮箱不符合格式");
         }
         //检查redis中有无验证码，如果有，则返回已存在

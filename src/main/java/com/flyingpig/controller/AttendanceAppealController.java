@@ -36,11 +36,11 @@ public class AttendanceAppealController {
     @PreAuthorize("hasAuthority('sys:student:operation')")
     public Result addAttendanceAppeal(@RequestBody AttendanceAppeal attendanceAppeal, @RequestHeader String Authorization) {
         //设置userid
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        Integer userid=Integer.parseInt(claims.getSubject());
-        Map<String,Object> studentInfo=studentService.getStudentInfoByUserId(userid);
+        Claims claims = JwtUtil.parseJwt(Authorization);
+        Integer userid = Integer.parseInt(claims.getSubject());
+        Map<String, Object> studentInfo = studentService.getStudentInfoByUserId(userid);
         attendanceAppeal.setStatus("0");
-        Integer studentId=(Integer) studentInfo.get("id");
+        Integer studentId = (Integer) studentInfo.get("id");
         attendanceAppeal.setStudentId(studentId);
         attendanceAppealService.addAttendanceAppeal(attendanceAppeal);
         return Result.success();
@@ -50,33 +50,33 @@ public class AttendanceAppealController {
     @PreAuthorize("hasAuthority('sys:student:operation')")
     public Result listAttendanceAppealByStuUserId(@RequestHeader String Authorization) {
         //设置学生id
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        Integer userId=Integer.parseInt(claims.getSubject());
-        List<AttendanceAppealWithCourseName> result=attendanceAppealService.listAttendanceAppealByStuUserId(userId);
+        Claims claims = JwtUtil.parseJwt(Authorization);
+        Integer userId = Integer.parseInt(claims.getSubject());
+        List<AttendanceAppealWithCourseName> result = attendanceAppealService.listAttendanceAppealByStuUserId(userId);
         return Result.success(result);
     }
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/teaAttendanceAppealSummary")
-    public Result pageAttendanceAppealByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
+    public Result pageAttendanceAppealByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestHeader String Authorization) {
         //设置教师id
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        Integer userid=Integer.parseInt(claims.getSubject());
-        PageBean result=attendanceAppealService.pageAttendanceAppealSummaryByTeaUserId(pageNo,pageSize,userid);
+        Claims claims = JwtUtil.parseJwt(Authorization);
+        Integer userid = Integer.parseInt(claims.getSubject());
+        PageBean result = attendanceAppealService.pageAttendanceAppealSummaryByTeaUserId(pageNo, pageSize, userid);
         return Result.success(result);
     }
 
     //查询对应申诉的详细信息
     @GetMapping("/{attendanceAppealId}/attendanceAppealDetail")
-    public Result getAttendanceAppealDetail(@RequestHeader String Authorization, @PathVariable Integer attendanceAppealId){
-        AttendanceAppealDetail resultAttendanceAppealDetail=attendanceAppealService.getAttendanceAppealDetail(attendanceAppealId);
+    public Result getAttendanceAppealDetail(@RequestHeader String Authorization, @PathVariable Integer attendanceAppealId) {
+        AttendanceAppealDetail resultAttendanceAppealDetail = attendanceAppealService.getAttendanceAppealDetail(attendanceAppealId);
         return Result.success(resultAttendanceAppealDetail);
     }
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PutMapping("/{attendanceAppealId}")
-    public Result judgeLeave(@PathVariable Integer attendanceAppealId, @RequestParam String status){
-        attendanceAppealService.updateByAttendanceAppealIdAndStatus(attendanceAppealId,status);
+    public Result judgeLeave(@PathVariable Integer attendanceAppealId, @RequestParam String status) {
+        attendanceAppealService.updateByAttendanceAppealIdAndStatus(attendanceAppealId, status);
         return Result.success();
     }
 

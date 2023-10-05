@@ -1,4 +1,5 @@
 package com.flyingpig.config;
+
 import com.github.xiaoymin.knife4j.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -54,8 +55,8 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
     /**
      * 获取指定会话的指定请求头的值
      *
-     * @param session     WebSocket会话对象
-     * @param headerName  请求头名称
+     * @param session    WebSocket会话对象
+     * @param headerName 请求头名称
      * @return 请求头的值
      */
     public static String getHeader(Session session, String headerName) {

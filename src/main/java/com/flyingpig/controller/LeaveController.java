@@ -29,14 +29,14 @@ public class LeaveController {
 
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @PostMapping("")
-    public Result addLeave(@RequestBody LeaveApplication leaveApplication,@RequestHeader String Authorization) {
+    public Result addLeave(@RequestBody LeaveApplication leaveApplication, @RequestHeader String Authorization) {
         //封装完毕后调用service层的add方法
 
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        Integer userid=Integer.parseInt(claims.getSubject());
-        Map<String,Object> studentInfo=studentService.getStudentInfoByUserId(userid);
+        Claims claims = JwtUtil.parseJwt(Authorization);
+        Integer userid = Integer.parseInt(claims.getSubject());
+        Map<String, Object> studentInfo = studentService.getStudentInfoByUserId(userid);
         leaveApplication.setStatus("0");
-        Integer studentId=(Integer) studentInfo.get("id");
+        Integer studentId = (Integer) studentInfo.get("id");
         leaveApplication.setStudentId(studentId);
         leaveService.addLeave(leaveApplication);
         return Result.success();
@@ -46,33 +46,33 @@ public class LeaveController {
     @GetMapping("/student")
     public Result listLeaveByStudentId(@RequestHeader String Authorization) {
         //设置学生id
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        Integer userId=Integer.parseInt(claims.getSubject());
-        List<LeaveApplicationWithCourseName> result=leaveService.listLeaveByUserId(userId);
+        Claims claims = JwtUtil.parseJwt(Authorization);
+        Integer userId = Integer.parseInt(claims.getSubject());
+        List<LeaveApplicationWithCourseName> result = leaveService.listLeaveByUserId(userId);
         return Result.success(result);
     }
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/teaLeaveSummary")
-    public Result pageLeaveByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize,@RequestHeader String Authorization){
+    public Result pageLeaveByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestHeader String Authorization) {
         //设置教师id
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        Integer userid=Integer.parseInt(claims.getSubject());
-        PageBean result=leaveService.pageLeaveByTeaUserId(pageNo,pageSize,userid);
+        Claims claims = JwtUtil.parseJwt(Authorization);
+        Integer userid = Integer.parseInt(claims.getSubject());
+        PageBean result = leaveService.pageLeaveByTeaUserId(pageNo, pageSize, userid);
         return Result.success(result);
     }
 
     @GetMapping("/{leaveId}/leaveDetail")
-    public Result getleaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId){
-        LeaveDatail resultLeaveDatail=leaveService.getLeaveDetail(leaveId);
+    public Result getleaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId) {
+        LeaveDatail resultLeaveDatail = leaveService.getLeaveDetail(leaveId);
         return Result.success(resultLeaveDatail);
     }
 
     //用于老师通过请假和不通过
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PutMapping("/{leaveId}")
-    public Result judgeLeave(@PathVariable Integer leaveId, @RequestParam String status){
-        leaveService.updateLeaveByLeaveIdAndStatus(leaveId,status);
+    public Result judgeLeave(@PathVariable Integer leaveId, @RequestParam String status) {
+        leaveService.updateLeaveByLeaveIdAndStatus(leaveId, status);
         return Result.success();
     }
 

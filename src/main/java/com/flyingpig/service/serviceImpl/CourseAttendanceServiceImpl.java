@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -81,21 +82,36 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         }
     }
     @Override
-    public ResultAttendance getWhoNoCheck(Integer courseId) {
-        //更新的条件
+    public List<ResultAttendance> listWhoNoCheck(Integer courseId,Integer returneesNumber,List<Integer> existingStudentId) {
+        //获取签到学生考勤列表
         QueryWrapper<CourseAttendance> wrapper=new QueryWrapper<>();
-        wrapper.eq("course_id",courseId);
-        List<CourseAttendance> courseAttendanceList= courseAttendanceMapper.selectList(wrapper);
-        CourseAttendance personCourseAttendance=courseAttendanceList.get(0);
-        Student student=studentMapper.selectById(personCourseAttendance.getStudentId());
-        ResultAttendance resultAttendance=new ResultAttendance();
-        resultAttendance.setId(personCourseAttendance.getId());
-        resultAttendance.setStudentId(student.getId());
-        resultAttendance.setStudentNo(student.getNo());
-        resultAttendance.setStudentName(student.getName());
-        resultAttendance.setCourseId(courseId);
-        resultAttendance.setStatus(personCourseAttendance.getStatus());
-        return resultAttendance;
+        wrapper.eq("course_id",courseId).eq("status",0);
+        List<CourseAttendance> allCourseAttendanceList= courseAttendanceMapper.selectList(wrapper);
+        //将需要排除学生排除在外
+        for(int i=0;i<existingStudentId.size();i++){
+            for(int j=0;j<allCourseAttendanceList.size();j++){
+                if(allCourseAttendanceList.get(j).getStudentId().equals(existingStudentId.get(i))){
+                    allCourseAttendanceList.remove(j);
+                    //因为保证学生不重复，所以break
+                    break;
+                }
+            }
+        }
+        //获取想要返回个数的还为考勤的学生，不足返回个数的按实际个数来
+        List<CourseAttendance> returnCourseAttendanceList=new ArrayList<>();
+        for(int i=0;i<allCourseAttendanceList.size()&&i<returneesNumber;i++){
+            returnCourseAttendanceList.add(allCourseAttendanceList.get(i));
+        }
+        //包装为返回结果
+        List<ResultAttendance> resultAttendanceList=new ArrayList<>();//初始化返回结果数组
+        for(CourseAttendance personCourseAttendance:returnCourseAttendanceList){
+            //遍历包装
+            Student student=studentMapper.selectById(personCourseAttendance.getStudentId());
+            ResultAttendance resultAttendance=new ResultAttendance(personCourseAttendance.getId(),student.getId(),student.getNo(),student.getName(),
+                    courseId,personCourseAttendance.getStatus());
+            resultAttendanceList.add(resultAttendance);
+        }
+        return resultAttendanceList;
     }
 
     @Override
