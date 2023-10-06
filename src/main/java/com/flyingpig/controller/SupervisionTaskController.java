@@ -7,6 +7,8 @@ import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
 import com.flyingpig.service.SupervisionTaskService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,15 +16,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @Slf4j
+@RestController
 @RequestMapping("/supervisiontasks")
+@Api("与督导任务表相关的api")
 public class SupervisionTaskController {
     @Autowired
     private SupervisionTaskService supervisionTaskService;
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('sys:supervision:operation')")
+    @ApiOperation("督导分页查询督导任务")
     public Result pageSupervisonTaskBySupervisonId(@RequestParam(defaultValue = "1")Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize,@RequestHeader String Authorization){
         //记录日志
         log.info("分页查询，参数：{}，{}",pageNo,pageSize);
@@ -37,6 +41,7 @@ public class SupervisionTaskController {
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PostMapping("")
+    @ApiOperation("教师指定督导某个课程考勤")
     public Result addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization,@RequestBody SupervisionTaskAddVO supervisionTaskAddVO){
         Claims claims= JwtUtil.parseJwt(Authorization);
         String teaUserid=claims.getSubject();
@@ -46,6 +51,7 @@ public class SupervisionTaskController {
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @DeleteMapping("")
+    @ApiOperation("教师删除督导某个课程考勤")
     public Result deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization,@RequestBody SupervisionTaskAddVO supervisionTaskAddVO){
         Claims claims= JwtUtil.parseJwt(Authorization);
         String teaUserid=claims.getSubject();
@@ -55,6 +61,7 @@ public class SupervisionTaskController {
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/supervisionList")
+    @ApiOperation("教师获取课程的督导列表")
     public Result listSupervisonByteaUserIdAndCourseNameAndsemester(@RequestHeader String Authorization,@RequestParam String semester,@RequestParam String courseName){
         Claims claims= JwtUtil.parseJwt(Authorization);
         String teaUserid=claims.getSubject();

@@ -11,6 +11,8 @@ import com.flyingpig.service.CourseDetailService;
 import com.flyingpig.service.StudentService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/attendanceAppeals")
+@Api("与考勤申诉表相关的api")
 public class AttendanceAppealController {
     @Autowired
     CourseDetailService courseDetailService;
@@ -32,8 +35,9 @@ public class AttendanceAppealController {
     @Autowired
     StudentService studentService;
 
-    @PostMapping("")
     @PreAuthorize("hasAuthority('sys:student:operation')")
+    @PostMapping("")
+    @ApiOperation("学生考勤申诉")
     public Result addAttendanceAppeal(@RequestBody AttendanceAppeal attendanceAppeal, @RequestHeader String Authorization) {
         //设置userid
         Claims claims = JwtUtil.parseJwt(Authorization);
@@ -46,8 +50,9 @@ public class AttendanceAppealController {
         return Result.success();
     }
 
-    @GetMapping("/student")
     @PreAuthorize("hasAuthority('sys:student:operation')")
+    @GetMapping("/student")
+    @ApiOperation("学生查看考勤申诉列表")
     public Result listAttendanceAppealByStuUserId(@RequestHeader String Authorization) {
         //设置学生id
         Claims claims = JwtUtil.parseJwt(Authorization);
@@ -58,6 +63,7 @@ public class AttendanceAppealController {
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/teaAttendanceAppealSummary")
+    @ApiOperation("教师分页查询所属学生的考勤申诉")
     public Result pageAttendanceAppealByTeacherId(@RequestParam Integer pageNo, @RequestParam Integer pageSize, @RequestHeader String Authorization) {
         //设置教师id
         Claims claims = JwtUtil.parseJwt(Authorization);
@@ -68,6 +74,7 @@ public class AttendanceAppealController {
 
     //查询对应申诉的详细信息
     @GetMapping("/{attendanceAppealId}/attendanceAppealDetail")
+    @ApiOperation("学生和老师查询想要查询的考勤申诉的详细信息")
     public Result getAttendanceAppealDetail(@RequestHeader String Authorization, @PathVariable Integer attendanceAppealId) {
         AttendanceAppealDetail resultAttendanceAppealDetail = attendanceAppealService.getAttendanceAppealDetail(attendanceAppealId);
         return Result.success(resultAttendanceAppealDetail);
@@ -75,6 +82,7 @@ public class AttendanceAppealController {
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PutMapping("/{attendanceAppealId}")
+    @ApiOperation("老师决定考勤申诉通不通过")
     public Result judgeLeave(@PathVariable Integer attendanceAppealId, @RequestParam String status) {
         attendanceAppealService.updateByAttendanceAppealIdAndStatus(attendanceAppealId, status);
         return Result.success();

@@ -6,6 +6,8 @@ import com.flyingpig.dataobject.vo.ChangePasswordVO;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,11 +15,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@Api("与用户表相关的api")
 public class UserController {
     @Autowired
     private LoginService loginService;
 
     @PostMapping("/login")
+    @ApiOperation("用户登录")
     public Result login(@RequestBody User user) {
         try {
             System.out.println(user);
@@ -29,11 +33,13 @@ public class UserController {
     }
 
     @PostMapping("/logout")
+    @ApiOperation("用户登出")
     public Result logout() {
         return loginService.logout();
     }
 
     @PutMapping("/password")
+    @ApiOperation("修改密码")
     public Result changePassword(@RequestBody ChangePasswordVO changePasswordVO) {
         // 从数据库中的密码
         String passwordInDatabase = loginService.getPasswordByNo(changePasswordVO.getNo());
@@ -54,6 +60,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/authenticate")
+    @ApiOperation("获取学生身份是督导还是学生")
     public Result getAuthenticateByUserId(@RequestHeader String Authorization) {
         Claims claims = JwtUtil.parseJwt(Authorization);
         String userid = claims.getSubject();

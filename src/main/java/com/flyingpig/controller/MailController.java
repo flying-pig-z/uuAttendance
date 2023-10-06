@@ -6,6 +6,9 @@ import com.flyingpig.dataobject.vo.EmailRegisterVO;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.EmailUtil;
 import com.flyingpig.util.RedisCache;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/user/email")
+@Api("与邮件处理相关的api")
 public class MailController {
     @Autowired
     private LoginService loginService;
@@ -28,6 +32,7 @@ public class MailController {
     private String emailUserName;
 
     @GetMapping("/verificationCode")
+    @ApiOperation("用户获取验证码")
     public Result sendEmailVerificationCode(@RequestParam  String email) {
         //检查email是否符合格式
         if(!EmailUtil.judgeEmailFormat(email)){
@@ -54,6 +59,7 @@ public class MailController {
     }
 
     @PostMapping("/register")
+    @ApiOperation("通过验证码完成注册")
     public Result emailRegister(@RequestBody EmailRegisterVO emailRegisterVO) {
         System.out.println(emailRegisterVO.getEmail());
         String verificationCode=redisCache.getCacheObject(emailRegisterVO.getEmail());
