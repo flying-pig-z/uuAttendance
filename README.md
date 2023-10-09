@@ -4,7 +4,7 @@
 
 uu考勤的流程图：
 
-<img src="https://github.com/Flying-pig-z/uuAttendance/assets/117554874/7116ec22-125f-4689-8ab5-fb33f2a9fb28" width="50%" height="auto">
+<img src="https://github.com/Flying-pig-z/uuAttendance/assets/117554874/7116ec22-125f-4689-8ab5-fb33f2a9fb28" width="100%" height="auto">
 
 简单说就是在课前，学生进行请假，老师判断请假是否通过，老师指派督导进行考勤。
 
