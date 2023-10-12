@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignInVO {
-    //课程id
-    private Integer courseId;
-    private Double latitude;
-    private Double longitude;
+public class SignInMessage {
+    private String userId;
+    private SignInVO signInVO;
+
 }

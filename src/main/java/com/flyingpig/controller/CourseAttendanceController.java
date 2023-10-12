@@ -5,15 +5,18 @@ import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.dto.*;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
 import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
+import com.flyingpig.dataobject.vo.SignInMessage;
 import com.flyingpig.dataobject.vo.SignInVO;
 import com.flyingpig.common.Result;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.service.ExportService;
 import com.flyingpig.util.JwtUtil;
+import com.flyingpig.util.SignInProducer;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,10 @@ public class CourseAttendanceController {
     private CourseAttendanceService courseAttendanceService;
     @Autowired
     private ExportService exportService;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private SignInProducer signInProducer;
 
     @PreAuthorize("hasAuthority('sys:supervision:operation')")
     @PutMapping("/status")
@@ -48,11 +55,15 @@ public class CourseAttendanceController {
         String userId = claims.getSubject();
         System.out.println(signInVO.getLatitude());
         System.out.println(signInVO.getLatitude());
-        if (courseAttendanceService.signIn(userId, signInVO)) {
-            return Result.success("签到成功");
-        } else {
-            return Result.error(2,"签到失败");
-        }
+//        if (courseAttendanceService.signIn(userId, signInVO)) {
+//            return Result.success("签到成功");
+//        } else {
+//            return Result.error(2,"签到失败");
+//        }
+        // 发送签到请求到 RabbitMQ 队列
+        signInProducer.sendSignInRequest(userId, signInVO);
+
+        return Result.success("签到请求已发送");
     }
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
