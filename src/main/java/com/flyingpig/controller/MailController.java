@@ -3,6 +3,7 @@ package com.flyingpig.controller;
 import com.flyingpig.common.Result;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.EmailRegisterVO;
+import com.flyingpig.filter.AccessLimit;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.EmailUtil;
 import com.flyingpig.util.RedisCache;
@@ -36,17 +37,16 @@ public class MailController {
     public Result sendEmailVerificationCode(@RequestParam  String email) {
         //检查email是否符合格式
         if(!EmailUtil.judgeEmailFormat(email)){
-            return Result.error("邮箱不符合格式");
+            return Result.error(2,"邮箱不符合格式");
         }
         //检查redis中有无验证码，如果有，则返回已存在
         String verificationCode=redisCache.getCacheObject(email);
         if(verificationCode!=null){
-            return Result.error("验证码已存在，请误重复发送");
+            return Result.error(2,"发送过于频繁，请一分钟后再试");
         }else {
             //如果没有，生成验证码存入缓存并发送
             verificationCode = EmailUtil.createVerificationCode();
-            //存入缓存
-            redisCache.setCacheObject(email, verificationCode, 120, TimeUnit.SECONDS);
+
             //发送
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(emailUserName);//设置发件qq邮箱
@@ -54,6 +54,8 @@ public class MailController {
             message.setSubject("验证码");    // 设置邮件主题
             message.setText(verificationCode);   // 设置邮件正文
             mailSender.send(message);
+            //存入缓存
+            redisCache.setCacheObject(email, verificationCode, 60, TimeUnit.SECONDS);
             return Result.success("验证码已发送");
         }
     }
@@ -73,7 +75,7 @@ public class MailController {
             loginService.addUser(user);
             return Result.success("添加成功,请联系管理员审核");
         }else {
-            return Result.error("验证码验证错误");
+            return Result.error(2,"验证码验证错误");
         }
 
     }

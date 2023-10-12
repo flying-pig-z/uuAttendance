@@ -118,28 +118,5 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskService {
             }
         }
     }
-    @Override
-    public List<CourseStudent> listSupervisonByteaUserIdAndCourseNameAndsemester(String teaUserid, String semester, String courseName) {
-        //查询对应的其中一节课程
-        QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<CourseDetail>();
-        courseDetailQueryWrapper.eq("course_teacher",teaUserid)
-                .eq("course_name",courseName)
-                .eq("semester",semester)
-                .select("id");
-        Integer courseId=courseDetailMapper.selectList(courseDetailQueryWrapper).get(0).getId();
-        //通过课程列表查询督导列表
-        QueryWrapper<SupervisionTask> supervisionTaskQueryWrapper=new QueryWrapper<>();
-        supervisionTaskQueryWrapper.eq("course_id",courseId).select("userid");
-        List<SupervisionTask> supervisionTaskList=supervisionTaskMapper.selectList(supervisionTaskQueryWrapper);
-        List<CourseStudent> courseStudentList=new ArrayList<>();
-        for(SupervisionTask supervisionTask:supervisionTaskList){
-            User user=userMapper.selectById(supervisionTask.getUserid());
-            CourseStudent courseStudent=new CourseStudent();
-            courseStudent.setStuUserId(user.getId());
-            courseStudent.setStudentNo(user.getNo());
-            courseStudent.setStudentName(user.getName());
-            courseStudentList.add(courseStudent);
-        }
-        return courseStudentList;
-    }
+
 }

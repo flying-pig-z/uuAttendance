@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -224,9 +227,15 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
             courseStudent.setStuUserId(student.getUserid());
             courseStudent.setStudentNo(student.getNo());
             courseStudent.setStudentName(student.getName());
+            courseStudent.setStudentType(userMapper.selectById(student.getUserid()).getUserType());
             courseStudentList.add(courseStudent);
         }
-        return courseStudentList;
+        //身份为督导的排在前面
+        List<CourseStudent> sortedList = courseStudentList.stream()
+                .sorted(Comparator.comparingInt(CourseStudent::getStudentType))
+                .collect(Collectors.toList());
+        Collections.reverse(sortedList);
+        return sortedList;
     }
 
     @Override

@@ -70,6 +70,7 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
             resultAttendanceAppealDetail.setStudentNo(student.getNo());
             resultAttendanceAppealDetail.setStudentName(student.getName());
             resultAttendanceAppealDetail.setCourseName(courseDetail.getCourseName());
+            resultAttendanceAppealDetail.setImage(attendanceAppeal.getImage());
         }
         return resultAttendanceAppealDetail;
     }

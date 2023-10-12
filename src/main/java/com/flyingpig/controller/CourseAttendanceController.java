@@ -51,7 +51,7 @@ public class CourseAttendanceController {
         if (courseAttendanceService.signIn(userId, signInVO)) {
             return Result.success("签到成功");
         } else {
-            return Result.error("签到失败");
+            return Result.error(2,"签到失败");
         }
     }
 
@@ -101,7 +101,7 @@ public class CourseAttendanceController {
     //通过老师的id和学期还有课程名字获取到这个课程的学生
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/student")
-    @ApiOperation("教师通过其id和学期还有课程名字获取到这个课程的学生")
+    @ApiOperation("教师通过其id和学期还有课程名字获取到这个课程的学生及其身份")
     public Result listStudentByTeauserIdAndsemesterAndCourseName(@RequestHeader String Authorization, @RequestParam Integer semester, @RequestParam String courseName) {
         Claims claims = JwtUtil.parseJwt(Authorization);
         String teaUserid = claims.getSubject();

@@ -16,4 +16,5 @@ public class AttendanceAppealDetail {
     private LocalDateTime beginTime;
     private LocalDateTime endTime;
     private String reason;
+    private String image;
 }

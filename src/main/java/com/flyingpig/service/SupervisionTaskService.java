@@ -15,5 +15,4 @@ public interface SupervisionTaskService {
 
     void deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(String teaUserid, SupervisionTaskAddVO supervisionTaskAddVO);
 
-    List<CourseStudent> listSupervisonByteaUserIdAndCourseNameAndsemester(String teaUserid, String semester, String courseName);
 }

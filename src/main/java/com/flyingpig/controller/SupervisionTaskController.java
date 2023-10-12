@@ -58,14 +58,4 @@ public class SupervisionTaskController {
         supervisionTaskService.deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid,supervisionTaskAddVO);
         return Result.success();
     }
-
-    @PreAuthorize("hasAuthority('sys:teacher:operation')")
-    @GetMapping("/supervisionList")
-    @ApiOperation("教师获取课程的督导列表")
-    public Result listSupervisonByteaUserIdAndCourseNameAndsemester(@RequestHeader String Authorization,@RequestParam String semester,@RequestParam String courseName){
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        String teaUserid=claims.getSubject();
-        List<CourseStudent> courseStudentList= supervisionTaskService.listSupervisonByteaUserIdAndCourseNameAndsemester(teaUserid,semester,courseName);
-        return Result.success(courseStudentList);
-    }
 }

@@ -26,4 +26,5 @@ public class AttendanceAppeal extends Model<AttendanceAppeal> {
     private String status;
 
     private String reason;
+    private String image;
 }

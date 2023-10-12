@@ -12,8 +12,8 @@ public class GlobalExceptionHandler {
     public Result ex(Exception ex) {
         ex.printStackTrace();
         if (ex instanceof AccessDeniedException) {
-            return Result.error("身份权限不符合");
+            return Result.error(0,"身份权限不符合");
         }
-        return Result.error("对不起，操作失败，请联系管理员");
+        return Result.error(2,"对不起，操作失败，请联系管理员");
     }
 }

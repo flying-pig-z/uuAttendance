@@ -23,7 +23,8 @@ public class Result {
     }
 
     //查询 失败响应
-    public static Result error(String msg) {
-        return new Result(0, msg, null);
+    public static Result error(Integer code,String msg) {
+        return new Result(code, msg, null);
     }
+
 }

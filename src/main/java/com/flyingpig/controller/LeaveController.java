@@ -7,15 +7,20 @@ import com.flyingpig.common.PageBean;
 import com.flyingpig.common.Result;
 import com.flyingpig.service.LeaveService;
 import com.flyingpig.service.StudentService;
+import com.flyingpig.util.AliOSSUtils;
 import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -29,19 +34,27 @@ public class LeaveController {
     private LeaveService leaveService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private AliOSSUtils aliOSSUtils;
 
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @PostMapping("")
     @ApiOperation("学生请假")
-    public Result addLeave(@RequestBody LeaveApplication leaveApplication, @RequestHeader String Authorization) {
+    public Result addLeave(@RequestHeader String Authorization, @RequestParam Integer courseId, @RequestParam String leavePlace,
+                           @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime appealBeginTime,
+                           @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime appealEndTime, @RequestParam String reason,
+                           @RequestParam String status, @RequestParam MultipartFile leaveImage) throws IOException {
         //封装完毕后调用service层的add方法
-
         Claims claims = JwtUtil.parseJwt(Authorization);
         Integer userid = Integer.parseInt(claims.getSubject());
         Map<String, Object> studentInfo = studentService.getStudentInfoByUserId(userid);
+        LeaveApplication leaveApplication=new LeaveApplication(null,null,courseId,reason,leavePlace,appealBeginTime,appealEndTime,status,null);
         leaveApplication.setStatus("0");
         Integer studentId = (Integer) studentInfo.get("id");
         leaveApplication.setStudentId(studentId);
+        //调用阿里云OSS工具类，将上传上来的文件存入阿里云
+        String url = aliOSSUtils.upload(leaveImage);
+        leaveApplication.setImage(url);
         leaveService.addLeave(leaveApplication);
         return Result.success();
     }

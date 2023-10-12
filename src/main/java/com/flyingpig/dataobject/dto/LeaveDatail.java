@@ -16,4 +16,5 @@ public class LeaveDatail {
     private LocalDateTime beginTime;
     private LocalDateTime endTime;
     private String reason;
+    private String image;
 }

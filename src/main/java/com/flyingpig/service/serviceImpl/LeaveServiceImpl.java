@@ -100,6 +100,7 @@ public class LeaveServiceImpl implements LeaveService {
             resultLeaveDatail.setStudentNo(student.getNo());
             resultLeaveDatail.setStudentName(student.getName());
             resultLeaveDatail.setCourseName(courseDetail.getCourseName());
+            resultLeaveDatail.setImage(leaveApplication.getImage());
         }
         return resultLeaveDatail;
     }

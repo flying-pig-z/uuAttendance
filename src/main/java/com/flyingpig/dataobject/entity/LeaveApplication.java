@@ -26,4 +26,5 @@ public class LeaveApplication {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime appealEndTime;
     private String status;
+    private String image;
 }
