@@ -58,6 +58,7 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 * 使用websocket长连接使得学生考勤签到界面的信息实时更新，解决轮询消耗大量带宽的问题
 * 使用阿里云OSS存储请假图片以及考勤申诉的图片
 * 使用robbitmq实现签到接口的高并发
+* 使用docker+nginx进行部署
 
 ## 3.项目亮点
 
