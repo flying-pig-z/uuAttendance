@@ -30,7 +30,7 @@ public interface CourseAttendanceService {
 
     boolean signIn(String userId, SignInVO signInVO);
 
-    List<CourseStudent> getStudentByTeauserIdAndsemesterAndCourseName(String teaUserid, Integer semester, String courseName);
+    List<CourseStudent> listStudentByTeauserIdAndsemesterAndCourseName(String teaUserid, Integer semester, String courseName);
 
     PageBean pageCourseAttendance(CourseAttendanceQueryVO courseAttendanceQueryVO);
 

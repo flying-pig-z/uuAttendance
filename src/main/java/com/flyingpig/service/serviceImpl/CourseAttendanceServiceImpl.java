@@ -7,10 +7,7 @@ import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
 import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
 import com.flyingpig.dataobject.vo.SignInVO;
-import com.flyingpig.mapper.CourseAttendanceMapper;
-import com.flyingpig.mapper.CourseDetailMapper;
-import com.flyingpig.mapper.StudentMapper;
-import com.flyingpig.mapper.UserMapper;
+import com.flyingpig.mapper.*;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.util.DistanceCalculator;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +35,9 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
     private CourseDetailMapper courseDetailMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private SupervisionTaskMapper supervisionTaskMapper;
+
     @Override
     public List<CourseTableInfo> getCourseTableInfoByWeekAndUserId(Integer userId, Integer week, Integer semester) {
         QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<>();
@@ -202,6 +202,7 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
             courseAttendance.setStatus(1);
             QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper=new QueryWrapper<>();
             courseAttendanceQueryWrapper.eq("course_id",signInVO.getCourseId());
+            courseAttendanceQueryWrapper.eq("student_id",student.getId());
             courseAttendanceMapper.update(courseAttendance,courseAttendanceQueryWrapper);
             return true;
         }else{
@@ -209,17 +210,20 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         }
     }
     @Override
-    public List<CourseStudent> getStudentByTeauserIdAndsemesterAndCourseName(String teaUserid, Integer semester, String courseName) {
+    public List<CourseStudent> listStudentByTeauserIdAndsemesterAndCourseName(String teaUserid, Integer semester, String courseName) {
+        //获得其中一节课的id
         QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<CourseDetail>();
         courseDetailQueryWrapper.eq("course_teacher",teaUserid);
         courseDetailQueryWrapper.eq("course_name",courseName);
         courseDetailQueryWrapper.eq("semester",semester);
         List<CourseDetail> courseDetailList=courseDetailMapper.selectList(courseDetailQueryWrapper);
         Integer courseOneId=courseDetailList.get(0).getId();
+        //通过这节课的id去查询考勤表对应的考勤数据
         QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper=new QueryWrapper<>();
         courseAttendanceQueryWrapper.eq("course_id",courseOneId).select("student_id");
         List<CourseAttendance> courseAttendanceList=courseAttendanceMapper.selectList(courseAttendanceQueryWrapper);
         List<CourseStudent> courseStudentList=new ArrayList<>();
+        //遍历考勤数据的到学生列表，并且结合督导任务表，获取学生身份
         for(CourseAttendance courseAttendance:courseAttendanceList){
             Integer studentId=courseAttendance.getStudentId();
             Student student=studentMapper.selectById(studentId);
@@ -227,7 +231,13 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
             courseStudent.setStuUserId(student.getUserid());
             courseStudent.setStudentNo(student.getNo());
             courseStudent.setStudentName(student.getName());
-            courseStudent.setStudentType(userMapper.selectById(student.getUserid()).getUserType());
+            QueryWrapper<SupervisionTask> supervisionTaskQueryWrapper=new QueryWrapper<>();
+            supervisionTaskQueryWrapper.eq("course_id",courseOneId).eq("userid",student.getUserid());
+            if(supervisionTaskMapper.selectOne(supervisionTaskQueryWrapper)!=null){
+                courseStudent.setStudentType(2);
+            }else {
+                courseStudent.setStudentType(1);
+            }
             courseStudentList.add(courseStudent);
         }
         //身份为督导的排在前面

@@ -12,8 +12,8 @@ import java.util.UUID;
 public class AliOSSUtils {
     // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
     private String endpoint = "https://oss-cn-beijing.aliyuncs.com";
-    private String accessKeyId = "***";
-    private String accessKeySecret = "****";
+    private String accessKeyId = "LTAI5tSh6nEmogBLXCZBXyAX";
+    private String accessKeySecret = "vQlDHs3bG3J9ClwiHDSiSixajFSc3p";
     private String bucketName = "flying-pig-z";
 
     /**
