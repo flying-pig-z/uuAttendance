@@ -12,6 +12,11 @@
 
 在课后，考勤如果有误，学生可以进行申诉，由老师进行审批。老师多样化查看考勤的最终结果。
 
+## 客户端仓库地址以及演示视频
+* 教师端仓库地址：https://github.com/ROBINRUGAN/uu-attendance
+* 学生端仓库地址：https://github.com/klxiaoniu/UUAttendance
+* 演示视频：https://www.bilibili.com/video/BV1wu411T7Lt/?spm_id_from=333.999.0.0&vd_source=d171ed648157798a725c9e901af91f9e
+
 ## 接口文档
 
 https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
