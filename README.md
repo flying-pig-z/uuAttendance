@@ -22,35 +22,35 @@
 https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 
 ## 1.项目目录树
-
-├─src<br>
-│  ├─main<br>
-│  │  ├─java<br>
-│  │  │  └─com<br>
-│  │  │      └─flyingpig<br>
-│  │  │          ├─common<br>
-│  │  │          ├─config<br>
-│  │  │          ├─controller<br>
-│  │  │          ├─dataobject<br>
-│  │  │          │  ├─dto<br>
-│  │  │          │  ├─entity<br>
-│  │  │          │  └─vo<br>
-│  │  │          ├─exception<br>
-│  │  │          ├─filter<br>
-│  │  │          ├─mapper<br>
-│  │  │          ├─service<br>
-│  │  │          │  └─serviceImpl<br>
-│  │  │          │      └─security<br>
-│  │  │          ├─util<br>
-│  │  │          └─websocket<br>
-│  │  └─resources<br>
-│  │      ├─com<br>
-│  │      │  └─flyingpig<br>
-│  │      │      └─mapper<br>
-│  │      └─template<br>
-│  └─test<br>
-│      └─java<br>
-
+```bash
+├─src
+│  ├─main
+│  │  ├─java
+│  │  │  └─com
+│  │  │      └─flyingpig
+│  │  │          ├─common
+│  │  │          ├─config
+│  │  │          ├─controller
+│  │  │          ├─dataobject
+│  │  │          │  ├─dto
+│  │  │          │  ├─entity
+│  │  │          │  └─vo
+│  │  │          ├─exception
+│  │  │          ├─filter
+│  │  │          ├─mapper
+│  │  │          ├─service
+│  │  │          │  └─serviceImpl
+│  │  │          │      └─security
+│  │  │          ├─util
+│  │  │          └─websocket
+│  │  └─resources
+│  │      ├─com
+│  │      │  └─flyingpig
+│  │      │      └─mapper
+│  │      └─template
+│  └─test
+│      └─java
+```
 ## 2.使用的技术栈
 
 * 项目基于springboot框架进行开发
