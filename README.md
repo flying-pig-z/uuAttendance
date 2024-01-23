@@ -71,7 +71,7 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 
 【1】在各层方法的命名上都采用"动词+名词+by+名词"，并且动词的命名规范如下：
 
-![img](https://img-blog.csdnimg.cn/0888dc8a8e68415eb543f569608ada43.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![img](https://img-blog.csdnimg.cn/0888dc8a8e68415eb543f569608ada43.png)
 
 【2】在包的命名上包名统一小写。
 
@@ -108,4 +108,8 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 
 ## 5.项目不足之处
 1.客户端传回来的定位会存在飘动的现象。
+
 2.因为客户端的一切计算都是不安全的，所以虚拟定位问题难以得到解决。
+
+3.签到页面属于高并发，虽然加入了rabbitmq对签到接口进行优化。但是如果并发量大的时候还需要利用Redis对课程信息即签到信息进行存储。
+
