@@ -2,8 +2,10 @@ package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.dataobject.dto.LoginUser;
+import com.flyingpig.dataobject.entity.UserRoleRelation;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.common.Result;
+import com.flyingpig.mapper.UserRoleRelationMapper;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.util.JwtUtil;
@@ -20,12 +22,19 @@ import java.util.Objects;
 
 @Service
 public class LoginServiceImpl implements LoginService {
+
     @Autowired
-    private AuthenticationManager authenticationManager;
+    AuthenticationManager authenticationManager;
+
     @Autowired
-    private RedisCache redisCache;
+    RedisCache redisCache;
+
     @Autowired
-    private UserMapper userMapper;
+    UserMapper userMapper;
+
+    @Autowired
+    UserRoleRelationMapper userRoleRelationMapper;
+
     @Override
     public Result login(User user) {
         //AuthenticationManager authenticate进行用户认证
@@ -83,6 +92,8 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public void addUser(User user) {
         userMapper.insert(user);
+        UserRoleRelation userRoleRelation=new UserRoleRelation(user.getId(),3);
+        userRoleRelationMapper.insert(userRoleRelation);
     }
 
     @Override

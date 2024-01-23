@@ -40,24 +40,18 @@ public class MailController {
             return Result.error(2,"邮箱不符合格式");
         }
         //检查redis中有无验证码，如果有，则返回已存在
-        String verificationCode=redisCache.getCacheObject(email);
-        if(verificationCode!=null){
-            return Result.error(2,"发送过于频繁，请一分钟后再试");
-        }else {
-            //如果没有，生成验证码存入缓存并发送
-            verificationCode = EmailUtil.createVerificationCode();
-
-            //发送
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(emailUserName);//设置发件qq邮箱
-            message.setTo(email);      // 设置收件人邮箱地址
-            message.setSubject("验证码");    // 设置邮件主题
-            message.setText(verificationCode);   // 设置邮件正文
-            mailSender.send(message);
-            //存入缓存
-            redisCache.setCacheObject(email, verificationCode, 60, TimeUnit.SECONDS);
-            return Result.success("验证码已发送");
-        }
+        //如果没有，生成验证码存入缓存并发送
+        String verificationCode = EmailUtil.createVerificationCode();
+        //发送
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(emailUserName);//设置发件qq邮箱
+        message.setTo(email);      // 设置收件人邮箱地址
+        message.setSubject("验证码");    // 设置邮件主题
+        message.setText(verificationCode);   // 设置邮件正文
+        mailSender.send(message);
+        //存入缓存
+        redisCache.setCacheObject(email, verificationCode, 120, TimeUnit.SECONDS);
+        return Result.success("验证码已发送");
     }
 
     @PostMapping("/register")
@@ -71,7 +65,7 @@ public class MailController {
             User user=new User();
             user.setNo(emailRegisterVO.getNo());
             user.setPassword(emailRegisterVO.getPassword());
-            user.setUserType(0);
+            user.setUserType(3);
             loginService.addUser(user);
             return Result.success("添加成功,请联系管理员审核");
         }else {
