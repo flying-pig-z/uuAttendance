@@ -1,6 +1,6 @@
 //package com.flyingpig.util;
 //
-//import com.flyingpig.dataobject.vo.SignInMessage;
+//import com.flyingpig.dataobject.message.SignInMessage;
 //import com.flyingpig.dataobject.vo.SignInVO;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Component;
