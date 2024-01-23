@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mysql-server:
+    image: mysql:latest
+    container_name: mysql-server
+    network_mode: host
+    environment:
+      - MYSQL_ROOT_PASSWORD=@Aa123456
+    restart: unless-stopped
+
+  redis-server:
+    image: redis:5.0
+    container_name: redis-server
+    network_mode: host
+    restart: unless-stopped
+
+  springboot-server:
+    build:
+      context: .
+      dockerfile: ./springboot_dockerfile
+    image: app:latest
+    container_name: springboot-server
+    network_mode: host
+    volumes:
+      - /root/springboot_data:/app
+    restart: unless-stopped
