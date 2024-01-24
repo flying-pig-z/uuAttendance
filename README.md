@@ -63,7 +63,6 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 * 使用websocket长连接使得学生考勤签到界面的信息实时更新，解决轮询消耗大量带宽的问题
 * 使用阿里云OSS存储请假图片以及考勤申诉的图片
 * 使用docker+nginx进行部署<br>
-* **使用rabbitmq实现签到接口的高并发**
 
 ## 3.项目亮点
 
@@ -111,5 +110,9 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 
 2.因为客户端的一切计算都是不安全的，所以虚拟定位问题难以得到解决。
 
-3.签到页面属于高并发，虽然加入了rabbitmq对签到接口进行优化。但是如果并发量大的时候还需要利用Redis对课程信息即签到信息进行存储。
+3.签到页面属于高并发，如果并发量大的时候需要利用Redis对课程信息即签到信息进行存储来优化签到接口。
+
+HSET studentSignInData studentId '{"courseId": courseId, "status": signInStatus}'
+
+
 
