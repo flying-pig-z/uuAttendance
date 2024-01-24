@@ -12,7 +12,6 @@ import com.flyingpig.mapper.*;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.util.DistanceCalculator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +39,6 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
     @Autowired
     private SupervisionTaskMapper supervisionTaskMapper;
 
-    @Autowired
-    RabbitTemplate rabbitTemplate;
 
     @Override
     public List<CourseTableInfo> getCourseTableInfoByWeekAndUserId(Integer userId, Integer week, Integer semester) {
@@ -194,14 +191,21 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
 
     @Override
     public boolean signIn(String userId, SignInVO signInVO) {
+        QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<>();
+        studentQueryWrapper.eq("userid",userId);
+        Student student=studentMapper.selectOne(studentQueryWrapper);
         QueryWrapper<CourseDetail> courseDetailQueryWrapper=new QueryWrapper<>();
         courseDetailQueryWrapper.eq("id", signInVO.getCourseId());
         CourseDetail courseDetail=courseDetailMapper.selectOne(courseDetailQueryWrapper);
         Double courseLatitude=Double.parseDouble(courseDetail.getLatitude());
         Double courseLongitude=Double.parseDouble(courseDetail.getLongitude());
         if(DistanceCalculator.distanceBetweenCoordinates(signInVO.getLatitude(),signInVO.getLongitude(),courseLatitude,courseLongitude)<=30){
-            SignInMessage signInMessage=new SignInMessage(userId,signInVO.getCourseId());
-            rabbitTemplate.convertAndSend("signIn-queue", signInMessage);
+            CourseAttendance courseAttendance=new CourseAttendance();
+            courseAttendance.setStatus(1);
+            QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper=new QueryWrapper<>();
+            courseAttendanceQueryWrapper.eq("course_id",signInVO.getCourseId());
+            courseAttendanceQueryWrapper.eq("student_id",student.getId());
+            courseAttendanceMapper.update(courseAttendance,courseAttendanceQueryWrapper);
             return true;
         }else{
             return false;
