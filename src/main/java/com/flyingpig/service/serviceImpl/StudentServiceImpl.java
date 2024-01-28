@@ -7,6 +7,7 @@ import com.flyingpig.dataobject.entity.Student;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.mapper.UserRoleRelationMapper;
 import com.flyingpig.service.StudentService;
+import com.flyingpig.util.RedisCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ public class StudentServiceImpl implements StudentService {
     private UserMapper userMapper;
     @Autowired
     private UserRoleRelationMapper userRoleRelationMapper;
+    @Autowired
+    RedisCache redisCache;
 
     @Override
     public void addStudent(User user, Student student) {
@@ -45,9 +48,10 @@ public class StudentServiceImpl implements StudentService {
         QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<>();
         studentQueryWrapper.eq("userid",userid);
         Student student=studentMapper.selectOne(studentQueryWrapper);
-        QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
-        userQueryWrapper.eq("id",userid);
-        User user=userMapper.selectOne(userQueryWrapper);
+//        QueryWrapper<User> userQueryWrapper=new QueryWrapper<>();
+//        userQueryWrapper.eq("id",userid);
+//        User user=userMapper.selectOne(userQueryWrapper);
+        User user = redisCache.getCacheObject("login"+userid);
         target.put("id",student.getId());
         target.put("no",user.getNo());
         target.put("name",user.getName());
