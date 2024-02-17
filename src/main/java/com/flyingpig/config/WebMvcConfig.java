@@ -1,6 +1,5 @@
 package com.flyingpig.config;
 
-import com.flyingpig.common.JacksonObjectMapper;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

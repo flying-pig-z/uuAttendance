@@ -1,4 +1,4 @@
-package com.flyingpig.util;
+package com.flyingpig.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;

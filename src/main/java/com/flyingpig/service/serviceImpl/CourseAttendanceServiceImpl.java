@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.common.PageBean;
 import com.flyingpig.dataobject.dto.*;
 import com.flyingpig.dataobject.entity.*;
+import com.flyingpig.dataobject.message.SignInMessage;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
 import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
 import com.flyingpig.dataobject.vo.SignInVO;
@@ -37,6 +38,7 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
     private UserMapper userMapper;
     @Autowired
     private SupervisionTaskMapper supervisionTaskMapper;
+
 
     @Override
     public List<CourseTableInfo> getCourseTableInfoByWeekAndUserId(Integer userId, Integer week, Integer semester) {

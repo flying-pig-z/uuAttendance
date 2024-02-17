@@ -8,7 +8,7 @@
         <version>2.5.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.itheima</groupId>
+    <groupId>com.flyingpig</groupId>
     <artifactId>uuAttendance</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>uuAttendance</name>

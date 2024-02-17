@@ -1,0 +1,5 @@
+FROM openjdk:17-jdk
+MAINTAINER flyingpig <1839976096@qq.com>
+ADD uuAttendance-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 9090
+CMD nohup java -jar app.jar > uuAttendance.log

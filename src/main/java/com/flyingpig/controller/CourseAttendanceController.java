@@ -5,7 +5,6 @@ import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.dto.*;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
 import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
-import com.flyingpig.dataobject.vo.SignInMessage;
 import com.flyingpig.dataobject.vo.SignInVO;
 import com.flyingpig.common.Result;
 import com.flyingpig.service.CourseAttendanceService;
@@ -54,8 +53,6 @@ public class CourseAttendanceController {
         } else {
             return Result.error(2,"签到失败");
         }
-        // 发送签到请求到 RabbitMQ 队列
-//        signInProducer.sendSignInRequest(userId, signInVO);
     }
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")

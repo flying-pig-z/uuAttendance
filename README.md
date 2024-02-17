@@ -63,7 +63,6 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 * 使用websocket长连接使得学生考勤签到界面的信息实时更新，解决轮询消耗大量带宽的问题
 * 使用阿里云OSS存储请假图片以及考勤申诉的图片
 * 使用docker+nginx进行部署<br>
-* **使用rabbitmq实现签到接口的高并发**
 
 ## 3.项目亮点
 
@@ -71,7 +70,7 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 
 【1】在各层方法的命名上都采用"动词+名词+by+名词"，并且动词的命名规范如下：
 
-![img](https://img-blog.csdnimg.cn/0888dc8a8e68415eb543f569608ada43.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![img](https://img-blog.csdnimg.cn/0888dc8a8e68415eb543f569608ada43.png)
 
 【2】在包的命名上包名统一小写。
 
@@ -105,4 +104,15 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 3.业务逻辑严密，考虑对多人考勤同一课程、同一课程有多份考勤名单和同一堂课出现两次点名等多种情况。
 
 4.支持考勤数据的导出
+
+## 5.项目不足之处
+1.客户端传回来的定位会存在飘动的现象。
+
+2.因为客户端的一切计算都是不安全的，所以虚拟定位问题难以得到解决。
+
+3.签到页面属于高并发，如果并发量大的时候需要利用Redis对课程信息即签到信息进行存储来优化签到接口。
+
+HSET studentSignInData studentId '{"courseId": courseId, "status": signInStatus}'
+
+
 
