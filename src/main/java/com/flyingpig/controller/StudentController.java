@@ -1,5 +1,6 @@
 package com.flyingpig.controller;
 
+import com.flyingpig.annotations.UserRateLimit;
 import com.flyingpig.dataobject.entity.Student;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.util.JwtUtil;
@@ -22,13 +23,14 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @UserRateLimit(value = 2, time = 1)
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/studentInfo")
     @ApiOperation("学生获取他本人的信息")
     public Result getStudentInfoById(@RequestHeader String Authorization) {
         //设置学生id
         Claims claims = JwtUtil.parseJwt(Authorization);
-        Integer userId = Integer.parseInt(claims.getSubject());
+        Long userId = Long.parseLong(claims.getSubject());
         Map<String, Object> studentInfo = studentService.getStudentInfoByUserId(userId);
         return Result.success(studentInfo);
     }

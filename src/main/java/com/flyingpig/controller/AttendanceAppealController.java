@@ -46,14 +46,14 @@ public class AttendanceAppealController {
     @PostMapping("")
     @ApiOperation("学生考勤申诉")
     public Result addAttendanceAppeal(@RequestHeader String Authorization, @RequestParam Integer courseId,
-                                      @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime appealBeginTime,
-                                      @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime appealEndTime, @RequestParam String reason,
+                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime appealBeginTime,
+                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime appealEndTime, @RequestParam String reason,
                                       @RequestParam String status, @RequestParam MultipartFile attendanceAppealImage) throws IOException {
         //设置userid
         Claims claims = JwtUtil.parseJwt(Authorization);
-        Integer userid = Integer.parseInt(claims.getSubject());
+        Long userid = Long.parseLong(claims.getSubject());
         Map<String, Object> studentInfo = studentService.getStudentInfoByUserId(userid);
-        AttendanceAppeal attendanceAppeal=new AttendanceAppeal(null,null,courseId,appealBeginTime,appealEndTime,status,reason,null);
+        AttendanceAppeal attendanceAppeal = new AttendanceAppeal(null, null, courseId, appealBeginTime, appealEndTime, status, reason, null);
         attendanceAppeal.setStatus("0");
         Integer studentId = (Integer) studentInfo.get("id");
         attendanceAppeal.setStudentId(studentId);

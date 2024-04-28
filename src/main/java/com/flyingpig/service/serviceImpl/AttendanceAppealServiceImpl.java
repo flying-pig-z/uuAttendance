@@ -30,6 +30,7 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
     private CourseDetailMapper courseDetailMapper;
     @Autowired
     private CourseAttendanceMapper courseAttendanceMapper;
+
     @Override
     public void addAttendanceAppeal(AttendanceAppeal attendanceAppeal) {
         attendanceAppealMapper.insert(attendanceAppeal);
@@ -37,33 +38,34 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
 
     @Override
     public List<AttendanceAppealWithCourseName> listAttendanceAppealByStuUserId(Integer userId) {
-        QueryWrapper<Student> studentQueryWrapper=new QueryWrapper<>();
-        studentQueryWrapper.eq("userid",userId);
-        Student student=studentMapper.selectOne(studentQueryWrapper);
-        QueryWrapper<AttendanceAppeal> attendanceAppealQueryWrapper=new QueryWrapper<>();
-        attendanceAppealQueryWrapper.eq("student_id",student.getId());
-        List<AttendanceAppeal> AttendanceAppealList=attendanceAppealMapper.selectList(attendanceAppealQueryWrapper);
-        List<AttendanceAppealWithCourseName> AttendanceAppealWithCourseNameList=new ArrayList<>();
-        for(int i=0;i< AttendanceAppealList.size();i++){
-            AttendanceAppeal target=AttendanceAppealList.get(i);
-            CourseDetail courseDetail=courseDetailMapper.selectById(target.getCourseId());
+        QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
+        studentQueryWrapper.eq("userid", userId);
+        Student student = studentMapper.selectOne(studentQueryWrapper);
+        QueryWrapper<AttendanceAppeal> attendanceAppealQueryWrapper = new QueryWrapper<>();
+        attendanceAppealQueryWrapper.eq("student_id", student.getId());
+        List<AttendanceAppeal> AttendanceAppealList = attendanceAppealMapper.selectList(attendanceAppealQueryWrapper);
+        List<AttendanceAppealWithCourseName> AttendanceAppealWithCourseNameList = new ArrayList<>();
+        for (int i = 0; i < AttendanceAppealList.size(); i++) {
+            AttendanceAppeal target = AttendanceAppealList.get(i);
+            CourseDetail courseDetail = courseDetailMapper.selectById(target.getCourseId());
             //封装成dto
-            AttendanceAppealWithCourseName targetDto=new AttendanceAppealWithCourseName(target,courseDetail.getCourseName());
+            AttendanceAppealWithCourseName targetDto = new AttendanceAppealWithCourseName(target, courseDetail.getCourseName());
             AttendanceAppealWithCourseNameList.add(targetDto);
         }
         return AttendanceAppealWithCourseNameList;
     }
+
     //查询申诉的详情
     @Override
     public AttendanceAppealDetail getAttendanceAppealDetail(Integer attendanceAppealId) {
         //获取本张表数据
-        AttendanceAppeal attendanceAppeal=attendanceAppealMapper.selectById(attendanceAppealId);
+        AttendanceAppeal attendanceAppeal = attendanceAppealMapper.selectById(attendanceAppealId);
         //通过外键获取其他表所有数据
-        Student student=studentMapper.selectById(attendanceAppeal.getStudentId());
-        CourseDetail courseDetail =courseDetailMapper.selectById(attendanceAppeal.getCourseId());
+        Student student = studentMapper.selectById(attendanceAppeal.getStudentId());
+        CourseDetail courseDetail = courseDetailMapper.selectById(attendanceAppeal.getCourseId());
         //封装结果
-        AttendanceAppealDetail resultAttendanceAppealDetail=new AttendanceAppealDetail();
-        if(attendanceAppeal!=null&&student!=null&& courseDetail !=null){
+        AttendanceAppealDetail resultAttendanceAppealDetail = new AttendanceAppealDetail();
+        if (attendanceAppeal != null && student != null && courseDetail != null) {
             resultAttendanceAppealDetail.setBeginTime(attendanceAppeal.getAppealBeginTime());
             resultAttendanceAppealDetail.setEndTime(attendanceAppeal.getAppealEndTime());
             resultAttendanceAppealDetail.setReason(attendanceAppeal.getReason());
@@ -78,23 +80,24 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
     @Override
     public void updateByAttendanceAppealIdAndStatus(Integer attendanceAppealId, String status) {
         //先将考勤申诉表中的考勤申诉状态改为通过
-        AttendanceAppeal attendanceAppeal=new AttendanceAppeal();
+        AttendanceAppeal attendanceAppeal = new AttendanceAppeal();
         attendanceAppeal.setId(attendanceAppealId);
         attendanceAppeal.setStatus(status);
         attendanceAppealMapper.updateById(attendanceAppeal);
         //如果通过再将签到表中的签到状态改为请假
-        if(status.equals("1")){
-            AttendanceAppeal attendanceAppeal1=attendanceAppealMapper.selectById(attendanceAppealId);
-            Integer courseId=attendanceAppeal1.getCourseId();
-            Integer studentId=attendanceAppeal1.getStudentId();
-            CourseAttendance courseAttendance=new CourseAttendance();
-            QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper=new QueryWrapper<>();
-            courseAttendanceQueryWrapper.eq("course_id",courseId);
-            courseAttendanceQueryWrapper.eq("student_id",studentId);
+        if (status.equals("1")) {
+            AttendanceAppeal attendanceAppeal1 = attendanceAppealMapper.selectById(attendanceAppealId);
+            Integer courseId = attendanceAppeal1.getCourseId();
+            Integer studentId = attendanceAppeal1.getStudentId();
+            CourseAttendance courseAttendance = new CourseAttendance();
+            QueryWrapper<CourseAttendance> courseAttendanceQueryWrapper = new QueryWrapper<>();
+            courseAttendanceQueryWrapper.eq("course_id", courseId);
+            courseAttendanceQueryWrapper.eq("student_id", studentId);
             courseAttendance.setStatus(1);
-            courseAttendanceMapper.update(courseAttendance,courseAttendanceQueryWrapper);
+            courseAttendanceMapper.update(courseAttendance, courseAttendanceQueryWrapper);
         }
     }
+
     @Override
     public PageBean pageAttendanceAppealSummaryByTeaUserId(Integer pageNo, Integer pageSize, Integer teacherId) {
         List<AttendanceAppeal> result = new ArrayList<>();
@@ -122,7 +125,7 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
             resultPage.add(attendanceAppealSummary);
         }
         //封装PageBean对象
-        PageBean pageBean=new PageBean(count,resultPage);
+        PageBean pageBean = new PageBean(count, resultPage);
         return pageBean;
     }
 }

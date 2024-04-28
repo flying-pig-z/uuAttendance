@@ -5,7 +5,7 @@ import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.EmailRegisterVO;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.EmailUtil;
-import com.flyingpig.util.RedisCache;
+import com.flyingpig.util.RedisRegularUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class MailController {
     private JavaMailSenderImpl mailSender;
     //这里要使用工具类，不然各个方法之间的redis数据无法共用
     @Autowired
-    private RedisCache redisCache;
+    private RedisRegularUtil redisCache;
     @Value("${spring.mail.username}")
     private String emailUserName;
 

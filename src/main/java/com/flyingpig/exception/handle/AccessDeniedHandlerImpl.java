@@ -1,4 +1,4 @@
-package com.flyingpig.exception;
+package com.flyingpig.exception.handle;
 
 import com.alibaba.fastjson.JSON;
 import com.flyingpig.common.Result;

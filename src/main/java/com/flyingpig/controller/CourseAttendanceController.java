@@ -47,11 +47,12 @@ public class CourseAttendanceController {
         Claims claims = JwtUtil.parseJwt(Authorization);
         String userId = claims.getSubject();
         System.out.println(signInVO.getLatitude());
-        System.out.println(signInVO.getLatitude());
+        System.out.println(signInVO.getLongitude());
+
         if (courseAttendanceService.signIn(userId, signInVO)) {
             return Result.success("签到成功");
         } else {
-            return Result.error(2,"签到失败");
+            return Result.error(2, "签到失败");
         }
     }
 

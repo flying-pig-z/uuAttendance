@@ -10,6 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignInMessage implements Serializable {
-    String userId;
+    Integer studentId;
     Integer courseId;
 }

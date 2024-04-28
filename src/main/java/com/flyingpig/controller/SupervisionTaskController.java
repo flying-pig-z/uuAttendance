@@ -27,14 +27,14 @@ public class SupervisionTaskController {
     @GetMapping("")
     @PreAuthorize("hasAuthority('sys:supervision:operation')")
     @ApiOperation("督导分页查询督导任务")
-    public Result pageSupervisonTaskBySupervisonId(@RequestParam(defaultValue = "1")Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize,@RequestHeader String Authorization){
+    public Result pageSupervisonTaskBySupervisonId(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize, @RequestHeader String Authorization) {
         //记录日志
-        log.info("分页查询，参数：{}，{}",pageNo,pageSize);
+        log.info("分页查询，参数：{}，{}", pageNo, pageSize);
         //调用业务层分页查询功能
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        String id=claims.getSubject();
-        Integer userId=Integer.parseInt(id);
-        PageBean pageBean= supervisionTaskService.pageSupervisonTaskBySupervisonId(pageNo,pageSize,userId);
+        Claims claims = JwtUtil.parseJwt(Authorization);
+        String id = claims.getSubject();
+        Integer userId = Integer.parseInt(id);
+        PageBean pageBean = supervisionTaskService.pageSupervisonTaskBySupervisonId(pageNo, pageSize, userId);
         //响应
         return Result.success(pageBean);
     }
@@ -42,20 +42,20 @@ public class SupervisionTaskController {
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @PostMapping("")
     @ApiOperation("教师指定督导某个课程考勤")
-    public Result addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization,@RequestBody SupervisionTaskAddVO supervisionTaskAddVO){
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        String teaUserid=claims.getSubject();
-        supervisionTaskService.addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid,supervisionTaskAddVO);
+    public Result addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization, @RequestBody SupervisionTaskAddVO supervisionTaskAddVO) {
+        Claims claims = JwtUtil.parseJwt(Authorization);
+        String teaUserid = claims.getSubject();
+        supervisionTaskService.addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid, supervisionTaskAddVO);
         return Result.success();
     }
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @DeleteMapping("")
     @ApiOperation("教师删除督导某个课程考勤")
-    public Result deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization,@RequestBody SupervisionTaskAddVO supervisionTaskAddVO){
-        Claims claims= JwtUtil.parseJwt(Authorization);
-        String teaUserid=claims.getSubject();
-        supervisionTaskService.deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid,supervisionTaskAddVO);
+    public Result deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization, @RequestBody SupervisionTaskAddVO supervisionTaskAddVO) {
+        Claims claims = JwtUtil.parseJwt(Authorization);
+        String teaUserid = claims.getSubject();
+        supervisionTaskService.deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid, supervisionTaskAddVO);
         return Result.success();
     }
 }

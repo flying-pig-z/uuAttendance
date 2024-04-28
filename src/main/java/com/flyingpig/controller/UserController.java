@@ -9,6 +9,7 @@ import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,10 @@ public class UserController {
         try {
             System.out.println(user);
             return loginService.login(user);
+        } catch (RedisConnectionFailureException e) {
+            return Result.error(2, "redis崩溃");
         } catch (Exception e) {
-            return Result.error(2,"账号或密码错误，请重新登录");
-
+            return Result.error(2, "账号或密码错误，请重新登录");
         }
     }
 
@@ -54,7 +56,7 @@ public class UserController {
             return Result.success("密码更新成功");
         } else {
             // 旧密码不匹配，返回错误提示
-            return Result.error(2,"密码更新失败");
+            return Result.error(2, "密码更新失败");
         }
     }
 

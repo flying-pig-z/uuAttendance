@@ -1,5 +1,6 @@
 package com.flyingpig.controller;
 
+import com.flyingpig.annotations.UserRateLimit;
 import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.dto.LeaveDatail;
@@ -46,7 +47,7 @@ public class LeaveController {
                            @RequestParam String status, @RequestParam MultipartFile leaveImage) throws IOException {
         //封装完毕后调用service层的add方法
         Claims claims = JwtUtil.parseJwt(Authorization);
-        Integer userid = Integer.parseInt(claims.getSubject());
+        Long userid = Long.parseLong(claims.getSubject());
         Map<String, Object> studentInfo = studentService.getStudentInfoByUserId(userid);
         LeaveApplication leaveApplication=new LeaveApplication(null,null,courseId,reason,leavePlace,appealBeginTime,appealEndTime,status,null);
         leaveApplication.setStatus("0");
@@ -81,6 +82,7 @@ public class LeaveController {
         return Result.success(result);
     }
 
+    @UserRateLimit(value = 2, time = 1)
     @GetMapping("/{leaveId}/leaveDetail")
     @ApiOperation("学生和教师查看想要查看的请假的详情")
     public Result getleaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId) {

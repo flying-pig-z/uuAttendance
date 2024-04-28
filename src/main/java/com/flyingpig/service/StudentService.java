@@ -12,5 +12,5 @@ public interface StudentService {
 
     void addStudent(User user, Student student);
 
-    Map<String,Object> getStudentInfoByUserId(Integer userid);
+    Map<String,Object> getStudentInfoByUserId(Long userid);
 }
