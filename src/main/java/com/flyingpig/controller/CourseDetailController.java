@@ -5,7 +5,6 @@ import com.flyingpig.dataobject.dto.CourseColumn;
 import com.flyingpig.dataobject.vo.CourseDetailAddVO;
 import com.flyingpig.service.CourseDetailService;
 import com.flyingpig.util.JwtUtil;
-import com.flyingpig.util.RedisSafeUtil;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    private final String host = "localhost";
+    private final String host = "111.229.173.12";
     private final int port = 5672;
     private final String virtualHost = "/";
     private final String username = "flyingpig";

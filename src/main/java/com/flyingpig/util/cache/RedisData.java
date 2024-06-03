@@ -1,4 +1,4 @@
-package com.flyingpig.util;
+package com.flyingpig.util.cache;
 
 import lombok.Data;
 

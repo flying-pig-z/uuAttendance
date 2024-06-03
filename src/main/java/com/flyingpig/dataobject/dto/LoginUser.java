@@ -24,7 +24,6 @@ public class LoginUser implements UserDetails{
     //存储SpringSecurity所需要的权限信息的集合
     //为了避免下面获取权限的方法调用都需要进行封装，我们将这个变量作为成员变量
     //redis默认在存储的时候不会将SimpleGrantedAuthority序列化，加上这个注解使得成员变量不会存储到redis
-    @JSONField(serialize = false)
     private List<SimpleGrantedAuthority> authorities;
     public LoginUser(User user,List<String> permissions) {
         this.user = user;

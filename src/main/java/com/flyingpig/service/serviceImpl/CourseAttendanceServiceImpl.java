@@ -2,7 +2,6 @@ package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.common.PageBean;
-import com.flyingpig.dataobject.constant.RabbitMQConstants;
 import com.flyingpig.dataobject.dto.*;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.message.SignInMessage;
@@ -12,14 +11,11 @@ import com.flyingpig.dataobject.vo.SignInVO;
 import com.flyingpig.mapper.*;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.util.DistanceCalculator;
-import com.flyingpig.util.RedisSafeUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.RabbitListeners;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

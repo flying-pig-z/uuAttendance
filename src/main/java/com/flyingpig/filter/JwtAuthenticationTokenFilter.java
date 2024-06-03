@@ -1,10 +1,12 @@
 package com.flyingpig.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.util.JwtUtil;
-import com.flyingpig.util.RedisRegularUtil;
+import com.flyingpig.util.cache.CacheUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -18,11 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.flyingpig.dataobject.constant.RedisConstants.LOGIN_USER_KEY;
+import static com.flyingpig.dataobject.constant.RedisConstants.USER_INFO_KEY;
+
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    private RedisRegularUtil redisCache;
+    private CacheUtil cacheUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -52,8 +57,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             throw new RuntimeException("token非法");
         }
         //从redis中获取用户信息
-        String redisKey = "login:" + userid;
-        LoginUser loginUser = redisCache.getCacheObject(redisKey);
+        String redisKey = LOGIN_USER_KEY + userid;
+        LoginUser loginUser = cacheUtil.get(redisKey, LoginUser.class);
+
         if (Objects.isNull(loginUser)) {
             throw new RuntimeException("用户未登录");
         }

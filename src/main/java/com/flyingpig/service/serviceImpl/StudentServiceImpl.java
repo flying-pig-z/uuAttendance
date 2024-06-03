@@ -1,28 +1,24 @@
 package com.flyingpig.service.serviceImpl;
 
+import cn.hutool.cache.impl.CacheValuesIterator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.dataobject.entity.UserRoleRelation;
 import com.flyingpig.mapper.StudentMapper;
 import com.flyingpig.dataobject.entity.Student;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.mapper.UserRoleRelationMapper;
 import com.flyingpig.service.StudentService;
-import com.flyingpig.util.RedisRegularUtil;
-import com.flyingpig.util.RedisSafeUtil;
+import com.flyingpig.util.cache.CacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.flyingpig.dataobject.entity.User;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static com.flyingpig.dataobject.constant.RedisConstants.USER_INFO_KEY;
-import static com.flyingpig.dataobject.constant.RedisConstants.USER_INFO_TTL;
 
 @Slf4j
 @Service
@@ -35,9 +31,9 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private UserRoleRelationMapper userRoleRelationMapper;
     @Autowired
-    RedisSafeUtil redisSafeUtil;
+    CacheUtil redisSafeUtil;
     @Autowired
-    RedisRegularUtil redisRegularUtil;
+    CacheUtil cacheUtil;
 
     @Override
     public void addStudent(User user, Student student) {
@@ -58,11 +54,8 @@ public class StudentServiceImpl implements StudentService {
         QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
         studentQueryWrapper.eq("userid", userid);
         Student student = studentMapper.selectOne(studentQueryWrapper);
-        User user = redisSafeUtil.queryWithPassThrough(USER_INFO_KEY, userid, User.class,
-                id -> userMapper.selectById(userid), // 使用Lambda表达式传递函数
-                USER_INFO_TTL,
-                TimeUnit.DAYS
-        );
+//        User user = userMapper.selectById(userid);
+        User user = cacheUtil.get(USER_INFO_KEY + userid, User.class);
         target.put("id", student.getId());
         target.put("no", user.getNo());
         target.put("name", user.getName());

@@ -1,6 +1,5 @@
 package com.flyingpig.service.serviceImpl;
 
-import cn.hutool.system.UserInfo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.flyingpig.dataobject.dto.LoginUser;
@@ -10,9 +9,8 @@ import com.flyingpig.common.Result;
 import com.flyingpig.mapper.UserRoleRelationMapper;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.dataobject.entity.User;
-import com.flyingpig.util.RedisSafeUtil;
+import com.flyingpig.util.cache.CacheUtil;
 import com.flyingpig.util.JwtUtil;
-import com.flyingpig.util.RedisRegularUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,17 +18,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static com.flyingpig.dataobject.constant.RedisConstants.USER_INFO_KEY;
-import static com.flyingpig.dataobject.constant.RedisConstants.USER_INFO_TTL;
+import static com.flyingpig.dataobject.constant.RedisConstants.*;
 
 @Service
-public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements LoginService{
+public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements LoginService {
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -39,7 +35,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     UserMapper userMapper;
 
     @Autowired
-    RedisSafeUtil redisSafeUtil;
+    CacheUtil cacheUtil;
 
     @Autowired
     UserRoleRelationMapper userRoleRelationMapper;
@@ -55,10 +51,14 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         }
         //如果认证通过了，使用userid生成一个jwt jwt存入ResponseResult返回
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
+        System.out.println(loginUser);
         String userid = loginUser.getUser().getId().toString();
         String jwt = JwtUtil.createJWT(userid);
+
         //把完整的用户信息存入redis  userid作为key
-        redisSafeUtil.set(USER_INFO_KEY + userid, loginUser.getUser(), USER_INFO_TTL, TimeUnit.DAYS);
+        cacheUtil.set(LOGIN_USER_KEY + userid, loginUser, USER_INFO_TTL, TimeUnit.DAYS);
+        cacheUtil.set(USER_INFO_KEY + userid, loginUser.getUser(), USER_INFO_TTL, TimeUnit.DAYS);
+
         Map<String, Object> map = new HashMap<>();
         map.put("token", jwt);
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
@@ -75,13 +75,15 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         Integer userid = loginUser.getUser().getId();
-        redisSafeUtil.delete(USER_INFO_KEY + userid);
+        cacheUtil.delete(USER_INFO_KEY + userid);
         return new Result(200, "退出成功", null);
     }
 
     @Override
     public Integer getAuthenticateByUserId(String userId) {
-        User user = redisSafeUtil.queryWithPassThrough(USER_INFO_KEY, userId, User.class, this::getById, USER_INFO_TTL, TimeUnit.DAYS);
+        User user = cacheUtil.safeGetWithLock(USER_INFO_KEY + userId, User.class, () -> {
+            return userMapper.selectById(userId);
+        }, USER_INFO_TTL, TimeUnit.DAYS);
         return user.getUserType();
     }
 

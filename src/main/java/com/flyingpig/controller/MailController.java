@@ -5,7 +5,7 @@ import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.EmailRegisterVO;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.EmailUtil;
-import com.flyingpig.util.RedisRegularUtil;
+import com.flyingpig.util.cache.CacheUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class MailController {
     private JavaMailSenderImpl mailSender;
     //这里要使用工具类，不然各个方法之间的redis数据无法共用
     @Autowired
-    private RedisRegularUtil redisCache;
+    private CacheUtil cacheUtil;
     @Value("${spring.mail.username}")
     private String emailUserName;
 
@@ -48,7 +48,7 @@ public class MailController {
         message.setText(verificationCode);   // 设置邮件正文
         mailSender.send(message);
         //存入缓存
-        redisCache.setCacheObject(email, verificationCode, 120, TimeUnit.SECONDS);
+        cacheUtil.set(email, verificationCode, Long.parseLong("120"), TimeUnit.SECONDS);
         return Result.success("验证码已发送");
     }
 
@@ -56,7 +56,7 @@ public class MailController {
     @ApiOperation("通过验证码完成注册")
     public Result emailRegister(@RequestBody EmailRegisterVO emailRegisterVO) {
         System.out.println(emailRegisterVO.getEmail());
-        String verificationCode=redisCache.getCacheObject(emailRegisterVO.getEmail());
+        String verificationCode=cacheUtil.get(emailRegisterVO.getEmail(), String.class);
         System.out.println(verificationCode);
         if(verificationCode!=null&&verificationCode.equals(emailRegisterVO.getVerificationCode())){
             //添加用户

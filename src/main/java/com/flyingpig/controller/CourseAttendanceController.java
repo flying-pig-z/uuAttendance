@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.List;
 
 @Slf4j
@@ -141,22 +142,22 @@ public class CourseAttendanceController {
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/export/studentAttendanceList")
     @ApiOperation("教师导出其所查看的学生签到页面的数据")
-    public void exportstudentAttendanceList(HttpServletResponse response, @RequestHeader String Authorization, @RequestParam String courseName, @RequestParam Integer semester,
+    public File exportstudentAttendanceList(@RequestHeader String Authorization, @RequestParam String courseName, @RequestParam Integer semester,
                                             @RequestParam String studentNo) {
         Claims claims = JwtUtil.parseJwt(Authorization);
         Integer teaUserid = Integer.parseInt(claims.getSubject());
-        exportService.exportStudentAttendance(response, teaUserid, courseName
-                , semester, studentNo);
+        return(exportService.exportStudentAttendance(teaUserid, courseName
+                , semester, studentNo));
     }
 
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/export/courseAttendanceList")
     @ApiOperation("教师导出其所查看的课程签到页面的数据")
-    public void exportcourseAttendance(HttpServletResponse response, @RequestHeader String Authorization, @RequestParam String courseName, @RequestParam Integer semester,
+    public File exportcourseAttendance(@RequestHeader String Authorization, @RequestParam String courseName, @RequestParam Integer semester,
                                        @RequestParam(required = false) Integer week, @RequestParam(required = false) Integer weekday,
                                        @RequestParam(required = false) Integer beginSection, @RequestParam(required = false) Integer endSection) {
         Claims claims = JwtUtil.parseJwt(Authorization);
         Integer teaUserid = Integer.parseInt(claims.getSubject());
-        exportService.exportCourseAttendance(response, teaUserid, courseName, semester, week, weekday, beginSection, endSection);
+        return exportService.exportCourseAttendance(teaUserid, courseName, semester, week, weekday, beginSection, endSection);
     }
 }

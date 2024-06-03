@@ -10,8 +10,7 @@ import com.flyingpig.mapper.*;
 import com.flyingpig.dataobject.dto.LeaveDatail;
 import com.flyingpig.common.PageBean;
 import com.flyingpig.service.LeaveService;
-import com.flyingpig.util.RedisSafeUtil;
-import io.swagger.models.auth.In;
+import com.flyingpig.util.cache.CacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class LeaveServiceImpl extends ServiceImpl<LeaveMapper, LeaveApplication>
     @Autowired
     private CourseAttendanceMapper courseAttendanceMapper;
     @Autowired
-    private RedisSafeUtil redisSafeUtil;
+    private CacheUtil cacheUtil;
 
     @Override
     public List<LeaveApplicationWithCourseName> listLeaveByUserId(Integer userId) {
@@ -97,9 +96,9 @@ public class LeaveServiceImpl extends ServiceImpl<LeaveMapper, LeaveApplication>
     @Override
     public LeaveDatail getLeaveDetail(Integer leaveId) {
         //获取本张表数据
-        LeaveApplication leaveApplication = redisSafeUtil.queryWithPassThrough(RedisConstants.LEAVE_DETAIL_KEY,
-                leaveId, LeaveApplication.class, this::getById,
-                RedisConstants.LEAVE_DETAIL_TTL, TimeUnit.SECONDS);
+        LeaveApplication leaveApplication = cacheUtil.safeGetWithLock(RedisConstants.LEAVE_DETAIL_KEY + leaveId, LeaveApplication.class, () -> {
+            return leaveMapper.selectById(leaveId);
+        }, RedisConstants.LEAVE_DETAIL_TTL, TimeUnit.SECONDS);
         //通过外键获取其他表所有数据
         Student student = studentMapper.selectById(leaveApplication.getStudentId());
         CourseDetail courseDetail = courseDetailMapper.selectById(leaveApplication.getCourseId());
@@ -126,12 +125,12 @@ public class LeaveServiceImpl extends ServiceImpl<LeaveMapper, LeaveApplication>
         leaveApplication.setId(leaveId);
         leaveApplication.setStatus(status);
         leaveMapper.updateById(leaveApplication);
-        redisSafeUtil.delete(RedisConstants.LEAVE_DETAIL_KEY+leaveId);
+        cacheUtil.delete(RedisConstants.LEAVE_DETAIL_KEY + leaveId);
         //如果通过再将签到表中的签到状态改为请假
         if ("1".equals(status)) {
-            LeaveApplication leaveApplication1 = redisSafeUtil.queryWithPassThrough(RedisConstants.LEAVE_DETAIL_KEY,
-                    leaveId, LeaveApplication.class, this::getById,
-                    RedisConstants.LEAVE_DETAIL_TTL, TimeUnit.SECONDS);;
+            LeaveApplication leaveApplication1 = cacheUtil.safeGetWithLock(RedisConstants.LEAVE_DETAIL_KEY + leaveId, LeaveApplication.class, () -> {
+                return leaveMapper.selectById(leaveId);
+            }, RedisConstants.LEAVE_DETAIL_TTL, TimeUnit.SECONDS);
             Integer courseId = leaveApplication1.getCourseId();
             Integer studentId = leaveApplication1.getStudentId();
             CourseAttendance courseAttendance = new CourseAttendance();

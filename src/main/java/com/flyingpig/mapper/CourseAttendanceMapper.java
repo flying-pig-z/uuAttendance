@@ -16,4 +16,6 @@ public interface CourseAttendanceMapper extends BaseMapper<CourseAttendance> {
     List<ClassAttendance> listStudentAttendanceByCourseIdList(List<CourseDetail> courseDetailList);
 
     List<StudentAttendance> getStudentAttendanceByCourseIdAndStudentNo(Integer teaUserid, String courseName, Integer semester, String studentNo);
+
+    List<StudentAttendance> pageStudentAttendanceByCourseIdAndStudentNo(Integer teaUserid, String courseName, Integer semester, String studentNo, int offset, int limit);
 }

@@ -3,7 +3,26 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.flyingpig.mapper.CourseAttendanceMapper" >
-<!--    选取在课程前20分钟-课程结束-->
+    <select id="pageStudentAttendanceByCourseIdAndStudentNo"
+            parameterType="map"
+            resultType="com.flyingpig.dataobject.dto.StudentAttendance">
+        SELECT student.no AS studentNo,
+               student.name AS studentName,
+               course_detail.week AS week,
+               course_detail.weekday AS weekday,
+               course_attendance.status AS status
+        FROM course_attendance
+                 JOIN student ON course_attendance.student_id = student.id
+                 JOIN course_detail ON course_detail.id = course_attendance.course_id
+        WHERE course_detail.course_name = #{courseName}
+          AND student.no = #{studentNo}
+          AND course_detail.semester = #{semester}
+          AND course_detail.course_teacher = #{teaUserid}
+        ORDER BY course_detail.begin_time
+        LIMIT #{limit} OFFSET #{offset};
+    </select>
+
+    <!--    选取在课程前20分钟-课程结束-->
     <select id="getStudentAttendanceNow" resultType="com.flyingpig.dataobject.entity.CourseAttendance">
         SELECT *
         FROM course_attendance
@@ -11,6 +30,7 @@
         AND (SELECT end_time FROM course_detail WHERE course_detail.id = course_attendance.course_id) > NOW()
         AND student_id=#{studentId}
     </select>
+
     <select id="listStudentAttendanceByCourseIdList" resultType="com.flyingpig.dataobject.dto.ClassAttendance">
         SELECT student.name AS studentNo,
         student.no AS studentName,
@@ -26,9 +46,10 @@
             #{courseDetailItem.id}
         </foreach>
         )
-#         使得学生不重复
         GROUP BY student_id;
+
     </select>
+
     <!--    连接三张表查询-->
     <select id="getStudentAttendanceByCourseIdAndStudentNo"
             resultType="com.flyingpig.dataobject.dto.StudentAttendance">
@@ -46,5 +67,6 @@
           AND course_detail.course_teacher = #{teaUserid}
         ORDER BY course_detail.begin_time;
     </select>
+
 
 </mapper>
