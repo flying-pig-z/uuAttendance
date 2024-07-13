@@ -1,11 +1,13 @@
 package com.flyingpig.controller;
 
-import com.flyingpig.annotations.UserRateLimit;
 import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.dto.LeaveDatail;
 import com.flyingpig.common.PageBean;
 import com.flyingpig.common.Result;
+import com.flyingpig.framework.ratelimiter.annotation.RateLimit;
+import com.flyingpig.framework.ratelimiter.annotation.RateLimitKey;
+import com.flyingpig.framework.ratelimiter.model.Mode;
 import com.flyingpig.service.LeaveService;
 import com.flyingpig.service.StudentService;
 import com.flyingpig.util.AliOSSUtils;
@@ -82,10 +84,10 @@ public class LeaveController {
         return Result.success(result);
     }
 
-    @UserRateLimit(value = 2, time = 1)
+    @RateLimit(generateTokenRate = 1, mode = Mode.TOKEN_BUCKET)
     @GetMapping("/{leaveId}/leaveDetail")
     @ApiOperation("学生和教师查看想要查看的请假的详情")
-    public Result getleaveDetail(@RequestHeader String Authorization, @PathVariable Integer leaveId) {
+    public Result getleaveDetail(@RateLimitKey @PathVariable Integer leaveId) {
         LeaveDatail resultLeaveDatail = leaveService.getLeaveDetail(leaveId);
         return Result.success(resultLeaveDatail);
     }

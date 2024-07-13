@@ -1,4 +1,4 @@
-package com.flyingpig.util.cache;
+package com.flyingpig.framework.cache.core;
 
 /**
  * 缓存加载器

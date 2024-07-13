@@ -8,6 +8,7 @@ import com.flyingpig.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@Slf4j
 @Api("与用户表相关的api")
 public class UserController {
     @Autowired
@@ -24,14 +26,15 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation("用户登录")
     public Result login(@RequestBody User user) {
-        try {
+//        try {
             System.out.println(user);
             return loginService.login(user);
-        } catch (RedisConnectionFailureException e) {
-            return Result.error(2, "redis崩溃");
-        } catch (Exception e) {
-            return Result.error(2, "账号或密码错误，请重新登录");
-        }
+//        } catch (RedisConnectionFailureException e) {
+//            return Result.error(2, "redis崩溃");
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//            return Result.error(2, "账号或密码错误，请重新登录");
+//        }
     }
 
     @PostMapping("/logout")

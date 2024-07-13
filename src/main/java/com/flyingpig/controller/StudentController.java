@@ -1,8 +1,9 @@
 package com.flyingpig.controller;
 
-import com.flyingpig.annotations.UserRateLimit;
 import com.flyingpig.dataobject.entity.Student;
 import com.flyingpig.dataobject.entity.User;
+import com.flyingpig.framework.ratelimiter.annotation.RateLimit;
+import com.flyingpig.framework.ratelimiter.annotation.RateLimitKey;
 import com.flyingpig.util.JwtUtil;
 import com.flyingpig.common.Result;
 import com.flyingpig.service.StudentService;
@@ -23,11 +24,11 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @UserRateLimit(value = 2, time = 1)
+    @RateLimit(limitNum = 2, windowSize = "1s")
     @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/studentInfo")
     @ApiOperation("学生获取他本人的信息")
-    public Result getStudentInfoById(@RequestHeader String Authorization) {
+    public Result getStudentInfoById(@RateLimitKey @RequestHeader String Authorization) {
         //设置学生id
         Claims claims = JwtUtil.parseJwt(Authorization);
         Long userId = Long.parseLong(claims.getSubject());

@@ -1,14 +1,13 @@
 package com.flyingpig.service.serviceImpl;
 
-import cn.hutool.cache.impl.CacheValuesIterator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.dataobject.entity.UserRoleRelation;
+import com.flyingpig.framework.cache.core.CacheUtil;
 import com.flyingpig.mapper.StudentMapper;
 import com.flyingpig.dataobject.entity.Student;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.mapper.UserRoleRelationMapper;
 import com.flyingpig.service.StudentService;
-import com.flyingpig.util.cache.CacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +29,6 @@ public class StudentServiceImpl implements StudentService {
     private UserMapper userMapper;
     @Autowired
     private UserRoleRelationMapper userRoleRelationMapper;
-    @Autowired
-    CacheUtil redisSafeUtil;
     @Autowired
     CacheUtil cacheUtil;
 

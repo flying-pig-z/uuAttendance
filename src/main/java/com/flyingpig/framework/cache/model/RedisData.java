@@ -1,4 +1,4 @@
-package com.flyingpig.util.cache;
+package com.flyingpig.framework.cache.model;
 
 import lombok.Data;
 

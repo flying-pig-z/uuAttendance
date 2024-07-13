@@ -23,8 +23,6 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
     @Autowired
     private AttendanceAppealMapper attendanceAppealMapper;
     @Autowired
-    private SupervisionTaskMapper supervisionTaskMapper;
-    @Autowired
     private StudentMapper studentMapper;
     @Autowired
     private CourseDetailMapper courseDetailMapper;
