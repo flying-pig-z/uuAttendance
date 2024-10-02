@@ -23,18 +23,19 @@ public class CourseTableInfo {
     private String place;
     private Integer status;
     private String teacherName;
-    public CourseTableInfo(CourseDetail courseDetail, Integer status,String teacherName){
-        id=courseDetail.getId();
-        name=courseDetail.getCourseName();
-        weekday=courseDetail.getWeekday();
-        month=courseDetail.getBeginTime().getMonthValue();
-        day=courseDetail.getBeginTime().getDayOfMonth();
-        sectionStart=courseDetail.getSectionStart();
-        sectionEnd=courseDetail.getSectionEnd();
-        place=courseDetail.getCoursePlace();
-        beginTime=courseDetail.getBeginTime();
-        endTime=courseDetail.getEndTime();
-        this.status=status;
-        this.teacherName=teacherName;
+
+    public CourseTableInfo(CourseDetail courseDetail, Integer status, String teacherName) {
+        id = courseDetail.getId();
+        name = courseDetail.getCourseName();
+        weekday = courseDetail.getWeekday();
+        month = courseDetail.getBeginTime().getMonthValue();
+        day = courseDetail.getBeginTime().getDayOfMonth();
+        sectionStart = courseDetail.getSectionStart();
+        sectionEnd = courseDetail.getSectionEnd();
+        place = courseDetail.getCoursePlace();
+        beginTime = courseDetail.getBeginTime();
+        endTime = courseDetail.getEndTime();
+        this.status = status;
+        this.teacherName = teacherName;
     }
 }

@@ -1,5 +1,6 @@
 package com.flyingpig.common;
 
+import com.flyingpig.dataobject.constant.StatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,12 +15,12 @@ public class Result {
 
     //增删改
     public static Result success() {
-        return new Result(1, "success", null);
+        return new Result(StatusCode.SUCCESS, "success", null);
     }
 
     //查询 成功响应
     public static Result success(Object data) {
-        return new Result(1, "success", data);
+        return new Result(StatusCode.SUCCESS, "success", data);
     }
 
     //查询 失败响应

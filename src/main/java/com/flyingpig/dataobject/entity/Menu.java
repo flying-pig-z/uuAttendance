@@ -1,5 +1,6 @@
 package com.flyingpig.dataobject.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,8 +23,8 @@ import java.io.Serializable;
 public class Menu implements Serializable {
     private static final long serialVersionUID = -54979041104113736L;
 
-    @TableId
-    private Long id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Integer id;
     /**
      * 菜单名
      */

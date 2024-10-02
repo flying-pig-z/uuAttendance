@@ -1,6 +1,7 @@
 package com.flyingpig.controller;
 
 import com.flyingpig.common.PageBean;
+import com.flyingpig.dataobject.constant.StatusCode;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.dto.*;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
@@ -10,15 +11,12 @@ import com.flyingpig.common.Result;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.service.ExportService;
 import com.flyingpig.util.JwtUtil;
-import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.List;
 
@@ -41,19 +39,17 @@ public class CourseAttendanceController {
         return Result.success();
     }
 
-    @PreAuthorize("hasAuthority('sys:student:operation')")
     @PutMapping("/signin")
     @ApiOperation("学生签到")
     public Result signIn(@RequestHeader String Authorization, @RequestBody SignInVO signInVO) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        String userId = claims.getSubject();
+        String userId = JwtUtil.parseJwt(Authorization).getSubject();
         System.out.println(signInVO.getLatitude());
         System.out.println(signInVO.getLongitude());
 
         if (courseAttendanceService.signIn(userId, signInVO)) {
             return Result.success("签到成功");
         } else {
-            return Result.error(2, "签到失败");
+            return Result.error(StatusCode.SERVERERROR, "签到失败");
         }
     }
 
@@ -61,20 +57,17 @@ public class CourseAttendanceController {
     @PostMapping("")
     @ApiOperation("录入考勤信息")
     public Result addCourseAttendances(@RequestBody CourseAttendanceAddVO courseAttendanceAddVO, @RequestHeader String Authorization) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        String userId = claims.getSubject();
+        String userId = JwtUtil.parseJwt(Authorization).getSubject();
         courseAttendanceService.addCourseAttendances(courseAttendanceAddVO, userId);
         return Result.success();
     }
 
-    @PreAuthorize("hasAuthority('sys:student:operation')")
     @GetMapping("/courseTableInfo")
     @ApiOperation("学生获取课表/考勤表")
-    public Result listCourseDetailWithStatusByWeekAndStudentId(@RequestParam("week") Integer week, @RequestParam("semester") Integer semester, @RequestHeader String Authorization) {
+    public Result listCourseDetailWithStatusByWeekAndStudentId(Integer week, Integer semester, @RequestHeader String Authorization) {
         CourseDetail select = new CourseDetail();
         //设置学生id
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        String id = claims.getSubject();
+        String id = JwtUtil.parseJwt(Authorization).getSubject();
         Integer userId = Integer.parseInt(id);
         List<CourseTableInfo> courseDetailWithStatusList = courseAttendanceService.getCourseTableInfoByWeekAndUserId(userId, week, semester);
         return Result.success(courseDetailWithStatusList);
@@ -83,7 +76,7 @@ public class CourseAttendanceController {
     @PreAuthorize("hasAuthority('sys:supervision:operation')")
     @GetMapping("/whoNoCheck")
     @ApiOperation("滑动获取还未签到的名单")
-    public Result listWhoNoCheck(@RequestParam("courseId") Integer courseId, @RequestParam(required = false, defaultValue = "1") Integer returneesNumber,
+    public Result listWhoNoCheck(Integer courseId, @RequestParam(required = false, defaultValue = "1") Integer returneesNumber,
                                  @RequestParam(required = false, defaultValue = "-1,-1,-1") List<Integer> existingStudentId) {
         //调用service层的添加功能
         List<ResultAttendance> resultAttendanceList = courseAttendanceService.listWhoNoCheck(courseId, returneesNumber, existingStudentId);
@@ -94,7 +87,7 @@ public class CourseAttendanceController {
     @PreAuthorize("hasAuthority('sys:supervision:operation')")
     @GetMapping("")
     @ApiOperation("督导获取这个课程的学生名单及其这节课的考勤情况")
-    public Result listCourseAttendanceBycourseId(@RequestParam("courseId") Integer courseId) {
+    public Result listCourseAttendanceBycourseId(Integer courseId) {
         //调用service层的添加功能id
         List<ResultAttendance> resultAttendanceList = courseAttendanceService.getresultAttendanceListByCourseId(courseId);
         return Result.success(resultAttendanceList);
@@ -104,9 +97,8 @@ public class CourseAttendanceController {
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/student")
     @ApiOperation("教师通过其id和学期还有课程名字获取到这个课程的学生及其身份")
-    public Result listStudentByTeauserIdAndsemesterAndCourseName(@RequestHeader String Authorization, @RequestParam Integer semester, @RequestParam String courseName) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        String teaUserid = claims.getSubject();
+    public Result listStudentByTeauserIdAndsemesterAndCourseName(@RequestHeader String Authorization, Integer semester, String courseName) {
+        String teaUserid = JwtUtil.parseJwt(Authorization).getSubject();
         List<CourseStudent> courseStudentList = courseAttendanceService.listStudentByTeauserIdAndsemesterAndCourseName(teaUserid, semester, courseName);
         return Result.success(courseStudentList);
     }
@@ -114,12 +106,11 @@ public class CourseAttendanceController {
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/courseAttendanceList")
     @ApiOperation("教师分页查询课程签到")
-    public Result pageCourseAttendance(@RequestHeader String Authorization, @RequestParam String courseName, @RequestParam Integer semester,
+    public Result pageCourseAttendance(@RequestHeader String Authorization, String courseName, Integer semester,
                                        @RequestParam(required = false) Integer week, @RequestParam(required = false) Integer weekday,
                                        @RequestParam(required = false) Integer beginSection, @RequestParam(required = false) Integer endSection,
                                        @RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "10") Integer pageSize) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        Integer teaUserid = Integer.parseInt(claims.getSubject());
+        Integer teaUserid = Integer.parseInt(JwtUtil.parseJwt(Authorization).getSubject());
         CourseAttendanceQueryVO courseAttendanceQueryVO = new CourseAttendanceQueryVO(teaUserid, courseName, semester, week, weekday, beginSection, endSection,
                 pageNo, pageSize);
         PageBean resultPage = courseAttendanceService.pageCourseAttendance(courseAttendanceQueryVO);
@@ -129,11 +120,10 @@ public class CourseAttendanceController {
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/studentAttendanceList")
     @ApiOperation("教师分页查询学生签到")
-    public Result pageStudentAttendanceByStudentInfo(@RequestHeader String Authorization, @RequestParam String courseName, @RequestParam Integer semester,
-                                                     @RequestParam String studentNo,
+    public Result pageStudentAttendanceByStudentInfo(@RequestHeader String Authorization, String courseName, Integer semester,
+                                                     String studentNo,
                                                      @RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "10") Integer pageSize) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        Integer teaUserid = Integer.parseInt(claims.getSubject());
+        Integer teaUserid = Integer.parseInt(JwtUtil.parseJwt(Authorization).getSubject());
         PageBean resultPage = courseAttendanceService.pageStudentAttendanceByteaUserIdAndCourseInfoAndStudentNo(teaUserid, courseName
                 , semester, studentNo, pageNo, pageSize);
         return Result.success(resultPage);
@@ -142,10 +132,9 @@ public class CourseAttendanceController {
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/export/studentAttendanceList")
     @ApiOperation("教师导出其所查看的学生签到页面的数据")
-    public File exportstudentAttendanceList(@RequestHeader String Authorization, @RequestParam String courseName, @RequestParam Integer semester,
-                                            @RequestParam String studentNo) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        Integer teaUserid = Integer.parseInt(claims.getSubject());
+    public File exportstudentAttendanceList(@RequestHeader String Authorization, String courseName, Integer semester,
+                                            String studentNo) {
+        Integer teaUserid = Integer.parseInt(JwtUtil.parseJwt(Authorization).getSubject());
         return(exportService.exportStudentAttendance(teaUserid, courseName
                 , semester, studentNo));
     }
@@ -153,11 +142,10 @@ public class CourseAttendanceController {
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/export/courseAttendanceList")
     @ApiOperation("教师导出其所查看的课程签到页面的数据")
-    public File exportcourseAttendance(@RequestHeader String Authorization, @RequestParam String courseName, @RequestParam Integer semester,
+    public File exportcourseAttendance(@RequestHeader String Authorization, String courseName, Integer semester,
                                        @RequestParam(required = false) Integer week, @RequestParam(required = false) Integer weekday,
                                        @RequestParam(required = false) Integer beginSection, @RequestParam(required = false) Integer endSection) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        Integer teaUserid = Integer.parseInt(claims.getSubject());
+        Integer teaUserid = Integer.parseInt(JwtUtil.parseJwt(Authorization).getSubject());
         return exportService.exportCourseAttendance(teaUserid, courseName, semester, week, weekday, beginSection, endSection);
     }
 }

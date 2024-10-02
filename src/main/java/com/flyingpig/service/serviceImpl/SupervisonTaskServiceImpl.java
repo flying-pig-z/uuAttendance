@@ -1,7 +1,7 @@
 package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.dataobject.dto.CourseStudent;
+import com.flyingpig.dataobject.constant.RoleConstants;
 import com.flyingpig.dataobject.dto.SupervisionTaskWithCourseNameAndBeginTimeAndEndTime;
 import com.flyingpig.dataobject.entity.CourseDetail;
 import com.flyingpig.dataobject.entity.SupervisionTask;
@@ -18,9 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -80,7 +77,7 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskService {
             user.setUserType(2);
             userMapper.updateById(user);
             //修改关系表中用户督导身份和权限
-            UserRoleRelation userRoleRelation=new UserRoleRelation(supervisionTaskAddVO.getUserId(),2);
+            UserRoleRelation userRoleRelation=new UserRoleRelation(supervisionTaskAddVO.getUserId(), RoleConstants.Supervision);
             userRoleRelationMapper.updateById(userRoleRelation);
         }
     }
@@ -111,7 +108,7 @@ public class SupervisonTaskServiceImpl implements SupervisionTaskService {
                 user.setUserType(1);
                 userMapper.updateById(user);
                 //修改关系表中用户督导身份和权限
-                UserRoleRelation userRoleRelation=new UserRoleRelation(supervisionTaskAddVO.getUserId(),1);
+                UserRoleRelation userRoleRelation=new UserRoleRelation(supervisionTaskAddVO.getUserId(),RoleConstants.STUDENT);
                 QueryWrapper<UserRoleRelation> userRoleRelationQueryWrapper=new QueryWrapper<>();
                 userRoleRelationQueryWrapper.eq("user_id",supervisionTaskAddVO.getUserId());
                 userRoleRelationMapper.update(userRoleRelation,userRoleRelationQueryWrapper);

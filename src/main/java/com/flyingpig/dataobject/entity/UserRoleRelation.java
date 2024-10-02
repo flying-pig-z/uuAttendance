@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @TableName("sys_user_role")
 public class UserRoleRelation {
-    @TableId(type = IdType.AUTO)
     private Integer userId;
     private Integer roleId;
 }

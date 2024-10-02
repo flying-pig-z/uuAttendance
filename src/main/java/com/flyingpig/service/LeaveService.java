@@ -14,10 +14,10 @@ public interface LeaveService extends IService<LeaveApplication> {
     void addLeave(LeaveApplication leaveApplication);
     PageBean pageLeaveByTeaUserId(Integer pageNo, Integer pageSize, Integer teacherId);
 
-    LeaveDatail getLeaveDetail(Integer leaveId);
+    LeaveDatail getLeaveDetail(Long leaveId);
 
 
-    void updateLeaveByLeaveIdAndStatus(Integer leaveId,String status);
+    void updateLeaveByLeaveIdAndStatus(Integer leaveId, String status);
 
-    List<LeaveApplicationWithCourseName> listLeaveByUserId(Integer userId);
+    List<LeaveApplicationWithCourseName> listLeaveByUserId(Long userId);
 }

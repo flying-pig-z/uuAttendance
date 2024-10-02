@@ -2,7 +2,6 @@ package com.flyingpig.controller;
 
 import com.flyingpig.common.PageBean;
 import com.flyingpig.common.Result;
-import com.flyingpig.dataobject.dto.CourseStudent;
 import com.flyingpig.dataobject.vo.SupervisionTaskAddVO;
 import com.flyingpig.service.SupervisionTaskService;
 import com.flyingpig.util.JwtUtil;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -31,9 +28,7 @@ public class SupervisionTaskController {
         //记录日志
         log.info("分页查询，参数：{}，{}", pageNo, pageSize);
         //调用业务层分页查询功能
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        String id = claims.getSubject();
-        Integer userId = Integer.parseInt(id);
+        Integer userId = Integer.parseInt(JwtUtil.parseJwt(Authorization).getSubject());
         PageBean pageBean = supervisionTaskService.pageSupervisonTaskBySupervisonId(pageNo, pageSize, userId);
         //响应
         return Result.success(pageBean);
@@ -43,8 +38,7 @@ public class SupervisionTaskController {
     @PostMapping("")
     @ApiOperation("教师指定督导某个课程考勤")
     public Result addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization, @RequestBody SupervisionTaskAddVO supervisionTaskAddVO) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        String teaUserid = claims.getSubject();
+        String teaUserid = JwtUtil.parseJwt(Authorization).getSubject();
         supervisionTaskService.addSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid, supervisionTaskAddVO);
         return Result.success();
     }
@@ -53,8 +47,7 @@ public class SupervisionTaskController {
     @DeleteMapping("")
     @ApiOperation("教师删除督导某个课程考勤")
     public Result deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(@RequestHeader String Authorization, @RequestBody SupervisionTaskAddVO supervisionTaskAddVO) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        String teaUserid = claims.getSubject();
+        String teaUserid = JwtUtil.parseJwt(Authorization).getSubject();
         supervisionTaskService.deleteSupervisonTaskByTeaUserIdAndSupervisionTaskAddVO(teaUserid, supervisionTaskAddVO);
         return Result.success();
     }

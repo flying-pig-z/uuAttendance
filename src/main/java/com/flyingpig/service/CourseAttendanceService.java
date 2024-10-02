@@ -10,7 +10,6 @@ import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
 import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
 import com.flyingpig.dataobject.vo.SignInVO;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public interface CourseAttendanceService {
 
     void updateAttendanceStatus(CourseAttendance attendance);
 
-    List<ResultAttendance> listWhoNoCheck(Integer courseId,Integer returneesNumber, List<Integer> existingStudentId);
+    List<ResultAttendance> listWhoNoCheck(Integer courseId, Integer returneesNumber, List<Integer> existingStudentId);
 
     List<ResultAttendance> getresultAttendanceListByCourseId(Integer courseId);
 

@@ -23,8 +23,6 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
     @Autowired
     private AttendanceAppealMapper attendanceAppealMapper;
     @Autowired
-    private SupervisionTaskMapper supervisionTaskMapper;
-    @Autowired
     private StudentMapper studentMapper;
     @Autowired
     private CourseDetailMapper courseDetailMapper;
@@ -57,7 +55,7 @@ public class AttendanceAppealServiceImpl implements AttendanceAppealService {
 
     //查询申诉的详情
     @Override
-    public AttendanceAppealDetail getAttendanceAppealDetail(Integer attendanceAppealId) {
+    public AttendanceAppealDetail getAttendanceAppealDetail(Long attendanceAppealId) {
         //获取本张表数据
         AttendanceAppeal attendanceAppeal = attendanceAppealMapper.selectById(attendanceAppealId);
         //通过外键获取其他表所有数据

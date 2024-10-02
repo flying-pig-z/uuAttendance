@@ -2,12 +2,14 @@ package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.flyingpig.common.PageBean;
+import com.flyingpig.dataobject.constant.RedisConstants;
 import com.flyingpig.dataobject.dto.*;
 import com.flyingpig.dataobject.entity.*;
 import com.flyingpig.dataobject.message.SignInMessage;
 import com.flyingpig.dataobject.vo.CourseAttendanceAddVO;
 import com.flyingpig.dataobject.vo.CourseAttendanceQueryVO;
 import com.flyingpig.dataobject.vo.SignInVO;
+import com.flyingpig.framework.cache.core.CacheUtil;
 import com.flyingpig.mapper.*;
 import com.flyingpig.service.CourseAttendanceService;
 import com.flyingpig.util.DistanceCalculator;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.flyingpig.dataobject.constant.RabbitMQConstants.SIGNIN_EXCHANGE_NAME;
@@ -43,6 +46,8 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
     @Autowired
     RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    CacheUtil cacheUtil;
 
     @Override
     public List<CourseTableInfo> getCourseTableInfoByWeekAndUserId(Integer userId, Integer week, Integer semester) {
@@ -160,18 +165,25 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
 
     @Override
     public StudentAttendanceNow getStudentAttendanceNow(String studentId) {
-        //获取当前时间
-        LocalDateTime nowTime = LocalDateTime.now();
-        StudentAttendanceNow studentAttendanceNow = new StudentAttendanceNow();
+        return cacheUtil.safeGetWithLock(
+                RedisConstants.STUDENT_ATTENDANCE_KEY + studentId,
+                StudentAttendanceNow.class,
+                () -> { // 这里的参数名可以保持为 key
+                    // 查询数据库并构建 StudentAttendanceNow 对象
+                    StudentAttendanceNow studentAttendanceNow = new StudentAttendanceNow();
+                    CourseAttendance courseAttendance = courseAttendanceMapper.getStudentAttendanceNow(studentId);
+                    studentAttendanceNow.setCourseId(courseAttendance.getCourseId());
+                    studentAttendanceNow.setStatus(courseAttendance.getStatus());
+                    CourseDetail courseDetail = courseDetailMapper.selectById(courseAttendance.getCourseId());
+                    studentAttendanceNow.setCourseName(courseDetail.getCourseName());
+                    studentAttendanceNow.setLongitude(courseDetail.getLongitude());
+                    studentAttendanceNow.setLatitude(courseDetail.getLatitude());
+                    return studentAttendanceNow;
+                },
+                RedisConstants.STUDENT_ATTENDANCE_TTL, // 缓存时间
+                TimeUnit.MINUTES // 缓存单位
+        );
 
-        CourseAttendance courseAttendance = courseAttendanceMapper.getStudentAttendanceNow(studentId);
-        studentAttendanceNow.setCourseId(courseAttendance.getCourseId());
-        studentAttendanceNow.setStatus(courseAttendance.getStatus());
-        CourseDetail courseDetail = courseDetailMapper.selectById(courseAttendance.getCourseId());
-        studentAttendanceNow.setCourseName(courseDetail.getCourseName());
-        studentAttendanceNow.setLongitude(courseDetail.getLongitude());
-        studentAttendanceNow.setLatitude(courseDetail.getLatitude());
-        return studentAttendanceNow;
     }
 
     @Override
@@ -198,21 +210,54 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
 
     @Override
     public boolean signIn(String userId, SignInVO signInVO) {
-        QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
-        studentQueryWrapper.eq("userid", userId);
-        Student student = studentMapper.selectOne(studentQueryWrapper);
-        QueryWrapper<CourseDetail> courseDetailQueryWrapper = new QueryWrapper<>();
-        courseDetailQueryWrapper.eq("id", signInVO.getCourseId());
-        CourseDetail courseDetail = courseDetailMapper.selectOne(courseDetailQueryWrapper);
-        Double courseLatitude = Double.parseDouble(courseDetail.getLatitude());
-        Double courseLongitude = Double.parseDouble(courseDetail.getLongitude());
-        if (DistanceCalculator.distanceBetweenCoordinates(signInVO.getLatitude(), signInVO.getLongitude(), courseLatitude, courseLongitude) <= 30) {
-            rabbitTemplate.convertAndSend(SIGNIN_EXCHANGE_NAME, "", new SignInMessage(student.getId(), signInVO.getCourseId()));
-            return true;
-        } else {
-            return false;
+        // 查询学生信息
+        Student student = studentMapper.selectOne(new QueryWrapper<Student>().eq("userid", userId));
+
+        // 查询课程详情
+        CourseDetail courseDetail = courseDetailMapper.selectOne(new QueryWrapper<CourseDetail>().eq("id", signInVO.getCourseId()));
+
+        // 检查课程信息是否存在
+        if (courseDetail == null || student == null) {
+            return false; // 处理未找到学生或课程的情况
         }
+
+        // 计算距离并验证签到位置
+        double courseLatitude = Double.parseDouble(courseDetail.getLatitude());
+        double courseLongitude = Double.parseDouble(courseDetail.getLongitude());
+        boolean isWithinDistance = DistanceCalculator.distanceBetweenCoordinates(
+                signInVO.getLatitude(),
+                signInVO.getLongitude(),
+                courseLatitude,
+                courseLongitude
+        ) <= 30;
+
+        if (isWithinDistance) {
+
+            // 更新缓存中的学生签到信息
+            StudentAttendanceNow studentAttendanceNow = cacheUtil.safeGetWithLock(RedisConstants.STUDENT_ATTENDANCE_KEY + student.getId(), StudentAttendanceNow.class, () -> {
+                StudentAttendanceNow studentAttendancePass = new StudentAttendanceNow();
+                // 查询当前的签到信息
+                CourseAttendance courseAttendance = courseAttendanceMapper.getStudentAttendanceNow(userId);
+                studentAttendancePass.setCourseId(courseAttendance.getCourseId());
+                studentAttendancePass.setStatus(courseAttendance.getStatus());
+                studentAttendancePass.setCourseName(courseDetail.getCourseName());
+                studentAttendancePass.setLongitude(courseDetail.getLongitude());
+                studentAttendancePass.setLatitude(courseDetail.getLatitude());
+                return studentAttendancePass;
+            }, RedisConstants.STUDENT_ATTENDANCE_TTL, TimeUnit.MINUTES);
+            studentAttendanceNow.setStatus(1);
+            cacheUtil.set(RedisConstants.STUDENT_ATTENDANCE_KEY + student.getId(), studentAttendanceNow, RedisConstants.STUDENT_ATTENDANCE_TTL, TimeUnit.MINUTES);
+
+            // 发送签到消息
+            rabbitTemplate.convertAndSend(SIGNIN_EXCHANGE_NAME, "", new SignInMessage(student.getId(), signInVO.getCourseId()));
+
+
+            return true;
+        }
+
+        return false; // 签到位置不在有效范围内
     }
+
 
     @Override
     public List<CourseStudent> listStudentByTeauserIdAndsemesterAndCourseName(String teaUserid, Integer semester, String courseName) {

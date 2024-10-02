@@ -14,8 +14,16 @@
 
 ## 客户端仓库地址以及演示视频
 * 教师端仓库地址：https://github.com/ROBINRUGAN/uu-attendance
+
 * 学生端仓库地址：https://github.com/klxiaoniu/UUAttendance
+
 * 演示视频：https://www.bilibili.com/video/BV1wu411T7Lt/?spm_id_from=333.999.0.0&vd_source=d171ed648157798a725c9e901af91f9e
+
+* 数据库文件：https://github.com/flying-pig-z/uuAttendance/blob/master/deployment-file/table.sql
+
+  > 这是数据库文件包含了建表SQL和部分数据。
+  >
+  > 其实本来造了不少假数据，但是后来丢失了。不过这里面基本的数据还是有的，里面的用户密码经过了加密，大部分都是102201604。当然可以自己注册一下。
 
 ## 接口文档
 
@@ -23,33 +31,52 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 
 ## 1.项目目录树
 ```bash
-├─src
-│  ├─main
-│  │  ├─java
-│  │  │  └─com
-│  │  │      └─flyingpig
-│  │  │          ├─common
-│  │  │          ├─config
-│  │  │          ├─controller
-│  │  │          ├─dataobject
-│  │  │          │  ├─dto
-│  │  │          │  ├─entity
-│  │  │          │  └─vo
-│  │  │          ├─exception
-│  │  │          ├─filter
-│  │  │          ├─mapper
-│  │  │          ├─service
-│  │  │          │  └─serviceImpl
-│  │  │          │      └─security
-│  │  │          ├─util
-│  │  │          └─websocket
-│  │  └─resources
-│  │      ├─com
-│  │      │  └─flyingpig
-│  │      │      └─mapper
-│  │      └─template
-│  └─test
-│      └─java
+├─main
+│  ├─java
+│  │  └─com
+│  │      └─flyingpig
+│  │          ├─common
+│  │          ├─config
+│  │          ├─controller
+│  │          ├─dataobject
+│  │          │  ├─constant
+│  │          │  ├─dto
+│  │          │  ├─entity
+│  │          │  ├─message
+│  │          │  └─vo
+│  │          ├─exception
+│  │          │  └─handle
+│  │          ├─filter
+│  │          ├─framework
+│  │          │  ├─cache
+│  │          │  │  ├─core
+│  │          │  │  └─model
+│  │          │  ├─log
+│  │          │  │  ├─annotation
+│  │          │  │  └─core
+│  │          │  └─ratelimiter
+│  │          │      ├─annotation
+│  │          │      ├─core
+│  │          │      │  └─strategy
+│  │          │      ├─model
+│  │          │      └─util
+│  │          ├─mapper
+│  │          ├─mq
+│  │          │  └─rule
+│  │          ├─service
+│  │          │  ├─excel
+│  │          │  └─serviceImpl
+│  │          │      └─security
+│  │          ├─util
+│  │          └─websocket
+│  └─resources
+│      ├─com
+│      │  └─flyingpig
+│      │      └─mapper
+│      ├─scripts
+│      └─template
+└─test
+    └─java
 ```
 ## 2.使用的技术栈
 
@@ -59,10 +86,10 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 * 安全方面使用spring-securiy+jwt对框架对访问接口的用户进行认证，对密码进行哈希加密存储，并对用户的身份进行精细化鉴权，确保接口使用的安全性
 * 使用spring-boot-starter-mail实现了邮箱验证码的发送以及账号的注册
 * 集成swagger便于文档的生成和接口的调试
-* 使用Apache POI将考勤数据导出为EXCEL
+* 使用EasyExcel将学生名单导入到数据库中
 * 使用websocket长连接使得学生考勤签到界面的信息实时更新，解决轮询消耗大量带宽的问题
 * 使用阿里云OSS存储请假图片以及考勤申诉的图片
-* 使用docker+nginx进行部署<br>
+* 使用docker+nginx进行部署
 
 ## 3.项目亮点
 
@@ -79,7 +106,7 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 【2】接口的命名严格遵循restful api的规范，以资源为中心，动词用get,post,put,delete方法代替，by后面的名词用传参代替。
 并且get方法传参统一采用query参数，而其他方法传参统一采用json参数。
 
-【3】规范请求的状态码--200，400,405,500
+【3】规范请求的状态码
 
 2.在数据库的设计方面，尽量避免字段冗余，除了个别的字段重复以平衡提高查询效率。
 
@@ -91,12 +118,18 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 
 * 使用RabbitMQ将签到入库操作放到消息队列中，进行异步削封，并提高响应速度
 
+* 使用多线程导入学生Excel名单并批量导入数据库中，技术栈使用的是EasyExcel
+
 4.安全性方面
 
 使用spring-securiy+jwt对框架对访问接口的用户进行认证，对密码进行哈希加密存储，
 并对用户的身份进行精细化鉴权，使用的是RBAC（基于角色的访问控制），确保接口使用的安全性，避免学生调用督导教师接口这类的异常发生。
 
-5.使用websocket长连接，每隔几秒就向数据库查询数据有无更新，如果有更新就发送给前端。使得学生考勤签到界面的信息实时更新，解决轮询消耗大量带宽的问题。
+5.签到页面
+
+课程信息使用websocket长连接动态更新应点名的课程和点名的状态，实现状态的同步。每隔几秒就向缓存查询应点名数据和点名的状态有无更新，如果有更新就将修改的数据推送给前端。提高响应速度，优化体验，节省带宽。
+
+签到的时候先修改缓存中签到的状态，然后再异步到数据库中。
 
 6.在业务层进行事务处理，避免异常导致数据库的操作错误。
 
@@ -113,17 +146,15 @@ https://apifox.com/apidoc/shared-54488126-29d5-4edf-b6c3-112c11ab22b3
 
 3.业务逻辑严密，考虑对多人考勤同一课程、同一课程有多份考勤名单和同一堂课出现两次点名等多种情况。
 
-4.支持考勤数据的导出，并进行分页查询防止OOM(其实数据量并不大也用不着分页查询)
+4.支持学生名单的导入和考勤数据的导出，导出时候进行分页查询防止OOM(其实数据量并不大也用不着分页查询)
 
-## 5.项目不足之处
+## 5.优化思考
 
 1.客户端传回来的定位会存在飘动的现象。
 
 2.因为客户端的一切计算都是不安全的，所以虚拟定位问题难以得到解决。
 
-3.签到页面属于高并发，如果并发量大的时候需要利用Redis对课程信息即签到信息进行存储来优化签到接口。
-
-HSET studentSignInData studentId '{"courseId": courseId, "status": signInStatus}'
+3.点名的时候可以将课堂学生列表存储在缓存中，然后进行抽取，并将抽取到的学生进行删除。
 
 
 

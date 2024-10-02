@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashSet;
 
 @Slf4j
@@ -27,8 +26,7 @@ public class CourseDetailController {
     @PostMapping("")
     @ApiOperation("教师添加课程信息")
     public Result addCourseDetail(@RequestBody CourseDetailAddVO courseDetailAddVO, @RequestHeader String Authorization) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        String teacherId = claims.getSubject();
+        String teacherId = JwtUtil.parseJwt(Authorization).getSubject();
         System.out.println(courseDetailAddVO);
         courseDetailService.addCourseDetail(teacherId, courseDetailAddVO);
         return Result.success();
@@ -45,9 +43,8 @@ public class CourseDetailController {
     @PreAuthorize("hasAuthority('sys:teacher:operation')")
     @GetMapping("/coursedetailList")
     @ApiOperation("下拉框通过学期查询课程列表")
-    public Result listCourseDetailByTeaUserIdAndSemester(@RequestHeader String Authorization, @RequestParam String semester) {
-        Claims claims = JwtUtil.parseJwt(Authorization);
-        String teacherId = claims.getSubject();
+    public Result listCourseDetailByTeaUserIdAndSemester(@RequestHeader String Authorization, String semester) {
+        String teacherId = JwtUtil.parseJwt(Authorization).getSubject();
         HashSet<String> courseNameSet = courseDetailService.listCourseDetailByTeaUserIdAndSemester(teacherId, semester);
         return Result.success(courseNameSet);
     }

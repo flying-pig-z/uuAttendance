@@ -2,14 +2,15 @@ package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.flyingpig.dataobject.constant.RoleConstants;
 import com.flyingpig.dataobject.dto.LoginUser;
 import com.flyingpig.dataobject.entity.UserRoleRelation;
+import com.flyingpig.framework.cache.core.CacheUtil;
 import com.flyingpig.mapper.UserMapper;
 import com.flyingpig.common.Result;
 import com.flyingpig.mapper.UserRoleRelationMapper;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.dataobject.entity.User;
-import com.flyingpig.util.cache.CacheUtil;
 import com.flyingpig.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -100,7 +101,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
     @Override
     public void addUser(User user) {
         userMapper.insert(user);
-        UserRoleRelation userRoleRelation = new UserRoleRelation(user.getId(), 3);
+        UserRoleRelation userRoleRelation = new UserRoleRelation(user.getId(), RoleConstants.TEACHER);
         userRoleRelationMapper.insert(userRoleRelation);
     }
 

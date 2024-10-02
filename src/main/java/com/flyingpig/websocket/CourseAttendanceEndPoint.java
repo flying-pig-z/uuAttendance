@@ -69,20 +69,6 @@ public class CourseAttendanceEndPoint {
     private StudentAttendanceNow lastCourseInfo = new StudentAttendanceNow();
 
 
-    /**
-     * 群发
-     *
-     * @param message
-     */
-    public void groupSending(String message) {
-        for (String name : webSocketSet.keySet()) {
-            try {
-                webSocketSet.get(name).session.getBasicRemote().sendText(message);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     /**
      * 指定发送

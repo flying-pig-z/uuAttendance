@@ -1,10 +1,8 @@
 package com.flyingpig.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.flyingpig.common.PageBean;
 import com.flyingpig.dataobject.dto.ClassAttendance;
 import com.flyingpig.dataobject.dto.StudentAttendance;
-import com.flyingpig.dataobject.entity.CourseAttendance;
 import com.flyingpig.dataobject.entity.CourseDetail;
 import com.flyingpig.mapper.CourseAttendanceMapper;
 import com.flyingpig.mapper.CourseDetailMapper;
@@ -16,9 +14,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

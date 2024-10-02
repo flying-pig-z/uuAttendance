@@ -1,11 +1,12 @@
 package com.flyingpig.controller;
 
 import com.flyingpig.common.Result;
+import com.flyingpig.dataobject.constant.StatusCode;
 import com.flyingpig.dataobject.entity.User;
 import com.flyingpig.dataobject.vo.EmailRegisterVO;
+import com.flyingpig.framework.cache.core.CacheUtil;
 import com.flyingpig.service.LoginService;
 import com.flyingpig.util.EmailUtil;
-import com.flyingpig.util.cache.CacheUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,10 @@ public class MailController {
 
     @GetMapping("/verificationCode")
     @ApiOperation("用户获取验证码")
-    public Result sendEmailVerificationCode(@RequestParam  String email) {
+    public Result sendEmailVerificationCode(String email) {
         //检查email是否符合格式
-        if(!EmailUtil.judgeEmailFormat(email)){
-            return Result.error(2,"邮箱不符合格式");
+        if (!EmailUtil.judgeEmailFormat(email)) {
+            return Result.error(2, "邮箱不符合格式");
         }
         //检查redis中有无验证码，如果有，则返回已存在
         //如果没有，生成验证码存入缓存并发送
@@ -56,18 +57,16 @@ public class MailController {
     @ApiOperation("通过验证码完成注册")
     public Result emailRegister(@RequestBody EmailRegisterVO emailRegisterVO) {
         System.out.println(emailRegisterVO.getEmail());
-        String verificationCode=cacheUtil.get(emailRegisterVO.getEmail(), String.class);
+        String verificationCode = cacheUtil.get(emailRegisterVO.getEmail(), String.class);
         System.out.println(verificationCode);
-        if(verificationCode!=null&&verificationCode.equals(emailRegisterVO.getVerificationCode())){
+        if (verificationCode != null && verificationCode.equals(emailRegisterVO.getVerificationCode())) {
             //添加用户
-            User user=new User();
-            user.setNo(emailRegisterVO.getNo());
-            user.setPassword(emailRegisterVO.getPassword());
-            user.setUserType(3);
+            User user = new User(null, emailRegisterVO.getNo(), emailRegisterVO.getPassword(),
+                    null, null, null, 3);
             loginService.addUser(user);
             return Result.success("添加成功,请联系管理员审核");
-        }else {
-            return Result.error(2,"验证码验证错误");
+        } else {
+            return Result.error(StatusCode.SERVERERROR, "验证码验证错误");
         }
 
     }

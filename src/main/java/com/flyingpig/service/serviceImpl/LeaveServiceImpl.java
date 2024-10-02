@@ -6,11 +6,11 @@ import com.flyingpig.dataobject.constant.RedisConstants;
 import com.flyingpig.dataobject.dto.LeaveApplicationWithCourseName;
 import com.flyingpig.dataobject.dto.LeaveSummary;
 import com.flyingpig.dataobject.entity.*;
+import com.flyingpig.framework.cache.core.CacheUtil;
 import com.flyingpig.mapper.*;
 import com.flyingpig.dataobject.dto.LeaveDatail;
 import com.flyingpig.common.PageBean;
 import com.flyingpig.service.LeaveService;
-import com.flyingpig.util.cache.CacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class LeaveServiceImpl extends ServiceImpl<LeaveMapper, LeaveApplication>
     private CacheUtil cacheUtil;
 
     @Override
-    public List<LeaveApplicationWithCourseName> listLeaveByUserId(Integer userId) {
+    public List<LeaveApplicationWithCourseName> listLeaveByUserId(Long userId) {
         QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
         studentQueryWrapper.eq("userid", userId);
         Student student = studentMapper.selectOne(studentQueryWrapper);
@@ -94,7 +94,7 @@ public class LeaveServiceImpl extends ServiceImpl<LeaveMapper, LeaveApplication>
     }
 
     @Override
-    public LeaveDatail getLeaveDetail(Integer leaveId) {
+    public LeaveDatail getLeaveDetail(Long leaveId) {
         //获取本张表数据
         LeaveApplication leaveApplication = cacheUtil.safeGetWithLock(RedisConstants.LEAVE_DETAIL_KEY + leaveId, LeaveApplication.class, () -> {
             return leaveMapper.selectById(leaveId);

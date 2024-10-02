@@ -1,12 +1,10 @@
 package com.flyingpig.filter;
 
-import com.alibaba.fastjson.JSON;
 import com.flyingpig.dataobject.dto.LoginUser;
+import com.flyingpig.framework.cache.core.CacheUtil;
 import com.flyingpig.util.JwtUtil;
-import com.flyingpig.util.cache.CacheUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -21,7 +19,6 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static com.flyingpig.dataobject.constant.RedisConstants.LOGIN_USER_KEY;
-import static com.flyingpig.dataobject.constant.RedisConstants.USER_INFO_KEY;
 
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {

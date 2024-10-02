@@ -14,7 +14,7 @@ public interface AttendanceAppealService {
     List<AttendanceAppealWithCourseName> listAttendanceAppealByStuUserId(Integer id);
 
 
-    AttendanceAppealDetail getAttendanceAppealDetail(Integer attendanceAppealId);
+    AttendanceAppealDetail getAttendanceAppealDetail(Long attendanceAppealId);
 
 
     void updateByAttendanceAppealIdAndStatus(Integer attendanceAppealId, String status);
